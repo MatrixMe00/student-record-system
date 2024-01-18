@@ -10,4 +10,9 @@ class ActivityLog extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    // many activity logs belong to one user
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

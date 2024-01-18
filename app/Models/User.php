@@ -49,13 +49,8 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    // activity logs
+    // every user has many activity logs
     public function activityLogs(){
         return $this->hasMany(ActivityLog::class);
-    }
-
-    // admin
-    public function admin(){
-        return $this->hasOne(Admin::class);
     }
 }
