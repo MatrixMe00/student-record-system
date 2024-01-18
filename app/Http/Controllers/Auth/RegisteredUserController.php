@@ -31,7 +31,9 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'lname' => ['required', 'string', 'max:255'],
+            'oname' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'unique:'.User::class],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -47,5 +49,19 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    /**
+     * This function is used to determine which user type is selected
+     */
+    private function store_user(Request $request){
+        // check for a developer
+        $developer = User::where("role_id", "1")->first();
+        if($developer){
+
+        }
+        switch($request->role_id){
+
+        }
     }
 }
