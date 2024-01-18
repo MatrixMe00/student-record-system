@@ -31,7 +31,10 @@ class DatabaseSeeder extends Seeder
             ["name" => "r_date", "visual_name" => "Reopening Date", "role_access" => "1-2-3-4"],
             ["name" => "v_date", "visual_name" => "Vacation Date", "role_access" => "1-2-3-4"],
             ["name" => "roll_number", "visual_name" => "Number on Roll", "role_access" => "1-2-3-4"],
-            ["name" => "head_signature", "visual_name" => "Headmaster's Signature", "role_access" => "1-2-3"]
+            ["name" => "head_signature", "visual_name" => "Headmaster's Signature", "role_access" => "1-2-3"],
+            ["name" => "academic_year", "visual_name" => "Current Academic Year", "role_access" => "1-2-3"],
+            ["name" => "academic_start", "visual_name" => "Month Academic year starts", "role_access" => "1-2-3"],
+            ["name" => "academic_end", "visual_name" => "Month Academic year ends", "role_access" => "1-2-3"]
             // ["name" => "", "visual_name" => "", "role_access" => ""]
         ];
 
