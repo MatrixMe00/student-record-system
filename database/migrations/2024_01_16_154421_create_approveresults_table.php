@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string("result_token")->unique();
             $table->foreignId("program_id")->constrained();
             $table->foreignId("teacher_id")->constrained("teachers", "user_id");
+            $table->integer("semester");
+            $table->enum("status", ["pending","reject", "accept"]);
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@ class SchoolAdmin extends Admin
 
     // approve results
     public function approvedResults(){
-        return $this->hasMany(approveresults::class);
+        return $this->hasMany(ApproveResults::class);
     }
 
     // admin has a school
