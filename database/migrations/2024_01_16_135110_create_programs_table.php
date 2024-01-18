@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("class")->nullable();
+            $table->string("slug")->nullable();
             $table->foreignId("school_id")->constrained()->cascadeOnDelete();
             $table->foreignId("class_teacher")->constrained("teachers", "user_id")->nullOnDelete();
             $table->timestamps();
