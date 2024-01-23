@@ -29,7 +29,8 @@ class SubjectController extends Controller
      */
     public function store(StoreSubjectRequest $request)
     {
-        //
+        $validated = $request->validated();
+        Subject::create($request);
     }
 
     /**
@@ -53,7 +54,8 @@ class SubjectController extends Controller
      */
     public function update(UpdateSubjectRequest $request, Subject $subject)
     {
-        //
+        $validated = $request->validated();
+        $subject->update($validated);
     }
 
     /**
@@ -61,6 +63,6 @@ class SubjectController extends Controller
      */
     public function destroy(Subject $subject)
     {
-        //
+        $subject->delete();
     }
 }

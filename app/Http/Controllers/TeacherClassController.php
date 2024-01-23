@@ -13,6 +13,7 @@ class TeacherClassController extends Controller
      */
     public function index()
     {
+        $all = TeacherClass::all();
         //
     }
 
@@ -29,7 +30,8 @@ class TeacherClassController extends Controller
      */
     public function store(StoreTeacherClassRequest $request)
     {
-        //
+        $validated = $request->validated();
+        TeacherClass::create($validated);
     }
 
     /**
@@ -53,7 +55,8 @@ class TeacherClassController extends Controller
      */
     public function update(UpdateTeacherClassRequest $request, TeacherClass $teacherClass)
     {
-        //
+        $validated = $request->validated();
+        $teacherClass->update($validated);
     }
 
     /**
@@ -61,6 +64,6 @@ class TeacherClassController extends Controller
      */
     public function destroy(TeacherClass $teacherClass)
     {
-        //
+        $teacherClass->delete();
     }
 }

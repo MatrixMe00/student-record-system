@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Settings;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateSettingsRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class UpdateSettingsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +24,11 @@ class UpdateSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "id" => ["required", "integer", Rule::exists("settings")],
+            "name" => ["required", "unique:".Settings::class, "string"],
+            "visual_name" => ["required", "string"],
+            "default_value" => ["nullable", "sometimes", "string"],
+            "role_access" => ["required", "string"]
         ];
     }
 }

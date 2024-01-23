@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreSchoolRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreSchoolRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,14 @@ class StoreSchoolRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "school_name" => ["required", "string", Rule::unique("schools", "name")],
+            "school_slug" => ["required", "string"],
+            "logo_path" => ["sometimes", "string", "nullable"],
+            "gps_address" => ["required", "string", "max:15"],
+            "box_number" => ["required", "string", Rule::unique("schools", "box_number")],
+            "description" => ["required", "string"],
+            "school_email" => ["required", "string"],
+            "admin_id" => ["required", "integer", Rule::exists("admins", "user_id")]
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Grades;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class GradesController extends Controller
 {
@@ -28,7 +29,17 @@ class GradesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            "student_id" => ["required", "integer", Rule::exists("students", "user_id")],
+            "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
+            "program_id" => ["required", "integer", Rule::exists("programs")],
+            "school_id" => ["required", "integer", Rule::exists("schools")],
+            "semester" => ["required", "integer", "max: 3", "min: 1"],
+            "class_mark" => ["required", "float", "min:0"],
+            "exam_mark" => ["required", "float", "min:0"]
+        ]);
+
+        Grades::create($validated);
     }
 
     /**
@@ -52,7 +63,16 @@ class GradesController extends Controller
      */
     public function update(Request $request, Grades $grades)
     {
-        //
+        $validated = $request->validate([
+            "id" => ["required", "integer", Rule::exists("grades")],
+            "student_id" => ["required", "integer", Rule::exists("students", "user_id")],
+            "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
+            "program_id" => ["required", "integer", Rule::exists("programs")],
+            "school_id" => ["required", "integer", Rule::exists("schools")],
+            "semester" => ["required", "integer", "max: 3", "min: 1"],
+            "class_mark" => ["required", "float", "min:0"],
+            "exam_mark" => ["required", "float", "min:0"]
+        ]);
     }
 
     /**
@@ -60,6 +80,6 @@ class GradesController extends Controller
      */
     public function destroy(Grades $grades)
     {
-        //
+        $grades->delete();
     }
 }

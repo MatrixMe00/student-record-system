@@ -29,7 +29,9 @@ class StudentController extends Controller
      */
     public function store(StoreStudentRequest $request)
     {
-        //
+        // validate the user
+        $student = $request->validated();
+        Student::create($student);
     }
 
     /**
@@ -53,7 +55,8 @@ class StudentController extends Controller
      */
     public function update(UpdateStudentRequest $request, Student $student)
     {
-        //
+        $validated = $request->validated();
+        $student->update($validated);
     }
 
     /**
@@ -61,6 +64,6 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        $student->delete();
     }
 }

@@ -29,7 +29,8 @@ class SchoolController extends Controller
      */
     public function store(StoreSchoolRequest $request)
     {
-        //
+        $validated = $request->validated();
+        School::create($validated);
     }
 
     /**
@@ -53,7 +54,8 @@ class SchoolController extends Controller
      */
     public function update(UpdateSchoolRequest $request, School $school)
     {
-        //
+        $validated = $request->validated();
+        $school->update($validated);
     }
 
     /**
@@ -61,6 +63,6 @@ class SchoolController extends Controller
      */
     public function destroy(School $school)
     {
-        //
+        $school->delete();
     }
 }

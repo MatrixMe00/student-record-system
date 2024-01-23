@@ -29,7 +29,8 @@ class SettingsController extends Controller
      */
     public function store(StoreSettingsRequest $request)
     {
-        //
+        $validated = $request->validated();
+        Settings::create($validated);
     }
 
     /**
@@ -53,7 +54,8 @@ class SettingsController extends Controller
      */
     public function update(UpdateSettingsRequest $request, Settings $settings)
     {
-        //
+        $validated = $request->validated();
+        $settings->update($validated);
     }
 
     /**
@@ -61,6 +63,6 @@ class SettingsController extends Controller
      */
     public function destroy(Settings $settings)
     {
-        //
+        $settings->delete();
     }
 }
