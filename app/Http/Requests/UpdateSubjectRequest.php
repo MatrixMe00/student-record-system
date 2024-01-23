@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateSubjectRequest extends FormRequest
 {
@@ -22,7 +23,10 @@ class UpdateSubjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "id" => ["required", "integer"],
+            "name" => ["required", "string"],
+            "slug" => ["nullable", "string"],
+            "school_id" => ["required", "integer", Rule::exists("schools")]
         ];
     }
 }

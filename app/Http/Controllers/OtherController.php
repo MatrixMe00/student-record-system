@@ -29,7 +29,7 @@ class OtherController extends Controller
      */
     public function store(StoreotherRequest $request)
     {
-        //
+        $validated = $request->validated();
     }
 
     /**
@@ -53,7 +53,8 @@ class OtherController extends Controller
      */
     public function update(UpdateotherRequest $request, other $other)
     {
-        //
+        $validated = $request->validated();
+        $other->update($validated);
     }
 
     /**

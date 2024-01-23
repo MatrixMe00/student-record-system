@@ -29,7 +29,8 @@ class ProgramController extends Controller
      */
     public function store(StoreProgramRequest $request)
     {
-        //
+        $validated = $request->validated();
+        Program::create($validated);
     }
 
     /**
@@ -53,7 +54,8 @@ class ProgramController extends Controller
      */
     public function update(UpdateProgramRequest $request, Program $program)
     {
-        //
+        $validated = $request->validated();
+        $program->update($validated);
     }
 
     /**
@@ -61,6 +63,6 @@ class ProgramController extends Controller
      */
     public function destroy(Program $program)
     {
-        //
+        $program->delete();
     }
 }

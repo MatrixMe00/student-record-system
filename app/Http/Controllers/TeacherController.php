@@ -29,7 +29,8 @@ class TeacherController extends Controller
      */
     public function store(StoreTeacherRequest $request)
     {
-        //
+        $validated = $request->validated();
+        Teacher::create($validated);
     }
 
     /**
@@ -37,7 +38,7 @@ class TeacherController extends Controller
      */
     public function show(Teacher $teacher)
     {
-        //
+        return $teacher;
     }
 
     /**
@@ -53,7 +54,8 @@ class TeacherController extends Controller
      */
     public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
-        //
+        $validated = $request->validated();
+        $teacher->update($validated);
     }
 
     /**
@@ -61,6 +63,6 @@ class TeacherController extends Controller
      */
     public function destroy(Teacher $teacher)
     {
-        //
+        $teacher->delete();
     }
 }

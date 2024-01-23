@@ -76,19 +76,20 @@ class ProfileController extends Controller
             "role_id" => $user->role_id
         ];
 
-        $a = Admin::find($user);
-        $t = Teacher::find($user);
-        $s = Student::find($user);
-        $o = other::find($user);
-
-        if(!$a->count() > 0){
-            $user_det = $a;
-        }elseif(!$t->count() > 0){
-            $user_det = $t;
-        }elseif(!$s->count() > 0){
-            $user_det = $s;
-        }elseif(!$o->count() > 0){
-            $user_det = $o;
+        switch($user->role_id){
+            case 1:
+            case 2:
+            case 3:
+                $user_det = Admin::find($user);
+                break;
+            case 4:
+                $user_det = Teacher::find($user);
+                break;
+            case 5:
+                $user_det = Student::fund($user);
+                break;
+            default:
+                $user_det = other::find($user);
         }
 
         $deleted_user += [

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateProgramRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateProgramRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,10 @@ class UpdateProgramRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "name" => ["required","string"],
+            "slug" => ["sometimes", "nullable", "string"],
+            "school_id" => ["required", "integer", Rule::exists("schools")],
+            "class_teacher" => ["required", "integer", Rule::exists("teachers", "user_id")]
         ];
     }
 }

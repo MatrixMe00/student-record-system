@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTeacherRequest extends FormRequest
 {
@@ -11,7 +12,8 @@ class StoreTeacherRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $authorized = request()->user()->user_role < 5;
+        return true;
     }
 
     /**
@@ -22,7 +24,13 @@ class StoreTeacherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "user_id" => ["integer", "required", Rule::exists("users")],
+            "lname" => ["string", "required", "max:255"],
+            "oname" => ["string", "required", "max:255"],
+            "phone_number" => ["string", "required", "min:10", "max:13"],
+            "secondary_number" => ["string", "sometimes", "min:10", "max:13"],
+            "class_teacher" => ["boolean", "sometimes"],
+            "program_id" => ["integer", "nullable", "sometimes", Rule::exists("programs")]
         ];
     }
 }

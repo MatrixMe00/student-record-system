@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateRoleRequest extends FormRequest
 {
@@ -11,7 +12,8 @@ class UpdateRoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $authorize = request()->user()->role_id <= 3;
+        return true;
     }
 
     /**
@@ -22,7 +24,10 @@ class UpdateRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "id" => ["required", "integer"],
+            "name" => ["required", "string", Rule::unique("roles", "name")],
+            "access_value" => ["sometimes", "integer"],
+            "school_id" => ["sometimes", "integer", Rule::exists("schools")]
         ];
     }
 }
