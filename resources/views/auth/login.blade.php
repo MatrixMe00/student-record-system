@@ -2,6 +2,13 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    <!-- Page Heading -->
+    <div class="w-full mb-6">
+        <h1 class="text-3xl border-b-2 pb-1 px-2 w-fit m-auto font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
+            Welcome back
+        </h1>
+    </div>
+
     <form method="POST" action="{{ route('login') }}" class="w-full md:min-w-96 m-auto">
         @csrf
 
