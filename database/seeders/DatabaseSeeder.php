@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Role;
 use App\Models\Settings;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +18,9 @@ class DatabaseSeeder extends Seeder
     {
         Role::truncate();
         Settings::truncate();
+
+        // reset system
+        Storage::disk('local')->delete('super.txt');
 
         $roles = [
             ["name" => "developer", "access_value" => 5],
