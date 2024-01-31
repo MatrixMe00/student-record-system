@@ -15,8 +15,8 @@ return new class extends Migration
             $table->foreignId("user_id")->constrained()->primary();
             $table->string("lname");
             $table->string("oname");
-            $table->string("phone_number");
-            $table->string("secondary_number")->nullable();
+            $table->string("primary_phone");
+            $table->string("secondary_phone")->nullable();
             $table->foreignId("school_id")->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
