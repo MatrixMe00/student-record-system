@@ -23,6 +23,14 @@ class CheckForSuperAdmin
         $setup_route = url()->current() == url()->route('setup');
 
         if($file){
+<<<<<<< Updated upstream
+=======
+            // skip non get requests
+            if(request()->method() != "GET"){
+                return $next($request);
+            }
+
+>>>>>>> Stashed changes
             if(str_contains($file = Storage::disk('local')->get('super.txt'), 'system-ready')){
                 $super = explode(":", $file);
                 $super = trim($super[1]);
@@ -44,6 +52,10 @@ class CheckForSuperAdmin
                 }
             }else{
                 Storage::disk('local')->put('super.txt', 'system-ready:false');
+<<<<<<< Updated upstream
+=======
+                http_response_code(404);
+>>>>>>> Stashed changes
             }
         }else{
             Storage::disk('local')->put('super.txt', 'system-ready:false');
