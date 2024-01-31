@@ -32,8 +32,8 @@ class RegisteredUserController extends Controller
     public function create(): View
     {
         return view('auth.register', [
-            "roles" => Role::all(["id", "name"])->toArray(),
-            "schools" => School::all()->toArray()
+            "role_id" => 3,
+            "page_title" => "Create an Account"
         ]);
     }
 
