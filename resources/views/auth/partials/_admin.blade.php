@@ -13,7 +13,7 @@
                     Let’s get you all set up so you can verify your personal account and begin creating your school profile.
                 </p>
 
-                <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 border p-4">
+                <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 border p-4" method="POST" action="{{ route('register') }}">
                     @csrf
 
                     <div>

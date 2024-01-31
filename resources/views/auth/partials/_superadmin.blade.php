@@ -1,3 +1,14 @@
+<section>
+    @if ($errors->any())
+    <div class="alert alert-danger text-right w-full">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+</section>
 <section class="bg-white dark:bg-gray-900 md:w-[80vw]">
     <div class="flex justify-center min-h-screen">
         <div class="hidden bg-cover lg:block lg:w-2/5 bg-center" style="background-image: url('https://wallpapercave.com/wp/wp2508260.jpg')">
@@ -13,7 +24,7 @@
                     The system would be ready for use once it has a supeadmin account
                 </p>
 
-                <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 border p-4">
+                <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 border p-4" action="{{ route('register') }}" method="POST">
                     @csrf
 
                     <div>
