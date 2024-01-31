@@ -23,7 +23,7 @@ class UpdateSchoolRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "id" => ["required", "integer", Rule::exists("schools")],
+            "id" => ["required", "integer", Rule::exists("schools", "id")],
             "school_name" => ["required", "string", Rule::unique("schools", "name")],
             "school_slug" => ["required", "string"],
             "logo_path" => ["sometimes", "string", "nullable"],

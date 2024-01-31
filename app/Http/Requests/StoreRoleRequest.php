@@ -26,7 +26,7 @@ class StoreRoleRequest extends FormRequest
         return [
             "name" => ["required", "string", Rule::unique("roles", "name")],
             "access_value" => ["sometimes", "integer"],
-            "school_id" => ["sometimes", "integer", Rule::exists("schools")]
+            "school_id" => ["sometimes", "integer", Rule::exists("schools", "id")]
         ];
     }
 }

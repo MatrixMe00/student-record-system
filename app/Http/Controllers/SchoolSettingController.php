@@ -11,7 +11,7 @@ class SchoolSettingController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            "school_id" => ["required", "integer", Rule::exists("schools")],
+            "school_id" => ["required", "integer", Rule::exists("schools", "id")],
             "settings" => ["required", "string"],
             "admin_id" => ["required", "integer", Rule::exists("admins","user_id")]
         ]);
@@ -22,7 +22,7 @@ class SchoolSettingController extends Controller
     public function update(Request $request, SchoolSetting $schoolSetting)
     {
         $validated = $request->validate([
-            "school_id" => ["required", "integer", Rule::exists("schools")],
+            "school_id" => ["required", "integer", Rule::exists("schools", "id")],
             "settings" => ["required", "string"],
             "admin_id" => ["required", "integer", Rule::exists("admins","user_id")]
         ]);

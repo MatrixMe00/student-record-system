@@ -26,7 +26,7 @@ class UpdateSubjectRequest extends FormRequest
             "id" => ["required", "integer"],
             "name" => ["required", "string"],
             "slug" => ["nullable", "string"],
-            "school_id" => ["required", "integer", Rule::exists("schools")]
+            "school_id" => ["required", "integer", Rule::exists("schools", "id")]
         ];
     }
 }

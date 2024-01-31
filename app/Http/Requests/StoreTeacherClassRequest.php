@@ -23,10 +23,10 @@ class StoreTeacherClassRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "school_id" => ["required","integer",Rule::exists("schools")],
+            "school_id" => ["required","integer",Rule::exists("schools", "id")],
             "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
-            "subject_id" => ["required", "integer", Rule::exists("subjects")],
-            "program_id" => ["required", "integer", Rule::exists("programs")]
+            "subject_id" => ["required", "integer", Rule::exists("subjects", "id")],
+            "program_id" => ["required", "integer", Rule::exists("programs", "id")]
         ];
     }
 }

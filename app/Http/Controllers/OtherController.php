@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\other;
 use App\Http\Requests\StoreotherRequest;
 use App\Http\Requests\UpdateotherRequest;
+use App\Models\User;
 
 class OtherController extends Controller
 {
@@ -27,9 +28,10 @@ class OtherController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreotherRequest $request)
+    public function store(StoreotherRequest $request, User $user)
     {
         $validated = $request->validated();
+        other::create($validated);
     }
 
     /**
