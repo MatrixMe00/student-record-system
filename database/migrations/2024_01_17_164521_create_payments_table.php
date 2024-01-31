@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("contact_email");
             $table->string("contact_phone");
             $table->string("payment_type");
-            $table->foreignId("student_id")->constrained();
+            $table->foreignId("student_id")->constrained('students', 'user_id');
             $table->timestamps();
         });
     }
