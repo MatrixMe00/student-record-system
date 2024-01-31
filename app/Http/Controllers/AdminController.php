@@ -6,6 +6,9 @@ use App\Models\Admin;
 use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\UpdateAdminRequest;
 use App\Models\User;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use ReflectionClass;
 
 class AdminController extends Controller
 {
@@ -35,21 +38,14 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAdminRequest $request, User $user)
+    public function store(StoreAdminRequest $request)
     {
         // if the role is a non-school role, school id should be null
         if($request->role_id < 3){
             $request->merge(["school_id" => null]);
         }
 
-        $validated = $request->validated();
-        $admin = [
-            "lname" => $validated->lname,
-            "oname" => $validated->oname,
-            "phone_number" => $validated->phone_number,
-            "secondary_number" => $validated->secondary_number,
-            "school_id" => $validated->school_id
-        ];
+        $admin = $request->validate($request->rules());
 
         $user = Admin::create($admin);
 

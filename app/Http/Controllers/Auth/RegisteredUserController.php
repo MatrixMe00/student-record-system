@@ -44,29 +44,23 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $user = $request->validate([
             'username' => ['required', 'string', 'unique:'.User::class],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'role_id' => ['required', 'integer', Rule::exists("roles")],
+            'role_id' => ['required', 'integer', Rule::exists("roles", "id")],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         // create the user
-        $user = User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'role_id' => $request->role_id,
-            'password' => $request->password,
-        ]);
+        $user = User::create($user);
+        // $user = new User($user);
 
         // based on user role determine which user data should be stored
         $this->store_user($request, $user);
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
+        return redirect('/');
     }
 
     /**
@@ -74,9 +68,13 @@ class RegisteredUserController extends Controller
      */
     private function store_user(Request $request, User $user){
         // check for a developer
-        $developer = User::where("role_id", 1)->first();
+        $developer = User::where("role_id", 1)->exists();
         if($developer && $user->role_id == 1){
-            ddd(["message" => "System cannot have two owners"]);
+            return redirect()->back()->withErrors(['owner_error' => 'System cannot have two owners']);
+        }
+
+        if($user->id){
+            $request->merge(["user_id" => $user->id]);
         }
 
         switch($request->role_id){
@@ -84,23 +82,23 @@ class RegisteredUserController extends Controller
             case 2:
             case 3:
                 $user_class = new AdminController;
-                $request = new StoreAdminRequest(request: $request->toArray());
+                $r = new StoreAdminRequest();
                 break;
             case 4:
                 $user_class = new TeacherController;
-                $request = new StoreTeacherRequest(request: $request->toArray());
+                $r = new StoreTeacherRequest();
                 break;
             case 5:
                 $user_class = new StudentController;
-                $request = new StoreStudentRequest(request: $request->toArray());
+                $r = new StoreStudentRequest();
                 break;
             default:{
                 $user_class = new OtherController;
-                $request = new StoreotherRequest(request: $request->toArray());
+                $r = new StoreotherRequest();
             }
-
-            // call store on each
-            return $user_class->store($request, $user);
         }
+
+        // call store on each
+        return $user_class->store($r->createFrom($request));
     }
 }

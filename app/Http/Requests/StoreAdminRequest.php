@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
 class StoreAdminRequest extends FormRequest
@@ -16,6 +18,19 @@ class StoreAdminRequest extends FormRequest
     }
 
     /**
+     * Handle a failed validation attempt.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json(['errors' => $validator->errors()], 422));
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -23,12 +38,12 @@ class StoreAdminRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id" => ["required", Rule::exists("users"), "integer"],
+            "user_id" => ["required", Rule::exists("users", "id"), "integer"],
             "lname" => ["required", "max:255"],
             "oname" => ["required", "max:255"],
             "primary_phone" => ["required", "max:13", "min:10"],
             "secondary_phone" => ["sometimes", "max:13", "min:10"],
-            "school_id" => ["nullable", "integer", Rule::exists("schools")]
+            "school_id" => ["nullable", "integer", Rule::exists("schools", "id")]
         ];
     }
 }
