@@ -25,7 +25,7 @@ class StoreSubjectRequest extends FormRequest
         return [
             "name" => ["required", "string"],
             "slug" => ["nullable", "string"],
-            "school_id" => ["required", "integer", Rule::exists("schools")]
+            "school_id" => ["required", "integer", Rule::exists("schools", "id")]
         ];
     }
 }

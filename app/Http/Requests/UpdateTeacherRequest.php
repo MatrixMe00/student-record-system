@@ -24,13 +24,13 @@ class UpdateTeacherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id" => ["integer", "required", Rule::exists("users")],
+            "user_id" => ["integer", "required", Rule::exists("users", "id")],
             "lname" => ["string", "required", "max:255"],
             "oname" => ["string", "required", "max:255"],
             "phone_number" => ["string", "required", "min:10", "max:13"],
             "secondary_number" => ["string", "sometimes", "min:10", "max:13"],
             "class_teacher" => ["boolean", "sometimes"],
-            "program_id" => ["integer", "nullable", "sometimes", Rule::exists("programs")]
+            "program_id" => ["integer", "nullable", "sometimes", Rule::exists("programs", "id")]
         ];
     }
 }

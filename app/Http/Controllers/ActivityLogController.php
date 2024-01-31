@@ -23,7 +23,7 @@ class ActivityLogController extends Controller
         $validated = $request->validate([
             "activity_type" => ["string", "required"],
             "message" => ["string", "required"],
-            "user_id" => ["integer", "required", Rule::exists("users")]
+            "user_id" => ["integer", "required", Rule::exists("users", "id")]
         ]);
 
         $log = ActivityLog::create($validated);
@@ -36,7 +36,7 @@ class ActivityLogController extends Controller
         $validated = $request->validate([
             "activity_type" => ["string", "required"],
             "message" => ["string", "required"],
-            "user_id" => ["integer", "required", Rule::exists("users")]
+            "user_id" => ["integer", "required", Rule::exists("users", "id")]
         ]);
 
         $activityLog->update($validated);

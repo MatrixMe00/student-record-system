@@ -31,8 +31,8 @@ class ApproveresultsController extends Controller
 
         $validated = $request->validate([
             "result_token" => ["required", "string", Rule::unique("approveresults", "result_token")],
-            "school_id" => ["required", "integer", Rule::exists('schools')],
-            "program_id" => ["required", "integer", Rule::exists('programs')],
+            "school_id" => ["required", "integer", Rule::exists('schools', 'id')],
+            "program_id" => ["required", "integer", Rule::exists('programs', 'id')],
             "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
             "semester" => ["required", "integer", "min:1", "max:3"],
             "worked_by" => ["required", "integer", Rule::exists("admins", "user_id")]
@@ -45,8 +45,8 @@ class ApproveresultsController extends Controller
     {
         $validated = $request->validate([
             "result_token" => ["required", "string", Rule::unique("approveresults", "result_token")],
-            "school_id" => ["required", "integer", Rule::exists('schools')],
-            "program_id" => ["required", "integer", Rule::exists('programs')],
+            "school_id" => ["required", "integer", Rule::exists('schools', 'id')],
+            "program_id" => ["required", "integer", Rule::exists('programs', 'id')],
             "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
             "semester" => ["required", "integer", "min:1", "max:3"],
             "worked_by" => ["required", "integer", Rule::exists("admins", "user_id")]
