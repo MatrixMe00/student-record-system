@@ -17,7 +17,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        return view('auth.login', [
+            "page_title" => "Student Login",
+            "role_id" => 5,
+            "login_icon" => "fas fa-user-graduate"
+        ]);
     }
 
     /**
