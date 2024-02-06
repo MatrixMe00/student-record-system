@@ -15,10 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/admin-login', function () {
     return view("auth.login", [
-        "page_title" => "Login"
+        "page_title" => "Admin Login",
+        "role_id" => 3,
+        "login_icon" => "fas fa-user-clock",
     ]);
+});
+
+Route::get("/", function(){
+    return view("welcome");
 });
 
 Route::get("/setup", function(){
@@ -27,6 +33,14 @@ Route::get("/setup", function(){
         "page_title" => "Activate System"
     ]);
 })->name('setup');
+
+Route::get("/teacher-login", function(){
+    return view("auth.login", [
+        "page_title" => "Teacher Login",
+        "role_id" => 4,
+        "login_icon" => "fas fa-person-chalkboard"
+    ]);
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
