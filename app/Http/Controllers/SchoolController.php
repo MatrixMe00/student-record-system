@@ -21,7 +21,18 @@ class SchoolController extends Controller
      */
     public function create()
     {
-        //
+        // without an admin id, redirect to admin register
+        $admin_id = session('admin_id') != null ? session('admin_id') : false;
+
+        /*if(!$admin_id){
+            return redirect("/register");
+        }*/
+
+        return view('auth.register', [
+            "admin_id" => $admin_id,
+            "school_register" => true,
+            "page_title" => "Add Your School"
+        ]);
     }
 
     /**
@@ -29,8 +40,10 @@ class SchoolController extends Controller
      */
     public function store(StoreSchoolRequest $request)
     {
-        $validated = $request->validated();
+        $validated = $request->validate($request->rules());
         School::create($validated);
+
+        return redirect("/admin-login");
     }
 
     /**
