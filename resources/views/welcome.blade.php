@@ -28,7 +28,7 @@
                         <x-welcome-tag href="/admin-login" tag_name="Admin Login" icon="fas fa-user-clock"/>
                         <x-welcome-tag href="/teacher-login" tag_name="Teacher Login" icon="fas fa-person-chalkboard" />
                         <x-welcome-tag href="/login" tag_name="Student Login" icon="fas fa-user-graduate" />
-                        <x-welcome-tag href="/" tag_name="Our Schools" icon="fas fa-school-flag" />
+                        <x-welcome-tag href="/schools" tag_name="Our Schools" icon="fas fa-school-flag" />
                         <x-welcome-tag href="/register" tag_name="Register School" icon="fas fa-school-circle-check" />
                     </div>
                 </div>
