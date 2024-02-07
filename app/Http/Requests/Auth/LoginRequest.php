@@ -27,8 +27,9 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'username' => ['required', 'string'],
             'password' => ['required', 'string'],
+            'role_id' => ['required', 'integer', 'exists:roles,id']
         ];
     }
 
@@ -41,11 +42,24 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (! Auth::attempt(['username' => $this->input('username'), 'password' => $this->input('password')], $this->boolean('remember'))) {
+            if (! Auth::attempt(['email' => $this->input('username'), 'password' => $this->input('password')], $this->boolean('remember'))) {
+                RateLimiter::hit($this->throttleKey());
+
+                throw ValidationException::withMessages([
+                    'username' => trans('auth.failed'),
+                ]);
+            }
+        }
+
+        $request_role = request()->role_id;
+        $user_role = request()->user()->role_id;
+
+        if((intval($request_role) == 3 && $user_role > 3) || ($request_role != $user_role)){
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'role_id' => "Requested user is not bound to this login type",
             ]);
         }
 

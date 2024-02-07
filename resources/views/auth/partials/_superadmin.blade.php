@@ -77,6 +77,11 @@
 
                     <x-text-input name="role_id" id="role_id" type="hidden" value="{{ $role_id }}" />
 
+                    {{-- alert register controller that its a system setup --}}
+                    @if (url()->current() == url()->route('setup'))
+                        <x-text-input name="setup_system" id="setup_system" type="hidden" value="1" />
+                    @endif
+
                     <button
                         class="flex items-center justify-between w-full px-6 py-3 text-sm
                             tracking-wide text-white capitalize group transform bg-blue-500 rounded-md

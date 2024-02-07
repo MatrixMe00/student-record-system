@@ -19,8 +19,10 @@ return new class extends Migration
             $table->string("location");
             $table->string("gps_address", 15);
             $table->string("box_number")->unique();
+            $table->enum("school_type", ["public", "private"]);
             $table->text("description");
             $table->string("school_email");
+            $table->string("school_head");
             $table->foreignId("admin_id")->constrained("admins","user_id")->nullOnDelete()->cascadeOnUpdate();
         });
     }

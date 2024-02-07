@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SchoolController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -15,12 +16,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view("auth.login", [
-        "page_title" => "Login"
-    ]);
+Route::get("/", function(){
+    return view("welcome");
 });
 
+// logins
+Route::get('/admin-login', function () {
+    return view("auth.login", [
+        "page_title" => "Admin Login",
+        "role_id" => 3,
+        "login_icon" => "fas fa-user-clock",
+    ]);
+})->name("admin.login");
+
+Route::get("/teacher-login", function(){
+    return view("auth.login", [
+        "page_title" => "Teacher Login",
+        "role_id" => 4,
+        "login_icon" => "fas fa-person-chalkboard"
+    ]);
+})->name("teacher.login");
+
+// registrations
 Route::get("/setup", function(){
     return view("auth.register", [
         "role_id" => 2,
@@ -28,6 +45,11 @@ Route::get("/setup", function(){
     ]);
 })->name('setup');
 
+Route::get("/register-school", [SchoolController::class, 'create']);
+Route::post("/register-school", [SchoolController::class, 'store']);
+Route::get("/schools", [SchoolController::class, 'index']);
+
+// dashboards
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

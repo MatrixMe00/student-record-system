@@ -60,7 +60,16 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        return redirect('/');
+        $new_system = isset($request->setup_system) ? true : false;
+        $new_school = isset($request->new_school) ? true : false;
+
+        if(intval($user->role_id) == 2 && $new_system){
+            return redirect('/');
+        }elseif(intval($user->role_id) == 3 && $new_school){
+            return redirect('/register-school')->with("admin_id", $user->id);
+        }else{
+            return redirect($request->get('referer'));
+        }
     }
 
     /**
