@@ -18,6 +18,10 @@
         </h1>
     </div>
 
+    <p class="fixed top-2 right-2 sm:right-6 border border-transparent hover:border-b-slate-500">
+        <a href="/">Home</a>
+    </p>
+
     <form method="POST" action="{{ route('login') }}" class="w-full md:min-w-96 m-auto">
         @csrf
 
