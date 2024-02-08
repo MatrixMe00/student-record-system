@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolController;
+use App\Models\Admin;
+use App\Models\deletedusers;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get("/", function(){
     return view("welcome");
-});
+})->name("index");
 
 // logins
 Route::get('/admin-login', function () {
@@ -51,7 +54,26 @@ Route::get("/schools", [SchoolController::class, 'index']);
 
 // dashboards
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $role_id = auth()->user()->role_id;
+    $options = [];
+
+    switch($role_id){
+        case 1:
+            $options["developer_count"] = User::where("role_id", 1)->get()->count();
+        case 2:
+            $options = [
+                "school_count" => School::all()->count(),
+                "admin_count" => User::where("role_id", 3)->orWhere("role_id",">",5)
+                                                          ->get()->count(),
+                "superadmin_count" => User::where("role_id", 2)->get()->count(),
+                "student_count" => User::where("role_id", 5)->get()->count(),
+                "teacher_count" => User::where("role_id", 4)->get()->count(),
+                "delete_count" => deletedusers::all()->count()
+            ];
+            break;
+    }
+
+    return view('dashboard', $options);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
