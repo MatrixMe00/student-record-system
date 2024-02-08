@@ -53,14 +53,28 @@ class LoginRequest extends FormRequest
         }
 
         $request_role = request()->role_id;
-        $user_role = request()->user()->role_id;
+        $user_role = Auth::user()->role_id;
 
-        if((intval($request_role) == 3 && $user_role > 3) || ($request_role != $user_role)){
-            RateLimiter::hit($this->throttleKey());
+        if($request_role == 3){
+            if($user_role > 3 && $user_role <= 5){
+                RateLimiter::hit($this->throttleKey());
 
-            throw ValidationException::withMessages([
-                'role_id' => "Requested user is not bound to this login type",
-            ]);
+                Auth::guard('web')->logout();
+
+                throw ValidationException::withMessages([
+                    'role_id' => "Requested user is not bound to this login type1",
+                ]);
+            }
+        }elseif($request_role > 3 && $request_role <= 5){
+            if($user_role != intval($request_role)){
+                RateLimiter::hit($this->throttleKey());
+
+                Auth::guard('web')->logout();
+
+                throw ValidationException::withMessages([
+                    'role_id' => "Requested user is not bound to this login type1",
+                ]);
+            }
         }
 
         RateLimiter::clear($this->throttleKey());
@@ -82,7 +96,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            'username' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -94,6 +108,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->input('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->input('username')).'|'.$this->ip());
     }
 }
