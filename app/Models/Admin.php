@@ -12,6 +12,7 @@ class Admin extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $primaryKey = "user_id";
 
     // admin is a user
     public function user(): BelongsTo{
