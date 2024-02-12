@@ -20,4 +20,10 @@ class SchoolAdmin extends Admin
     public function school(): BelongsTo{
         return $this->belongsTo(School::class);
     }
+
+    // all records
+    public static function all($columns = ['*'])
+    {
+
+    }
 }

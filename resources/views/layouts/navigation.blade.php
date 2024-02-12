@@ -1,7 +1,9 @@
 @php
+    $user = Auth::user();
     $nav_links = [
-        // ["name" => "", "route" => ""]
-        ["name" => "Dashboard", "route" => "dashboard"]
+        // ["name" => "", "route" => "", "users" => []]
+        ["name" => "Dashboard", "route" => "dashboard", "users" => [0]],
+        ["name" => "Users", "route" => "users.all", "users" => [1,2,3]]
     ];
 @endphp
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
@@ -12,16 +14,18 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                        <x-application-logo icon="fas fa-school text-5xl" class="block w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @foreach ($nav_links as $nav_link)
-                        <x-nav-link :href="route($nav_link['route'])" :active="request()->routeIs($nav_link['route'])">
-                            {{ __($nav_link["name"]) }}
-                        </x-nav-link>
+                        @if ($nav_link["users"] == [0] || in_array($user->role_id, $nav_link["users"]))
+                            <x-nav-link :href="route($nav_link['route'])" :active="request()->routeIs($nav_link['route'])">
+                                {{ __($nav_link["name"]) }}
+                            </x-nav-link>
+                        @endif
                     @endforeach
                 </div>
             </div>
@@ -31,7 +35,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->username }}</div>
+                            <div>{{ $user->username }}</div>
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -85,8 +89,8 @@
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->username }}</div>
+                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ $user->name }}</div>
+                <div class="font-medium text-sm text-gray-500">{{ $user->username }}</div>
             </div>
 
             <div class="mt-3 space-y-1">
