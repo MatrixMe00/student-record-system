@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\UserController;
 use App\Models\Admin;
 use App\Models\deletedusers;
 use App\Models\School;
@@ -75,6 +76,8 @@ Route::get('/dashboard', function () {
 
     return view('dashboard', $options);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get("/users", [UserController::class, 'index'])->name("users.all");
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
