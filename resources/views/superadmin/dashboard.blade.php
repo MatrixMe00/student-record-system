@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+<x-app-main>
     <div class="bg-transparent grid grid-cols-1 sm:grid-cols-2
         md:grid-cols-3 lg:grid-cols-4 dark:bg-gray-800 overflow-hidden
         shadow-sm sm:rounded-lg py-4 gap-4">
@@ -12,4 +12,4 @@
         <x-dashboard-card icon="fas fa-user-graduate" context="{{ $student_count }}" title="Students" />
         <x-dashboard-card icon="fas fa-user-minus" context="{{ $delete_count }}" title="Deleted Users" />
     </div>
-</div>
+</x-app-main>
