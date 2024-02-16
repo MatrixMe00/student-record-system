@@ -1,3 +1,3 @@
-@props(["icon" => "fas fa-school"])
+@props(["icon" => "fas fa-school text-6xl"])
 
-<i {{ $attributes->merge(['class' => "$icon text-6xl text-gray-700"]) }}></i>
+<i {{ $attributes->merge(['class' => "$icon text-gray-700"]) }}></i>

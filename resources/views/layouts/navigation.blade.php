@@ -5,6 +5,11 @@
         ["name" => "Dashboard", "route" => "dashboard", "users" => [0]],
         ["name" => "Users", "route" => "users.all", "users" => [1,2,3]]
     ];
+    $menu_links = [
+        // ["name" => "", "route" => ""]
+        ["name" => "Profile", "route" => "profile.edit"],
+        ["name" => "Main Page", "route" => "index"]
+    ]
 @endphp
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
@@ -46,9 +51,11 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
+                        @foreach ($menu_links as $menu)
+                            <x-dropdown-link :href="route($menu['route'])">
+                                {{ __($menu["name"]) }}
+                            </x-dropdown-link>
+                        @endforeach
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -94,9 +101,11 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
+                @foreach ($menu_links as $menu)
+                    <x-responsive-nav-link :href="route($menu['route'])">
+                        {{ __($menu["name"]) }}
+                    </x-responsive-nav-link>
+                @endforeach
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
