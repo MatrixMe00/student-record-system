@@ -28,10 +28,13 @@
         </div>
         <ul :class="{'hidden': !open, 'block': open}" class="bg-white shadow-md rounded-md p-4 flex-1 mt-12 absolute z-20 top-8 right-4 w-64 border sm:shadow-none sm:block sm:border-0 sm:mt-0 sm:static sm:w-auto">
           <div class="order-1 justify-end items-center space-y-5 sm:flex sm:space-x-6 sm:space-y-0">
-            <li class="text-gray-500 hover:text-indigo-600"><a href="javascript:void(0)">Home</a></li>
-            <li class="text-gray-500 hover:text-indigo-600"><a href="javascript:void(0)">About</a></li>
-            <li class="text-gray-500 hover:text-indigo-600"><a href="javascript:void(0)">Schools</a></li>
-            <li class="text-gray-500 hover:text-indigo-600"><a href="javascript:void(0)">Contact Us</a></li>
+            <x-nav-menu-link href="{{ route('index') }}" is_current="{{ request()->routeIs('index') }}">Home</x-nav-menu-link>
+            <x-nav-menu-link href="javascript:void(0)" :is_current="false">About Us</x-nav-menu-link>
+            <x-nav-menu-link href="javascript:void(0)" :is_current="false">Schools</x-nav-menu-link>
+            <x-nav-menu-link href="{{ route('contact') }}" is_current="{{ request()->routeIs('contact') }}">Contact Us</x-nav-menu-link>
+            @auth
+                <x-nav-menu-link href="{{ route('dashboard') }}">{{ auth()->user()->username }}</x-nav-menu-link>
+            @endauth
           </div>
         </ul>
       </nav>
