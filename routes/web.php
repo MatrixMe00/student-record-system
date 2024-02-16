@@ -24,6 +24,10 @@ Route::get("/", function(){
     return view("welcome");
 })->name("index");
 
+Route::get("/contact-us", function(){
+    return view("home.contact");
+})->name("contact");
+
 // logins
 Route::get('/admin-login', function () {
     return view("auth.login", [
