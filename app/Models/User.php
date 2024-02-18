@@ -55,4 +55,26 @@ class User extends Authenticatable
     public function activityLogs(): HasMany{
         return $this->hasMany(ActivityLog::class);
     }
+
+    // some users belong to schools
+    public function school() :BelongsTo|null{
+        if($this->role_id >= 3){
+            switch($this->role_id){
+                case 3:
+                    $school_admin = SchoolAdmin::find($this->id);
+                    return $school_admin->school;
+                case 4:
+                    $teacher = Teacher::find($this->id);
+                    return $teacher->school;
+                case 5:
+                    $student = Student::find($this->id);
+                    return $student->school;
+                default:
+                    $other = other::find($this->id);
+                    return $other->school;
+            }
+        }
+
+        return null;
+    }
 }
