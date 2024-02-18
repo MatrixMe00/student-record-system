@@ -12,7 +12,6 @@ class other extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $table = "admins";
 
     // belongs to a school
     public function school(): BelongsTo{
