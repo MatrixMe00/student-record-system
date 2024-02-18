@@ -19,8 +19,21 @@ class Admin extends Model
         return $this->belongsTo(User::class);
     }
 
+
+
     // has logs through the parent user
     public function activity_logs(): HasManyThrough{
         return $this->hasManyThrough(ActivityLog::class, User::class, localKey: "user_id");
+    }
+
+    // Override the default newQuery method to add constraints
+    public function newQuery($excludeDeleted = true)
+    {
+        $query = parent::newQuery($excludeDeleted);
+
+        // return only users with null value
+        $query->where('school_id', null);
+
+        return $query;
     }
 }
