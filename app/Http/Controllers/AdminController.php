@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\UpdateAdminRequest;
+use App\Models\SchoolAdmin;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -21,7 +22,7 @@ class AdminController extends Controller
         if(is_null($school_id)){
             $admins = Admin::all();
         }else{
-            $admins = Admin::where("school_id", $school_id)->get();
+            $admins = SchoolAdmin::all();
         }
 
         return $admins;
@@ -42,6 +43,8 @@ class AdminController extends Controller
     {
         // if the role is a non-school role, school id should be null
         if($request->role_id < 3){
+            $request->merge(["school_id" => null]);
+        }elseif(is_null(auth()->user()) && $request->role_id == 3){
             $request->merge(["school_id" => null]);
         }
 

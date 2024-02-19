@@ -91,6 +91,7 @@ Route::middleware('auth')->group(function () {
 
     // users
     Route::get("/users", [UserController::class, 'index'])->name("users.all");
+    Route::get("/users/add", [UserController::class, 'index'])->name("user.add");
     Route::get("/user/{username}/edit", [UserController::class, "edit"]);
 });
 

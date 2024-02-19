@@ -13,6 +13,22 @@ class Student extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $primaryKey = "user_id";
+
+    // Override the default newQuery method to add constraints
+    public function newQuery($excludeDeleted = true)
+    {
+        $query = parent::newQuery($excludeDeleted);
+
+        // based on the user role
+        if(auth()->user()->role_id < 3){
+            $query->where('school_id', '>', 0);
+        }else{
+            $query->where('school_id', $this->school_id);
+        }
+
+        return $query;
+    }
 
     // student grades
     public function grades(): HasMany{

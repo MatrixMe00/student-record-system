@@ -15,6 +15,21 @@ class Teacher extends Model
 
     protected $guarded = [];
 
+    // Override the default newQuery method to add constraints
+    public function newQuery($excludeDeleted = true)
+    {
+        $query = parent::newQuery($excludeDeleted);
+
+        // based on the user role
+        if(auth()->user()->role_id < 3){
+            $query->where('school_id', '>', 0);
+        }else{
+            $query->where('school_id', $this->school_id);
+        }
+
+        return $query;
+    }
+
     // every teacher belongs to a school
     public function school(): BelongsTo{
         return $this->belongsTo(School::class);

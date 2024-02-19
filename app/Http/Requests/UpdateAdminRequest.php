@@ -27,7 +27,7 @@ class UpdateAdminRequest extends FormRequest
             "lname" => ["required", "max:255"],
             "oname" => ["required", "max:255"],
             "primary_phone" => ["required", "max:13", "min:10"],
-            "secondary_phone" => ["sometimes", "max:13", "min:10"],
+            "secondary_phone" => ["sometimes", "nullable", "digits_between:10,13"],
             "school_id" => ["nullable", "integer", Rule::exists("schools", "id")]
         ];
     }

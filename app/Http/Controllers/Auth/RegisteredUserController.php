@@ -47,8 +47,8 @@ class RegisteredUserController extends Controller
         ]);
 
         // create the user
-        $user = User::create($user);
-        // $user = new User($user);
+        // $user = User::create($user);
+        $user = new User($user);
 
         // based on user role determine which user data should be stored
         $this->store_user($request, $user);
@@ -57,8 +57,11 @@ class RegisteredUserController extends Controller
 
         $new_system = isset($request->setup_system) ? true : false;
         $new_school = isset($request->new_school) ? true : false;
+        $non_submit = isset($request->non_submit) ? true : false;
 
-        if(intval($user->role_id) == 2 && $new_system){
+        if($non_submit){
+            return redirect()->route('users.all');
+        }elseif(intval($user->role_id) == 2 && $new_system){
             return redirect('/');
         }elseif(intval($user->role_id) == 3 && $new_school){
             return redirect('/register-school')->with("admin_id", $user->id);
@@ -76,6 +79,9 @@ class RegisteredUserController extends Controller
         if($developer && $user->role_id == 1){
             return redirect()->back()->withErrors(['owner_error' => 'System cannot have two owners']);
         }
+
+        // create the user
+        $user->save();
 
         if($user->id){
             $request->merge(["user_id" => $user->id]);
