@@ -29,8 +29,10 @@ class TeacherController extends Controller
      */
     public function store(StoreTeacherRequest $request)
     {
-        $validated = $request->validated();
-        Teacher::create($validated);
+        $validated = $request->validate($request->rules());
+        $teacher = Teacher::create($validated);
+
+        return redirect()->back()->with(["message" => "Teacher has been created"]);
     }
 
     /**

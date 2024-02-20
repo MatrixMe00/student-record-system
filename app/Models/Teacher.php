@@ -21,10 +21,10 @@ class Teacher extends Model
         $query = parent::newQuery($excludeDeleted);
 
         // based on the user role
-        if(auth()->user()->role_id < 3){
-            $query->where('school_id', '>', 0);
-        }else{
+        if($this->school_id){
             $query->where('school_id', $this->school_id);
+        }else{
+            $query->where('school_id', '>', 0);
         }
 
         return $query;
@@ -59,5 +59,10 @@ class Teacher extends Model
     // teacher teaches many subjects
     public function subjects() :HasManyThrough{
         return $this->hasManyThrough(Subject::class, TeacherClass::class, localKey: "user_id");
+    }
+
+    // a teacher is a user
+    public function user() :BelongsTo{
+        return $this->belongsTo(User::class);
     }
 }

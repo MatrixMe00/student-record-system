@@ -1,4 +1,4 @@
-<div class="flex items-center w-full p-8 mx-auto lg:px-12" x-data="{ formData: {}, message: '', errorMessage: true}">
+<div class="flex items-center w-full p-8 mx-auto lg:px-12">
     <div class="w-full">
         <h1 class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
             Add A New User
@@ -8,7 +8,9 @@
             Fill the form below to add a new user
         </p>
 
-        <p id="message_tag" class="text-center mt-2 -mb-2 p-2 bg-white" style="display: none"></p>
+        @if ($errors->any())
+            <x-input-error :messages="$errors->all()" />
+        @endif
 
         <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 border p-4"
             method="POST" action="{{ route('register') }}">
@@ -71,7 +73,7 @@
             </div>
 
             {{-- user role --}}
-            <div>
+            <div x-data="{role_id=''}">
                 <x-input-label for="role_id" :value="__('User Role')" />
                 <x-input-select :options="$roles" default="Select A Role" name="role_id" id="role_id" :value="old('role_id')" />
                 <x-input-error :messages="$errors->get('role_id')" class="mt-2" />

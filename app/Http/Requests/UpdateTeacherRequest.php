@@ -13,7 +13,7 @@ class UpdateTeacherRequest extends FormRequest
     public function authorize(): bool
     {
         $authorized = request()->user()->user_role < 5;
-        return true;
+        return $authorized;
     }
 
     /**
@@ -30,6 +30,7 @@ class UpdateTeacherRequest extends FormRequest
             "phone_number" => ["string", "required", "min:10", "max:13"],
             "secondary_number" => ["string", "sometimes", "min:10", "max:13"],
             "class_teacher" => ["boolean", "sometimes"],
+            "school_id" => ["required", "integer", Rule::exists("schools", "id")],
             "program_id" => ["integer", "nullable", "sometimes", Rule::exists("programs", "id")]
         ];
     }
