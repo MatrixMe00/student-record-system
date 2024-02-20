@@ -23,7 +23,8 @@ return new class extends Migration
             $table->text("description");
             $table->string("school_email");
             $table->string("school_head");
-            $table->foreignId("admin_id")->constrained("admins","user_id")->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId("admin_id")->nullable();
+            $table->timestamps();
         });
     }
 

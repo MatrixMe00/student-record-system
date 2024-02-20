@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('school_settings', function (Blueprint $table) {
             $table->foreignId("school_id")->primary()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string("settings")->comment("A hashed data of the school settings");
-            $table->foreignId("admin_id")->constrained("admins","user_id");
+            $table->foreignId("admin_id");
             $table->timestamps();
         });
     }

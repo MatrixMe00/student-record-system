@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId("teacher_id")->constrained("teachers", "user_id");
             $table->integer("semester");
             $table->enum("status", ["pending","reject", "accept"])->default("pending");
-            $table->foreignId("worked_by")->constrained("admins", "user_id");
+            $table->foreignId("admin_id");
             $table->timestamps();
         });
     }
