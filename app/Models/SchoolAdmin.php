@@ -2,23 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
-class SchoolAdmin extends Admin
+class SchoolAdmin extends Model
 {
     protected $table = "admins";
+    protected $primaryKey = "user_id";
 
     // Override the default newQuery method to add constraints
     public function newQuery($excludeDeleted = true)
     {
         $query = parent::newQuery($excludeDeleted);
 
-        // based on the user role
-        if(auth()->user()->role_id < 3){
-            $query->where('school_id', '>', 0);
-        }else{
+        // based on the user school
+        if($this->school_id !== null){
             $query->where('school_id', $this->school_id);
+        }else{
+            $query->where('school_id', '>', 0);
         }
 
         return $query;
@@ -32,5 +34,15 @@ class SchoolAdmin extends Admin
     // admin has a school
     public function school(): BelongsTo{
         return $this->belongsTo(School::class);
+    }
+
+    // admin is a user
+    public function user(): BelongsTo{
+        return $this->belongsTo(User::class);
+    }
+
+    // has logs through the parent user
+    public function activity_logs(): HasManyThrough{
+        return $this->hasManyThrough(ActivityLog::class, User::class, localKey: "user_id");
     }
 }
