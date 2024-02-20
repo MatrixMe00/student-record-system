@@ -11,6 +11,8 @@ class SchoolAdmin extends Model
     protected $table = "admins";
     protected $primaryKey = "user_id";
 
+    protected $guarded = [];
+
     // Override the default newQuery method to add constraints
     public function newQuery($excludeDeleted = true)
     {
