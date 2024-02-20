@@ -19,8 +19,6 @@ class Admin extends Model
         return $this->belongsTo(User::class);
     }
 
-
-
     // has logs through the parent user
     public function activity_logs(): HasManyThrough{
         return $this->hasManyThrough(ActivityLog::class, User::class, localKey: "user_id");
