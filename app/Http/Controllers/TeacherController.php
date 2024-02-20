@@ -56,8 +56,10 @@ class TeacherController extends Controller
      */
     public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
-        $validated = $request->validated();
+        $validated = $request->validate($request->rules());
         $teacher->update($validated);
+
+        return redirect()->back()->with(["message" => "Teacher has been updated"]);
     }
 
     /**
