@@ -52,7 +52,7 @@ class AdminController extends Controller
 
         $user = Admin::create($admin);
 
-        return $user;
+        return redirect()->back()->with(["message" => "Admin has been created successfully"]);
     }
 
     /**
@@ -74,12 +74,12 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAdminRequest $request, Admin $admin)
+    public function update(UpdateAdminRequest $request, Admin|SchoolAdmin $admin)
     {
-        $validated = $request->validated();
+        $validated = $request->validate($request->rules());
         $admin->update($validated);
 
-        return $admin;
+        return redirect()->back()->with(["message" => "Admin was updated successfully"]);
     }
 
     /**

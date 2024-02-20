@@ -30,8 +30,10 @@ class OtherController extends Controller
      */
     public function store(StoreotherRequest $request, User $user)
     {
-        $validated = $request->validated();
+        $validated = $request->validate($request->rules());
         other::create($validated);
+
+        return redirect()->back()->with(['message' => "User was created successfully"]);
     }
 
     /**
@@ -55,8 +57,10 @@ class OtherController extends Controller
      */
     public function update(UpdateotherRequest $request, other $other)
     {
-        $validated = $request->validated();
+        $validated = $request->validate($request->rules());
         $other->update($validated);
+
+        return redirect()->back()->with(["message" => ["User record has been updated"]]);
     }
 
     /**

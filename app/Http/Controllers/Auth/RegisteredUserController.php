@@ -12,6 +12,7 @@ use App\Http\Requests\StoreotherRequest;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\StoreTeacherRequest;
 use App\Models\User;
+use App\Traits\UserModelTrait;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,6 +22,8 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
+    use UserModelTrait;
+
     /**
      * Display the registration view.
      */
@@ -88,28 +91,10 @@ class RegisteredUserController extends Controller
             $request->merge(["user_id" => $user->id]);
         }
 
-        switch($request->role_id){
-            case 1:
-            case 2:
-            case 3:
-                $user_class = new AdminController;
-                $r = new StoreAdminRequest();
-                break;
-            case 4:
-                $user_class = new TeacherController;
-                $r = new StoreTeacherRequest();
-                break;
-            case 5:
-                $user_class = new StudentController;
-                $r = new StoreStudentRequest();
-                break;
-            default:{
-                $user_class = new OtherController;
-                $r = new StoreotherRequest();
-            }
-        }
+        $user_class = $this->createController($request->role_id);
+        $controller_request = $this->createStoreRequest($request->role_id, $request);
 
         // call store on each
-        return $user_class->store($r->createFrom($request));
+        return $user_class->store($controller_request);
     }
 }

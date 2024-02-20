@@ -33,7 +33,7 @@ class StudentController extends Controller
         $student = $request->validate($request->rules());
         Student::create($student);
 
-        return redirect()->back();
+        return redirect()->back()->with(["message" => "Student has been created successfully"]);
     }
 
     /**
@@ -57,8 +57,10 @@ class StudentController extends Controller
      */
     public function update(UpdateStudentRequest $request, Student $student)
     {
-        $validated = $request->validated();
+        $validated = $request->validate($request->rules());
         $student->update($validated);
+
+        return redirect()->back()->with(["message" => ["Student data has been updated"]]);
     }
 
     /**
