@@ -79,14 +79,14 @@
 
             {{-- school --}}
             <div>
-                <x-input-label for="school_id" :value="__('User School')" />
                 @if (is_array($school_id))
+                    <x-input-label for="school_id" :value="__('User School')" />
                     @php
                         $school_id = count($school_id) > 0 ? $school_id : "";
                     @endphp
                     <x-input-select :options="$school_id" default="Select A School" name="school_id" id="school_id" :value="old('school_id')" />
                 @else
-                <x-text-input id="school_id" type="hidden" name="school_id" :value="old('school_id')" placeholder="XXX XXX XXXX" maxlength="13" minlength="10" />
+                <x-text-input id="school_id" type="hidden" name="school_id" value="{{ $school_id }}" placeholder="XXX XXX XXXX" maxlength="13" minlength="10" />
                 @endif
                 <x-input-error :messages="$errors->get('school_id')" class="mt-2" />
             </div>

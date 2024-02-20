@@ -35,7 +35,7 @@ class UserController extends Controller
                 ];
                 $roles = Role::where("school_id", 0)->get()->toArray();
                 $school_id[] = ["id" => 0, "name" => "No school"];
-                $school_id += School::all()->toArray();
+                $school_id = array_merge($school_id, School::all(["id", "school_name as name"])->toArray());
                 break;
             case 3:
                 $options = [

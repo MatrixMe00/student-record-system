@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class StoreAdminRequest extends FormRequest
@@ -43,7 +44,9 @@ class StoreAdminRequest extends FormRequest
             "oname" => ["required", "max:255"],
             "primary_phone" => ["required", "max:13", "min:10"],
             "secondary_phone" => ["sometimes", "nullable", "digits_between:10,13"],
-            "school_id" => ["nullable", "integer", Rule::exists("schools", "id")]
+            "school_id" => ["nullable", "integer", Rule::requiredIf(function(){
+                return Auth::check() && Auth::user()->role_id == 3;
+            }), Rule::exists("schools", "id")]
         ];
     }
 }
