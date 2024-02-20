@@ -23,12 +23,11 @@ class UpdateotherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id" => ["required", Rule::exists("users", "id"), "integer"],
             "lname" => ["required", "max:255"],
             "oname" => ["required", "max:255"],
             "primary_phone" => ["required", "max:13", "min:10"],
-            "secondary_phone" => ["sometimes", "max:13", "min:10"],
-            "school_id" => ["nullable", "integer", Rule::exists("schools", "id")]
+            "secondary_phone" => ["sometimes", "nullable", "max:13", "min:10"],
+            "school_id" => ["sometimes", "nullable", "integer", Rule::exists("schools", "id")]
         ];
     }
 }

@@ -28,10 +28,10 @@ class StoreTeacherRequest extends FormRequest
             "lname" => ["string", "required", "max:255"],
             "oname" => ["string", "required", "max:255"],
             "primary_phone" => ["string", "required", "min:10", "max:13"],
-            "secondary_number" => ["string", "sometimes", "min:10", "max:13"],
-            "class_teacher" => ["boolean", "sometimes"],
+            "secondary_phone" => ["sometimes", "nullable", "string", "min:10", "max:13"],
+            "class_teacher" => ["sometimes", "boolean"],
             "school_id" => ["required", "integer", Rule::exists("schools", "id")],
-            "program_id" => ["integer", "nullable", "sometimes", Rule::exists("programs", "id")]
+            "program_id" => ["sometimes", "integer", "nullable", Rule::exists("programs", "id")]
         ];
     }
 }

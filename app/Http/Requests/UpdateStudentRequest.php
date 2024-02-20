@@ -25,14 +25,13 @@ class UpdateStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id" => ["required", "integer"],
-            "lname" => ["required", "max:255"],
-            "oname" => ["required", "max:255"],
-            "next_of_kin" => ["required", "max:255"],
+            "lname" => ["required", "string", "max:255"],
+            "oname" => ["required", "string", "max:255"],
+            "next_of_kin" => ["sometimes", "required", "string", "max:255"],
             "primary_phone" => ["required", "max:13", "min:10"],
-            "secondary_phone" => ["sometimes", "max:13", "min:10"],
-            "school_id" => ["required", "integer", Rule::exists("schools", 'id')],
-            "program_id" => ["required", "integer", Rule::exists("programs", 'id')]
+            "secondary_phone" => ["sometimes", "nullable", "max:13", "min:10"],
+            "school_id" => ["sometimes", "required", "integer", Rule::exists("schools", 'id')],
+            "program_id" => ["sometimes", "required", "integer", Rule::exists("programs", 'id')]
         ];
     }
 }
