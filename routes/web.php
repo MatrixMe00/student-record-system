@@ -62,37 +62,7 @@ Route::post("/register-school", [SchoolController::class, 'store'])->name("schoo
 Route::get("/schools", [SchoolController::class, 'index'])->name("school.index");
 
 // dashboards
-Route::get('/dashboard', function () {
-    $role_id = auth()->user()->role_id;
-    $options = [];
-
-    switch($role_id){
-        case 1:
-            $options["developer_count"] = User::where("role_id", 1)->get()->count();
-        case 2:
-            $options = [
-                "school_count" => School::all()->count(),
-                "admin_count" => User::where('role_id', 3)->orWhere('role_id', '>', 5)->get()->count(),
-                "superadmin_count" => Admin::all()->count(),
-                "student_count" => Student::all()->count(),
-                "teacher_count" => Teacher::all()->count(),
-                "delete_count" => deletedusers::all()->count()
-            ];
-            break;
-        case 4:
-        case 5:
-            break;
-        default:
-            $options = [
-                "admin_count" => User::where('role_id', 3)->orWhere('role_id', '>', 5)->get()->count(),
-                "student_count" => Student::all()->count(),
-                "teacher_count" => Teacher::all()->count(),
-                "delete_count" => deletedusers::all()->count()
-            ];
-    }
-
-    return view('dashboard', $options);
-})->middleware(['auth', 'verified', 'school.check'])->name('dashboard');
+Route::get('/dashboard', [UserController::class, 'dashboard'])->middleware(['auth', 'verified', 'school.check'])->name('dashboard');
 
 Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -103,6 +73,7 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get("/users", [UserController::class, 'index'])->name("users.all");
     Route::get("/users/add", [UserController::class, 'index'])->name("user.add");
     Route::get("/user/{username}/edit", [UserController::class, "edit"]);
+    Route::put("/user/{username}/edit", [UserController::class, "update"]);
 });
 
 require __DIR__.'/auth.php';
