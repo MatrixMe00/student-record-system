@@ -21,7 +21,7 @@ class Student extends Model
         $query = parent::newQuery($excludeDeleted);
 
         // based on the user role
-        if(auth()->user()?->school || $this->school_id){
+        if(auth()->user()?->school() || $this->school_id){
             $school_id = auth()->user()->school->id ?? $this->school_id;
             $query->where("school_id", $school_id);
         }
