@@ -62,16 +62,16 @@ class User extends Authenticatable
             switch($this->role_id){
                 case 3:
                     $school_admin = SchoolAdmin::find($this->id);
-                    return $school_admin->school;
+                    return $school_admin->school();
                 case 4:
                     $teacher = Teacher::find($this->id);
-                    return $teacher->school;
+                    return $teacher->school();
                 case 5:
                     $student = Student::find($this->id);
-                    return $student->school;
+                    return $student->school();
                 default:
                     $other = other::find($this->id);
-                    return $other->school;
+                    return $other->school();
             }
         }
 
