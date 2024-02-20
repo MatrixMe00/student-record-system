@@ -13,7 +13,11 @@
                     Set up your school by providing the necessary details. Please provide valid data.
                 </p>
 
-                <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 border p-4" method="POST" action="{{ route('register') }}">
+                @if ($errors->any())
+                    <x-input-error :messages="$errors->all()" />
+                @endif
+
+                <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 border p-4" enctype="multipart/form-data" method="POST" action="{{ route('school.store') }}">
                     @csrf
 
                     <!-- Name of school -->
@@ -39,16 +43,16 @@
 
                     <!-- Headmaster or Headmistress -->
                     <div>
-                        <x-input-label for="head_name" :value="__('Headmaster / Headmistress name')" />
-                        <x-text-input id="head_name" type="text" name="head_name" :value="old('head_name')" placeholder="Headmaster / Headmistress" required />
-                        <x-input-error :messages="$errors->get('head_name')" class="mt-2" />
+                        <x-input-label for="school_head" :value="__('Headmaster / Headmistress name')" />
+                        <x-text-input id="school_head" type="text" name="school_head" :value="old('school_head')" placeholder="Headmaster / Headmistress" required />
+                        <x-input-error :messages="$errors->get('school_head')" class="mt-2" />
                     </div>
 
                     <!-- School Logo -->
                     <div>
-                        <x-input-label for="school_logo" :value="__('School Logo')" />
-                        <x-text-input id="school_logo" type="file" accept="image" name="school_logo" :value="old('school_logo')" />
-                        <x-input-error :messages="$errors->get('school_logo')" class="mt-2" />
+                        <x-input-label for="logo_path" :value="__('School Logo')" />
+                        <x-text-input id="logo_path" type="file" accept="image" name="logo_path" :value="old('logo_path')" />
+                        <x-input-error :messages="$errors->get('logo_path')" class="mt-2" />
                     </div>
 
                     <!-- School Location -->
@@ -90,7 +94,7 @@
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
 
-                    <x-text-input name="admin_id" id="admin_id" type="hidden" value="{{ $admin_id }}" />
+                    <x-text-input name="admin_id" id="admin_id" type="text" value="{{ auth()->user()?->id ?? $admin_id }}" />
 
                     <button
                         class="flex items-center justify-between w-full px-6 py-3 text-sm
@@ -101,9 +105,16 @@
                         <i class="fas fa-angle-right group-hover:mr-2 transition-all duration-500"></i>
                     </button>
                     <div class="flex items-center justify-end mt-4">
-                        <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('admin.login') }}">
-                            {{ __('Cancel Registration') }}
+                        @if(auth()->user())
+                        <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('logout') }}">
+                            {{ __('Log Out') }}
                         </a>
+                        @else
+                            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('admin.login') }}">
+                                {{ __('Cancel Registration') }}
+                            </a>
+                        @endif
+
                     </div>
                 </form>
             </div>

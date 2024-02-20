@@ -26,10 +26,13 @@ class StoreSchoolRequest extends FormRequest
             "school_name" => ["required", "string", Rule::unique("schools", "name")],
             "school_slug" => ["required", "string"],
             "logo_path" => ["sometimes", "string", "nullable"],
-            "gps_address" => ["required", "string", "max:15"],
+            "location" => ["required", 'string'],
+            "gps_address" => ["required", "string", "max:15", Rule::unique("schools", "gps_address")],
             "box_number" => ["required", "string", Rule::unique("schools", "box_number")],
+            "school_type" => ["required", "string", Rule::in(["public", "private"])],
+            "school_head" => ["required", "string"],
             "description" => ["required", "string"],
-            "school_email" => ["required", "string"],
+            "school_email" => ["required", "string", "email", Rule::unique("schools", "email")],
             "admin_id" => ["required", "integer", Rule::exists("admins", "user_id")]
         ];
     }

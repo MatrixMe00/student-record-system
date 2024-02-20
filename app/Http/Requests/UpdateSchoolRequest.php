@@ -24,13 +24,16 @@ class UpdateSchoolRequest extends FormRequest
     {
         return [
             "id" => ["required", "integer", Rule::exists("schools", "id")],
-            "school_name" => ["required", "string", Rule::unique("schools", "name")],
+            "school_name" => ["required", "string"],
             "school_slug" => ["required", "string"],
+            "location" => ["required", 'string'],
             "logo_path" => ["sometimes", "string", "nullable"],
             "gps_address" => ["required", "string", "max:15"],
-            "box_number" => ["required", "string", Rule::unique("schools", "box_number")],
+            "box_number" => ["required", "string"],
+            "school_type" => ["required", "string", Rule::in(["public", "private"])],
+            "school_head" => ["required", "string"],
             "description" => ["required", "string"],
-            "school_email" => ["required", "string"],
+            "school_email" => ["required", "string", "email"],
             "admin_id" => ["required", "integer", Rule::exists("admins", "user_id")]
         ];
     }

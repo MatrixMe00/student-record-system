@@ -65,6 +65,7 @@
                     </div>
 
                     <x-text-input name="role_id" id="role_id" type="hidden" value="{{ $role_id }}" />
+                    <x-text-input name="new_school" id="new_school" type="hidden" value="1" />
 
                     <button
                         class="flex items-center justify-between w-full px-6 py-3 text-sm

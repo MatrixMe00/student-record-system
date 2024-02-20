@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\School;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
+use App\Models\Admin;
 
 class SchoolController extends Controller
 {
@@ -13,7 +14,9 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        //
+        return view('home.schools', [
+            "schools" => School::all()
+        ]);
     }
 
     /**
@@ -24,9 +27,12 @@ class SchoolController extends Controller
         // without an admin id, redirect to admin register
         $admin_id = session('admin_id') != null ? session('admin_id') : false;
 
-        /*if(!$admin_id){
-            return redirect("/register");
-        }*/
+        if(!$admin_id){
+            $admin_id = auth()->user()?->id ?? false;
+
+            if(!$admin_id || $admin_id == null)
+                return redirect("/register");
+        }
 
         return view('auth.register', [
             "admin_id" => $admin_id,
@@ -40,10 +46,23 @@ class SchoolController extends Controller
      */
     public function store(StoreSchoolRequest $request)
     {
-        $validated = $request->validate($request->rules());
-        School::create($validated);
+        // dd($request);
+        // get the logo path
+        $request->merge([
+            "logo_path" => $this->store_logo()
+        ]);
 
-        return redirect("/admin-login");
+        $validated = $request->validate($request->rules());
+        $school = School::create($validated);
+
+        // store school id into user school
+        $this->update_user($school->id, $request->admin_id);
+
+        if(auth()->user()){
+            return redirect()->route('dashboard');
+        }
+
+        return redirect()->route("admin.login");
     }
 
     /**
@@ -69,6 +88,8 @@ class SchoolController extends Controller
     {
         $validated = $request->validated();
         $school->update($validated);
+
+        return redirect()->back();
     }
 
     /**
@@ -77,5 +98,32 @@ class SchoolController extends Controller
     public function destroy(School $school)
     {
         $school->delete();
+    }
+
+    /**
+     * Stores the school id into the user
+     */
+    private function update_user(int $school_id, int $admin_id){
+        $admin = Admin::find($admin_id);
+
+        // admin would be found regardless
+        $admin->school_id = $school_id;
+        $admin->save();
+    }
+
+    /**
+     * Saves a copy of the school logo on storage
+     */
+    private function store_logo(bool $store = true){
+        if($store){
+
+        }
+        if(!empty(request()->logo_path)){
+            $path = request()->file('logo_path')->store('images/school-logo', 'public');
+
+            return $path;
+        }
+
+        return null;
     }
 }
