@@ -57,9 +57,9 @@ Route::get("/setup", function(){
     ]);
 })->name('setup');
 
-Route::get("/register-school", [SchoolController::class, 'create']);
-Route::post("/register-school", [SchoolController::class, 'store']);
-Route::get("/schools", [SchoolController::class, 'index']);
+Route::get("/register-school", [SchoolController::class, 'create'])->middleware('school.check')->name("school.create");
+Route::post("/register-school", [SchoolController::class, 'store'])->name("school.store");
+Route::get("/schools", [SchoolController::class, 'index'])->name("school.index");
 
 // dashboards
 Route::get('/dashboard', function () {
@@ -72,19 +72,29 @@ Route::get('/dashboard', function () {
         case 2:
             $options = [
                 "school_count" => School::all()->count(),
-                "admin_count" => SchoolAdmin::all()->count() + other::all()->count(),
+                "admin_count" => User::where('role_id', 3)->orWhere('role_id', '>', 5)->get()->count(),
                 "superadmin_count" => Admin::all()->count(),
                 "student_count" => Student::all()->count(),
                 "teacher_count" => Teacher::all()->count(),
                 "delete_count" => deletedusers::all()->count()
             ];
             break;
+        case 4:
+        case 5:
+            break;
+        default:
+            $options = [
+                "admin_count" => User::where('role_id', 3)->orWhere('role_id', '>', 5)->get()->count(),
+                "student_count" => Student::all()->count(),
+                "teacher_count" => Teacher::all()->count(),
+                "delete_count" => deletedusers::all()->count()
+            ];
     }
 
     return view('dashboard', $options);
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'school.check'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
