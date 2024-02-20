@@ -39,9 +39,10 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $email_required = $request->role_id == 5 ? "nullable" : "required";
         $user = $request->validate([
             'username' => ['required', 'string', 'unique:'.User::class],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => [$email_required, 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'role_id' => ['required', 'integer', Rule::exists("roles", "id")],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);

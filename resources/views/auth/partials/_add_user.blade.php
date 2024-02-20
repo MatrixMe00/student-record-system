@@ -1,4 +1,4 @@
-<div class="flex items-center w-full p-8 mx-auto lg:px-12">
+<div class="flex items-center w-full p-8 mx-auto lg:px-12" x-data="{ selected_role:'{{ old('role_id') }}', email_val:'{{ old('email') }}' }" x-init="email_val='{{ old('email') }}'">
     <div class="w-full">
         <h1 class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
             Add A New User
@@ -16,6 +16,13 @@
             method="POST" action="{{ route('register') }}">
             @csrf
 
+            {{-- user role --}}
+            <div>
+                <x-input-label for="role_id" :value="__('User Role')" />
+                <x-input-select :options="$roles" default="Select A Role" name="role_id" id="role_id" :value="old('role_id')" x-model="selected_role" />
+                <x-input-error :messages="$errors->get('role_id')" class="mt-2" />
+            </div>
+
             {{-- user lastname --}}
             <div>
                 <x-input-label for="lname" :value="__('Last Name')" />
@@ -31,9 +38,9 @@
             </div>
 
             {{-- user email --}}
-            <div>
+            <div x-show="selected_role != 5">
                 <x-input-label for="email" :value="__('Email')" />
-                <x-text-input id="email" type="email" name="email" :value="old('email')" placeholder="example@email.com" />
+                <x-text-input id="email" type="email" x-model="email_val" name="email" :value="old('email')" placeholder="example@email.com" />
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
 
@@ -72,11 +79,18 @@
                 <x-input-error :messages="$errors->get('secondary_phone')" class="mt-2" />
             </div>
 
-            {{-- user role --}}
-            <div x-data="{role_id=''}">
-                <x-input-label for="role_id" :value="__('User Role')" />
-                <x-input-select :options="$roles" default="Select A Role" name="role_id" id="role_id" :value="old('role_id')" />
-                <x-input-error :messages="$errors->get('role_id')" class="mt-2" />
+            {{-- student next of kin --}}
+            <div x-show="selected_role==5">
+                <x-input-label for="next_of_kin" :value="__('Student Next of Kin')" />
+                <x-text-input id="next_of_kin" name="next_of_kin" :value="old('next_of_kin')" placeholder="Next of Kin" />
+                <x-input-error :messages="$errors->get('next_of_kin')" />
+            </div>
+
+            {{-- student program --}}
+            <div x-show="selected_role==5">
+                <x-input-label for="program_id" :value="__('Student Class')" />
+                <x-input-select :options="$programs ?? ''" default="Select A Class" name="school_id" id="school_id" :value="old('school_id')" />
+                <x-input-error :messages="$errors->get('program_id')" />
             </div>
 
             {{-- school --}}

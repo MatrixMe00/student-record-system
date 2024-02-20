@@ -30,8 +30,10 @@ class StudentController extends Controller
     public function store(StoreStudentRequest $request)
     {
         // validate the user
-        $student = $request->validated();
+        $student = $request->validate($request->rules());
         Student::create($student);
+
+        return redirect()->back();
     }
 
     /**

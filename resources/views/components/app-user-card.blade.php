@@ -1,11 +1,14 @@
 @props(["user"])
 
 @php
+    $status_text = $user->user->is_active ? "Deactivate" : "Activate";
     if(auth()->user()->id != $user->user_id){
-        $edit = "/user/".$user->user->username."/edit";
-        $delete = "/user/".$user->user->username."/delete";
+        $username = "/user/{$user->user->username}";
+        $edit = $username."/edit";
+        $delete = $username."/delete";
+        $deactivate = $username."/status";
     }else{
-        $edit = $delete = "javascript:void(0)";
+        $edit = $delete = $deactivate = "javascript:void(0)";
         $disable = "text-gray-400 hover:bg-gray-100";
     }
 
@@ -28,6 +31,7 @@
             <ul class="list-none">
                 <li class="p-2 {{ $disable ?? 'hover:bg-gray-300' }}"><a href="{{ $edit }}" class="block">Edit</a></li>
                 <li class="p-2 {{ $disable ?? 'hover:bg-gray-300' }}"><a href="{{ $delete }}" class="block">Delete</a></li>
+                <li class="p-2 {{ $disable ?? 'hover:bg-gray-300' }}"><a href="{{ $deactivate }}" class="block">{{ $status_text }}</a></li>
             </ul>
         </div>
       </div>

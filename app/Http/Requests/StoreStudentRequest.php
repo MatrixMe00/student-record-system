@@ -24,6 +24,7 @@ class StoreStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "user_id" => ["required", "integer", Rule::exists("users", "id")],
             "lname" => ["required", "max:255"],
             "oname" => ["required", "max:255"],
             "next_of_kin" => ["required", "max:255"],

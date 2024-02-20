@@ -21,10 +21,9 @@ class Student extends Model
         $query = parent::newQuery($excludeDeleted);
 
         // based on the user role
-        if(auth()->user()->role_id < 3){
-            $query->where('school_id', '>', 0);
-        }else{
-            $query->where('school_id', $this->school_id);
+        if(auth()->user()?->school || $this->school_id){
+            $school_id = auth()->user()->school->id ?? $this->school_id;
+            $query->where("school_id", $school_id);
         }
 
         return $query;
@@ -48,5 +47,10 @@ class Student extends Model
     // has logs through the parent user
     public function activity_logs(): HasManyThrough{
         return $this->hasManyThrough(ActivityLog::class, User::class, localKey: "user_id");
+    }
+
+    // belongs to the user class
+    public function user(): BelongsTo{
+        return $this->belongsTo(User::class);
     }
 }

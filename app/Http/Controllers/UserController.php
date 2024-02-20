@@ -33,7 +33,7 @@ class UserController extends Controller
                     "students" => Student::all(),
                     "others" => other::all()
                 ];
-                $roles = Role::where("school_id", 0)->get()->toArray();
+                $roles = Role::where("school_id", 0)->where("id", "<", 5)->get()->toArray();
                 $school_id[] = ["id" => 0, "name" => "No school"];
                 $school_id = array_merge($school_id, School::all(["id", "school_name as name"])->toArray());
                 break;
