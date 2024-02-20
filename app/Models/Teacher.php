@@ -14,6 +14,7 @@ class Teacher extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $primaryKey = "user_id";
 
     // Override the default newQuery method to add constraints
     public function newQuery($excludeDeleted = true)
