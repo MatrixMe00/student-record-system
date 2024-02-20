@@ -30,7 +30,7 @@
           <div class="order-1 justify-end items-center space-y-5 sm:flex sm:space-x-6 sm:space-y-0">
             <x-nav-menu-link href="{{ route('index') }}" is_current="{{ request()->routeIs('index') }}">Home</x-nav-menu-link>
             <x-nav-menu-link href="javascript:void(0)" :is_current="false">About Us</x-nav-menu-link>
-            <x-nav-menu-link href="javascript:void(0)" :is_current="false">Schools</x-nav-menu-link>
+            <x-nav-menu-link href="{{ route('school.index') }}" is_current="{{ request()->routeIs('school.index') }}">Schools</x-nav-menu-link>
             <x-nav-menu-link href="{{ route('contact') }}" is_current="{{ request()->routeIs('contact') }}">Contact Us</x-nav-menu-link>
             @auth
                 <x-nav-menu-link href="{{ route('dashboard') }}">{{ auth()->user()->username }}</x-nav-menu-link>

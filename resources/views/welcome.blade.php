@@ -30,11 +30,11 @@
 
             <div class="mt-16">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-                    <x-welcome-tag href="/admin-login" tag_name="Admin Login" icon="fas fa-user-clock"/>
-                    <x-welcome-tag href="/teacher-login" tag_name="Teacher Login" icon="fas fa-person-chalkboard" />
-                    <x-welcome-tag href="/login" tag_name="Student Login" icon="fas fa-user-graduate" />
-                    <x-welcome-tag href="/schools" tag_name="Our Schools" icon="fas fa-school-flag" />
-                    <x-welcome-tag href="/register" tag_name="Register School" icon="fas fa-school-circle-check" />
+                    <x-welcome-tag href="{{ route('admin.login') }}" tag_name="Admin Login" icon="fas fa-user-clock"/>
+                    <x-welcome-tag href="{{ route('teacher.login') }}" tag_name="Teacher Login" icon="fas fa-person-chalkboard" />
+                    <x-welcome-tag href="{{ route('login') }}" tag_name="Student Login" icon="fas fa-user-graduate" />
+                    <x-welcome-tag href="{{ route('school.index') }}" tag_name="Our Schools" icon="fas fa-school-flag" />
+                    <x-welcome-tag href="{{ route('register') }}" tag_name="Register School" icon="fas fa-school-circle-check" />
                 </div>
             </div>
 
