@@ -33,7 +33,7 @@ class UserController extends Controller
                     "students" => Student::all(),
                     "others" => other::all()
                 ];
-                $roles = Role::all()->toArray();
+                $roles = Role::where("school_id", 0)->get()->toArray();
                 $school_id[] = ["id" => 0, "name" => "No school"];
                 $school_id += School::all()->toArray();
                 break;
@@ -44,8 +44,8 @@ class UserController extends Controller
                     "students" => Student::all(),
                     "others" => other::all()
                 ];
-                $roles = Role::where("id", ">", "2")->get()->toArray();
                 $school_id = $user->school->id;
+                $roles = Role::where("id", ">", "2")->where("school_id", 0)->orWhere("school_id", $school_id)->get()->toArray();
                 break;
             default:
         }
