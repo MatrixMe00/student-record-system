@@ -12,19 +12,12 @@
     <x-app-main>
         @if (auth()->user()->role_id <= 3)
             <section class="mt-4 ml-6">
-                @if ($is_add)
-                    <x-primary-button
-                        x-data=""
-                        x-on:click.prevent="$dispatch('open-modal', 'create_user')"
-                        type="button">
-                        {{ __("Add New User") }}
-                    </x-primary-button>
-                @else
-                    <x-primary-button onclick="location.href='{{ route('user.add') }}'"
-                        type="button">
-                        {{ __("Add New User") }}
-                    </x-primary-button>
-                @endif
+                <x-primary-button
+                    x-data=""
+                    x-on:click.prevent="$dispatch('open-modal', 'create_user')"
+                    type="button">
+                    {{ __("Add New User") }}
+                </x-primary-button>
             </section>
         @endif
 
@@ -50,8 +43,8 @@
         </x-app-tab>
 
         {{-- modal for new user --}}
-        @if (auth()->user()->role_id <= 3 && request()->routeIs('user.add'))
-            <x-modal name="create_user" show="true">
+        @if (auth()->user()->role_id <= 3)
+            <x-modal name="create_user" :show="$errors->any()">
                 @include("auth.partials._add_user")
             </x-modal>
         @endif

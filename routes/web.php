@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use App\Models\Admin;
 use App\Models\deletedusers;
@@ -71,9 +73,17 @@ Route::middleware(['auth', 'school.check'])->group(function () {
 
     // users
     Route::get("/users", [UserController::class, 'index'])->name("users.all");
-    Route::get("/users/add", [UserController::class, 'index'])->name("user.add");
     Route::get("/user/{username}/edit", [UserController::class, "edit"]);
     Route::put("/user/{username}/edit", [UserController::class, "update"]);
+
+    // programs
+    Route::get("/classes", [ProgramController::class, 'index'])->name("program.all");
+
+    // subjects
+    Route::get("/subjects", [SubjectController::class, 'index'])->name('subject.all');
+
+    // school settings
+    Route::get("/my-school", [SchoolController::class, 'show'])->name('my-school');
 });
 
 require __DIR__.'/auth.php';
