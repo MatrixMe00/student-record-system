@@ -5,10 +5,6 @@
 
     @section("title", "Users")
 
-    @php
-        $is_add = request()->routeIs('user.add');
-    @endphp
-
     <x-app-main>
         @if (auth()->user()->role_id <= 3)
             <section class="mt-4 ml-6">
