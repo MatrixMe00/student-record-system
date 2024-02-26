@@ -89,7 +89,7 @@
             {{-- student program --}}
             <div x-show="selected_role==5">
                 <x-input-label for="program_id" :value="__('Student Class')" />
-                <x-input-select :options="$programs ?? ''" default="Select A Class" name="school_id" id="school_id" :value="old('school_id')" />
+                <x-input-select :options="$programs ?? ''" default="Select A Class" name="program_id" id="program_id" :value="old('program_id')" />
                 <x-input-error :messages="$errors->get('program_id')" />
             </div>
 

@@ -17,7 +17,9 @@
                 </p>
 
                 @session('success')
-                    <p class="text-center mt-2 -mb-2 p-2 bg-white border cursor-pointer" onclick="this.remove()">{{ session('success') }}</p>
+                    <x-session-message>
+                        {{ __(session('success')) }}
+                    </x-session-message>
                 @endsession
 
                 @if ($errors->any())
