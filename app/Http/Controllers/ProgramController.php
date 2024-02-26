@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Program;
 use App\Http\Requests\StoreProgramRequest;
 use App\Http\Requests\UpdateProgramRequest;
+use App\Models\Teacher;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class ProgramController extends Controller
 {
@@ -13,7 +16,11 @@ class ProgramController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.classes.index', [
+            "programs" => Program::all(),
+            "school_id" => auth()->user()?->school->id,
+            "teachers" => Teacher::all(["user_id", "lname", "oname"])
+        ]);
     }
 
     /**
@@ -29,8 +36,18 @@ class ProgramController extends Controller
      */
     public function store(StoreProgramRequest $request)
     {
-        $validated = $request->validated();
-        Program::create($validated);
+        // check if the name already exists
+        if(($message = $this->check_name_slug()) === true){
+            $validated = $request->validate($request->rules());
+            $program = Program::create($validated);
+
+            $success = true;
+            $message = "$program->name has been created successfully";
+        }else{
+            $success = false;
+        }
+
+        return redirect()->back()->with(["success" => $success, "message" => $message]);
     }
 
     /**
@@ -46,7 +63,7 @@ class ProgramController extends Controller
      */
     public function edit(Program $program)
     {
-        //
+        return view('admin.classes.edit', ["program" => $program]);
     }
 
     /**
@@ -54,8 +71,13 @@ class ProgramController extends Controller
      */
     public function update(UpdateProgramRequest $request, Program $program)
     {
-        $validated = $request->validated();
+        // check the name and slug
+        $this->check_name_slug(true, $program->id);
+
+        $validated = $request->validate($request->rules());
         $program->update($validated);
+
+        return redirect()->back()->with(["success" => "Update for $program->name was successful"]);
     }
 
     /**
@@ -63,6 +85,56 @@ class ProgramController extends Controller
      */
     public function destroy(Program $program)
     {
+        $class_name = $program->name;
         $program->delete();
+
+        return redirect()->back()->with(["success" => true, "message" => "$class_name has been deleted"]);
+    }
+
+    /**
+     * Checks if a program name for a school already exists
+     */
+    private function program_name_exists(bool $is_update, ?int $program_id){
+        $name = request()->name;
+
+        $exists = $is_update ?
+            Program::where('name', $name)->where("id", "!=", $program_id)->exists() :
+            Program::where('name', $name)->exists();
+
+        return $exists;
+    }
+
+    /**
+     * Checks if a slug exists
+     */
+    private function slug_exists(bool $is_update, ?int $program_id){
+        $slug = request()->slug;
+        $exists = false;
+
+        if(!empty($slug)){
+            $exists = $is_update ?
+                Program::where('slug', $slug)->where("id", "!=", $program_id)->exists() :
+                Program::where('slug', $slug)->exists();
+        }
+
+        return $exists;
+    }
+
+    private function check_name_slug(bool $is_update = false, ?int $program_id = null){
+        if($this->program_name_exists($is_update, $program_id)){
+            $message = request()->name." already exists";
+            throw ValidationException::withMessages([
+                'name' => $message,
+            ]);
+            return $message;
+        }if($this->slug_exists($is_update, $program_id)){
+            $message = request()->slug." already exists";
+            throw ValidationException::withMessages([
+                'slug' => $message,
+            ]);
+            return $message;
+        }
+
+        return true;
     }
 }

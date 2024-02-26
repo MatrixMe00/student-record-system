@@ -12,7 +12,9 @@ class UpdateProgramRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $role_id = auth()->user()->role_id;
+        $authorized = $role_id == 3 || $role_id > 5;
+        return $authorized;
     }
 
     /**

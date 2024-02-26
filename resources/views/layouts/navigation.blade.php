@@ -3,7 +3,10 @@
     $nav_links = [
         // ["name" => "", "route" => "", "users" => []]
         ["name" => "Dashboard", "route" => "dashboard", "users" => [0]],
-        ["name" => "Users", "route" => "users.all", "users" => [1,2,3]]
+        // ["name" => "Notifications", "route" => "", "users" => []],
+        ["name" => "Users", "route" => "users.all", "users" => [1,2,3]],
+        ["name" => "Classes", "route" => "program.all", "users" => [3]],
+        ["name" => "Subjects", "route" => "subject.all", "users" => [3]],
     ];
     $menu_links = [
         // ["name" => "", "route" => ""]

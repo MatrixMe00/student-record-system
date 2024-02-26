@@ -22,10 +22,9 @@ class Teacher extends Model
         $query = parent::newQuery($excludeDeleted);
 
         // based on the user role
-        if($this->school_id){
-            $query->where('school_id', $this->school_id);
-        }else{
-            $query->where('school_id', '>', 0);
+        $school_id = $this->school_id ?? auth()->user()?->school->id;
+        if(!empty($school_id) || !is_null($school_id)){
+            $query->where('school_id', $school_id);
         }
 
         return $query;
