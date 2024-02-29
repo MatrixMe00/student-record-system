@@ -81,6 +81,7 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::post("/class/add", [ProgramController::class, 'store'])->name("add-program");
     Route::get("/class/{program}/delete", [ProgramController::class, 'destroy']);
     Route::get("/class/{program}/edit", [ProgramController::class, 'edit']);
+    Route::put("/class/{program}/edit", [ProgramController::class, 'update']);
 
     // subjects
     Route::get("/subjects", [SubjectController::class, 'index'])->name('subject.all');

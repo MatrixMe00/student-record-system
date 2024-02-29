@@ -63,7 +63,10 @@ class ProgramController extends Controller
      */
     public function edit(Program $program)
     {
-        return view('admin.classes.edit', ["program" => $program]);
+        return view('admin.classes.edit', [
+            "program" => $program,
+            "teachers" => Teacher::all(["user_id", "lname", "oname"])
+        ]);
     }
 
     /**
@@ -72,12 +75,17 @@ class ProgramController extends Controller
     public function update(UpdateProgramRequest $request, Program $program)
     {
         // check the name and slug
-        $this->check_name_slug(true, $program->id);
+        if(($message = $this->check_name_slug(true, $program->id)) === true){
+            $validated = $request->validate($request->rules());
+            $program->update($validated);
 
-        $validated = $request->validate($request->rules());
-        $program->update($validated);
+            $success = true;
+            $message = "Update for $program->name was successful";
+        }else{
+            $success = false;
+        }
 
-        return redirect()->back()->with(["success" => "Update for $program->name was successful"]);
+        return redirect()->back()->with(["success" => $success, "message" => $message]);
     }
 
     /**
@@ -113,8 +121,8 @@ class ProgramController extends Controller
 
         if(!empty($slug)){
             $exists = $is_update ?
-                Program::where('slug', $slug)->where("id", "!=", $program_id)->exists() :
-                Program::where('slug', $slug)->exists();
+                Program::where('slug', $slug)->where("id", "!=", $program_id)->where('slug', "!=", "")->exists() :
+                Program::where('slug', $slug)->where("slug", "!=", "")->exists();
         }
 
         return $exists;

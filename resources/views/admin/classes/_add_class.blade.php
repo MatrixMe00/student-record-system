@@ -1,11 +1,11 @@
 <div class="flex items-center w-full p-8 mx-auto lg:px-12">
     <div class="w-full">
         <h1 class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
-            Add A New User
+            Add A New Class
         </h1>
 
         <p class="mt-4 text-gray-500 dark:text-gray-400">
-            Fill the form below to add a new user
+            Fill the form below to add a new class to your school
         </p>
 
         @if ($errors->any())
@@ -39,7 +39,11 @@
                 <x-input-select :options="0" name="class_teacher" id="class_teacher" :value="old('class_teacher')">
                     <option value="">Select A Class Teacher</option>
                     @foreach ($teachers as $teacher)
-                        <option value="{{ $teacher->user_id }}">{{ ucwords($teacher->lname." ".$teacher->oname) }}</option>
+                        <option value="{{ $teacher->user_id }}"
+                            @if ($teacher->user_id == old('class_teacher'))
+                                {{ "selected" }}
+                            @endif
+                        >{{ ucwords($teacher->lname." ".$teacher->oname) }}</option>
                     @endforeach
                 </x-input-select>
                 <x-input-error :messages="$errors->get('class_teacher')" />
