@@ -6,5 +6,6 @@
         <x-dashboard-card icon="fas fa-chalkboard-user" context="{{ $teacher_count }}" title="Teachers" />
         <x-dashboard-card icon="fas fa-user-graduate" context="{{ $student_count }}" title="Students" />
         <x-dashboard-card icon="fas fa-user-minus" context="{{ $delete_count }}" title="Deleted Users" />
+        <x-dashboard-card icon="fas fa-book-open-reader" context="{{ $subject_count }}" title="Subjects" />
     </div>
 </x-app-main>

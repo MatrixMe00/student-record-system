@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\School;
 use App\Models\SchoolAdmin;
 use App\Models\Student;
+use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\User;
 use App\Traits\UserModelTrait;
@@ -134,6 +135,7 @@ class UserController extends Controller
                     "admin_count" => User::where('role_id', 3)->orWhere('role_id', '>', 5)->get()->count(),
                     "student_count" => Student::all()->count(),
                     "teacher_count" => Teacher::all()->count(),
+                    "subject_count" => Subject::all()->count(),
                     "delete_count" => deletedusers::all()->count()
                 ];
         }
