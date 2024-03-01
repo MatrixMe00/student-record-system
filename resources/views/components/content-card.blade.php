@@ -1,4 +1,4 @@
-@props(["title", "item_id", "sub_title" => "", "content" => null, "avatar_url" => "", "extras" => []])
+@props(["title", "item_id", "path_head", "sub_title" => "", "content" => null, "avatar_url" => "", "extras" => []])
 
 <a
   href="javascript:void(0)"
@@ -48,7 +48,7 @@
     </dl>
   @endif
   <div class="flex gap-2 text-sm mt-6">
-    <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='/class/{{ $item_id }}/edit'">Edit</span>
-    <span class="cursor-pointer text-red-500 hover:underline hover:underline-offset-4" onclick="location.href='/class/{{ $item_id }}/delete'">Delete</span>
+    <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/edit'">Edit</span>
+    <span class="cursor-pointer text-red-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/delete'">Delete</span>
   </div>
 </a>

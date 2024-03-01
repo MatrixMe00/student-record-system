@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        <x-app-header>Your Classes</x-app-header>
+        <x-app-header>Your Subjects</x-app-header>
     </x-slot>
 
-    @section("title", "Classes")
+    @section("title", "Subjects")
 
     <x-app-main class="mt-4">
         {{-- show the success message after creation --}}
@@ -17,19 +17,19 @@
         <x-primary-button
             x-data=""
             x-on:click.prevent="$dispatch('open-modal', 'create_class')"
-            type="button">Add A Class</x-primary-button>
+            type="button">Add A Subject</x-primary-button>
 
-        @if ($programs->count() > 0)
+        @if ($subjects->count() > 0)
             <x-content-grid class="mt-6">
-                @foreach ($programs as $program)
+                @foreach ($subjects as $subject)
                     @php
-                        $teacher = $program->teacher;
+                        // $teacher = $program->teacher;
                         $extras = [
-                            ["title" => "Student Count", "content" => $program->students->count()." students"],
-                            ["title" => "Class Teacher", "content" => ($teacher->lname." ".$teacher->oname) ?? "Not set"]
+                            ["title" => "Classes Offering", "content" => $subject->programs->count()],
+                            ["title" => "Teachers Teaching", "content" => $subject->teachers->count()]
                         ];
                     @endphp
-                    <x-content-card class="bg-white hover:bg-neutral-50" title="{{ $program->name }}" item_id="{{ $program->id }}" :sub_title="$program->slug ?? 'No Slug name'" path_head="class" :extras="$extras" />
+                    <x-content-card class="bg-white hover:bg-neutral-50" title="{{ $subject->name }}" item_id="{{ $subject->id }}" :sub_title="$subject->slug ?? 'No Slug name'" path_head="subject" :extras="$extras" />
                 @endforeach
             </x-content-grid>
         @else
@@ -41,7 +41,7 @@
         {{-- modal for new class program --}}
         @if (auth()->user()->role_id <= 3)
             <x-modal name="create_class" :show="$errors->any()">
-                @include("admin.classes._add_class")
+                @include("admin.subjects._add_subject")
             </x-modal>
         @endif
     </x-app-main>

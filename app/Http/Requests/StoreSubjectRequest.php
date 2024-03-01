@@ -12,7 +12,9 @@ class StoreSubjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $role_id = auth()->user()->role_id;
+        $authorized = $role_id == 3 || $role_id > 5;
+        return $authorized;
     }
 
     /**
@@ -25,7 +27,8 @@ class StoreSubjectRequest extends FormRequest
         return [
             "name" => ["required", "string"],
             "slug" => ["nullable", "string"],
-            "school_id" => ["required", "integer", Rule::exists("schools", "id")]
+            "school_id" => ["required", "integer", Rule::exists("schools", "id")],
+            // "optional" => ["boolean"]
         ];
     }
 }

@@ -11,6 +11,7 @@ use App\Models\other;
 use App\Models\School;
 use App\Models\SchoolAdmin;
 use App\Models\Student;
+use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -85,6 +86,10 @@ Route::middleware(['auth', 'school.check'])->group(function () {
 
     // subjects
     Route::get("/subjects", [SubjectController::class, 'index'])->name('subject.all');
+    Route::post("/subject/add", [SubjectController::class, 'store'])->name("add-subject");
+    Route::get("/subject/{subject}/edit", [SubjectController::class, 'edit']);
+    Route::put("/subject/{subject}/edit", [SubjectController::class, 'update']);
+    Route::get("/subject/{subject}/delete", [SubjectController::class, 'destroy']);
 
     // school settings
     Route::get("/my-school", [SchoolController::class, 'show'])->name('my-school');

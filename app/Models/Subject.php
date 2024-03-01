@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
@@ -20,8 +21,9 @@ class Subject extends Model
         $query = parent::newQuery($excludeDeleted);
 
         // based on the user role
-        if(auth()->user()->role_id >= 3){
-            $query->where('school_id', $this->school_id);
+        $school_id = auth()->user()?->school->id ?? null;
+        if($school_id){
+            $query->where('subjects.school_id', $school_id);
         }
 
         return $query;
@@ -33,12 +35,14 @@ class Subject extends Model
     }
 
     // classes learning this subject
-    public function programs() :HasManyThrough{
-        return $this->hasManyThrough(Program::class, TeacherClass::class);
+    public function programs() :HasMany|null{
+        $tc = new TeacherClass(["school_id" => $this->school_id, "subject_id" => $this->id]);
+        return $tc->programs();
     }
 
     // teacher for this subject
-    public function teacher() :HasOneThrough{
-        return $this->hasOneThrough(Teacher::class, TeacherClass::class);
+    public function teachers() :HasMany|null{
+        $tc = new TeacherClass(["school_id" => $this->school_id, "subject_id" => $this->id]);
+        return $tc->teachers();
     }
 }
