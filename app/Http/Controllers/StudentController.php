@@ -60,7 +60,7 @@ class StudentController extends Controller
         $validated = $request->validate($request->rules());
         $student->update($validated);
 
-        return redirect()->back()->with(["message" => ["Student data has been updated"]]);
+        return redirect()->back()->with(["success" => true, "message" => "Student data has been updated"]);
     }
 
     /**

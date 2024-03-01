@@ -18,7 +18,7 @@
 
                 @session('success')
                     <x-session-message>
-                        {{ __(session('success')) }}
+                        {{ __(session('message') ?? session('success')) }}
                     </x-session-message>
                 @endsession
 
@@ -92,7 +92,7 @@
                         {{-- student program --}}
                         <div>
                             <x-input-label for="program_id" :value="__('Student Class')" />
-                            <x-input-select :options="$programs ?? ''" default="Select A Class" name="program_id" id="program_id" :value="old('program_id')" />
+                            <x-input-select :options="$programs ?? ''" default="Select A Class" name="program_id" id="program_id" :value="old('program_id') ?? $model->program_id" />
                             <x-input-error :messages="$errors->get('program_id')" />
                         </div>
                     @endif

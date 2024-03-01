@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\deletedusers;
 use App\Models\other;
+use App\Models\Program;
 use App\Models\Role;
 use App\Models\School;
 use App\Models\SchoolAdmin;
@@ -57,7 +58,7 @@ class UserController extends Controller
 
         //
 
-        return view("users", ["options" => $options, "roles" => $roles, "school_id" => $school_id]);
+        return view("users", ["options" => $options, "roles" => $roles, "school_id" => $school_id, "programs" => $user->role_id == 3 ? Program::all(["id", "name"])->toArray() : null]);
     }
 
     /**
@@ -67,7 +68,8 @@ class UserController extends Controller
         $user = User::where("username", $username)->first();
         return view('auth.partials._edit_user',[
             "user" => $user,
-            "model" => $this->user_model($user)
+            "model" => $this->user_model($user),
+            "programs" => Program::all(["id", "name"])->toArray()
         ]);
     }
 
@@ -87,7 +89,7 @@ class UserController extends Controller
         // update corresponding model
         $this->update_model($request, $user);
 
-        return redirect()->back()->with(["success" => session('message')]);
+        return redirect()->back();
     }
 
     /**

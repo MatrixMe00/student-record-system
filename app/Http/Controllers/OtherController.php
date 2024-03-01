@@ -60,7 +60,7 @@ class OtherController extends Controller
         $validated = $request->validate($request->rules());
         $other->update($validated);
 
-        return redirect()->back()->with(["message" => ["User record has been updated"]]);
+        return redirect()->back()->with(["message" => "User record has been updated"]);
     }
 
     /**
