@@ -107,7 +107,7 @@ class ProgramController extends Controller
 
         $exists = $is_update ?
             Program::where('name', $name)->where("id", "!=", $program_id)->exists() :
-            Program::where('name', $name)->exists();
+            Program::where('name', $name)->where("school_id", auth()->user()->school->id)->exists();
 
         return $exists;
     }
@@ -122,7 +122,7 @@ class ProgramController extends Controller
         if(!empty($slug)){
             $exists = $is_update ?
                 Program::where('slug', $slug)->where("id", "!=", $program_id)->where('slug', "!=", "")->exists() :
-                Program::where('slug', $slug)->where("slug", "!=", "")->exists();
+                Program::where('slug', $slug)->where("school_id", auth()->user()->school->id)->exists();
         }
 
         return $exists;
