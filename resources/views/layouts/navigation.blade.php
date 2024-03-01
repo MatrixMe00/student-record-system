@@ -12,7 +12,11 @@
         // ["name" => "", "route" => ""]
         ["name" => "Profile", "route" => "profile.edit"],
         ["name" => "Main Page", "route" => "index"]
-    ]
+    ];
+
+    if($user->role_id == 3){
+        $menu_links[] = ["name" => "School Detail", "route" => "my-school"];
+    }
 @endphp
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->

@@ -8,6 +8,7 @@ use App\Models\deletedusers;
 use App\Models\other;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Traits\UserModelTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,8 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    use UserModelTrait;
+
     /**
      * Display the user's profile form.
      */
@@ -23,6 +26,7 @@ class ProfileController extends Controller
     {
         return view('profile.edit', [
             'user' => $request->user(),
+            "model" => $this->user_model($request->user())
         ]);
     }
 
@@ -33,11 +37,14 @@ class ProfileController extends Controller
     {
         $request->user()->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
+        if ($request->user()->role_id != 5 && $request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
         $request->user()->save();
+
+        // update corresponding model
+        UserController::updateModel($request, $request->user());
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

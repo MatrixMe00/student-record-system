@@ -110,6 +110,14 @@ class UserController extends Controller
     }
 
     /**
+     * This is used to help update other user modals
+     */
+    public static function updateModel(Request $request, User $user){
+        $uc = new static;
+        $uc->update_model($request, $user);
+    }
+
+    /**
      * Get the dashboard of the user
      */
     public function dashboard(){
