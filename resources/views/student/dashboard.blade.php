@@ -1,7 +1,12 @@
-<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6 text-gray-900 dark:text-gray-100">
-            {{ __("You're logged in!") }}
-        </div>
+<x-app-main>
+    <div class="bg-transparent grid grid-cols-1 sm:grid-cols-2
+        md:grid-cols-3 lg:grid-cols-4 dark:bg-gray-800 overflow-hidden
+        shadow-sm sm:rounded-lg py-4 gap-4">
+        {{-- <x-dashboard-card icon="fas fa-book-open-reader" context="{{ $subject_count }}" title="Subjects" /> --}}
+        <x-dashboard-card icon="fas fa-clipboard-user" context="{{ $current_class }}" title="Current Class" />
+        <x-dashboard-card icon="fas fa-clipboard-user" context="{{ $grade_value }}" title="Average Score" />
+        <x-dashboard-card icon="fas fa-clipboard-user" context="{{ $average_grade }}" title="Average Grade" />
+        <x-dashboard-card icon="fas fa-clipboard-user" context="{{ $grade_description }}" title="Grade Description" />
+
     </div>
-</div>
+</x-app-main>

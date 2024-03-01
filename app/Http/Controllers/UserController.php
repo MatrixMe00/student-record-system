@@ -139,6 +139,13 @@ class UserController extends Controller
                 break;
             case 4:
             case 5:
+                $student = $this->user_model(auth()->user());
+                $options = [
+                    "current_class" => $student->program->name,
+                    "average_grade" => $student->average_grade(),
+                    "grade_value" => $student->grade_value(),
+                    "grade_description" => $student->grade_description()
+                ];
                 break;
             default:
                 $options = [
