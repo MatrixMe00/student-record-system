@@ -40,7 +40,7 @@
                 {{-- email --}}
                 <div>
                     <x-input-label for="email" :value="__('Email')" />
-                    <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+                    <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="email" />
                     <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
                     @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
@@ -66,8 +66,8 @@
 
             {{-- username --}}
             <div>
-                <x-input-label for="username" :value="__('Username')" />
-                <x-text-input id="username" name="username" type="text" class="mt-1 block w-full" :value="old('username', $user->username)" required autocomplete="username" />
+                <x-input-label for="username" :value="__($user->role_id == 5 ? 'Index Number' :'Username')" />
+                <x-text-input id="username" name="username" type="text" class="mt-1 block w-full" :value="old('username', $user->username)" required autocomplete="username" :readonly="$user->role_id == 5" />
                 <x-input-error class="mt-2" :messages="$errors->get('username')" />
             </div>
 
