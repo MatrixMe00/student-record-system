@@ -15,8 +15,12 @@ class TeacherClass extends Model
     protected $guarded = [];
 
     // teacher
-    public function teacher() :BelongsTo{
-        return $this->belongsTo(Teacher::class);
+    public function teacher() :BelongsTo|null{
+        if($this->teacher_id > 0){
+            return $this->belongsTo(Teacher::class, ownerKey: "teacher_id");
+        }
+
+        return null;
     }
 
     // subject

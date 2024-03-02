@@ -22,8 +22,8 @@ class Teacher extends Model
         $query = parent::newQuery($excludeDeleted);
 
         // based on the user role
-        $school_id = $this->school_id ?? auth()->user()?->school->id;
-        if(!empty($school_id) || !is_null($school_id)){
+        $school_id = auth()->user()?->school?->id ?? null;
+        if($school_id){
             $query->where('school_id', $school_id);
         }
 
@@ -37,18 +37,18 @@ class Teacher extends Model
 
     // every teacher has some results
     public function results(): HasMany{
-        return $this->hasMany(ApproveResults::class, "teacher_id", "user_id");
+        return $this->hasMany(ApproveResults::class, "teacher_id");
     }
 
     // every teacher teaches a set of classes / programs
     public function classes(): HasMany{
-        return $this->hasMany(TeacherClass::class, "teacher_id", "user_id");
+        return $this->hasMany(TeacherClass::class, "teacher_id");
     }
 
     // a teacher can be a class teacher
     public function teacher_class(): HasOne|false{
         return $this->class_teacher && !is_null($this->program_id) ?
-            $this->hasOne(Program::class, "class_teacher", "user_id") : false;
+            $this->hasOne(Program::class, "class_teacher") : false;
     }
 
     // has logs through the parent user

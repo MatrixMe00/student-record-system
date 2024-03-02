@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApproveresultsController;
 use App\Http\Controllers\GradesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
@@ -97,6 +98,8 @@ Route::middleware(['auth', 'school.check'])->group(function () {
 
     // results
     Route::get("/results", [GradesController::class, "index"])->name("result.all");
+    Route::post("/results", [ApproveresultsController::class, "store"])->name("result.store");
+    Route::get("/result/{result_token}/delete", [ApproveresultsController::class, "destroy"]);
 });
 
 require __DIR__.'/auth.php';

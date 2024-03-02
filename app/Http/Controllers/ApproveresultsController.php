@@ -17,47 +17,39 @@ class ApproveresultsController extends Controller
 
     public function store(Request $request)
     {
-        if(empty($request->worked_by)){
-            $user = $request->user();
-            // check if user is admin
-            if($user->role_id < 4){
-                $request->merge(["worked_by" => $user->id,
-                    "result_token" => $this->createToken(
-                        $request->teacher_token, $request->school_id
-                    )
-                ]);
-            }
-        }
-
         $validated = $request->validate([
             "result_token" => ["required", "string", Rule::unique("approveresults", "result_token")],
             "school_id" => ["required", "integer", Rule::exists('schools', 'id')],
             "program_id" => ["required", "integer", Rule::exists('programs', 'id')],
             "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
-            "semester" => ["required", "integer", "min:1", "max:3"],
-            "worked_by" => ["required", "integer", Rule::exists("admins", "user_id")]
+            "semester" => ["required", "integer", "min:1", "max:3"]
         ]);
 
         ApproveResults::create($validated);
+
+        return redirect()->back()->with(["success" => true, "message" => "Result data has been added"]);
     }
 
     public function update(Request $request, ApproveResults $approveResults)
     {
         $validated = $request->validate([
-            "result_token" => ["required", "string", Rule::unique("approveresults", "result_token")],
-            "school_id" => ["required", "integer", Rule::exists('schools', 'id')],
             "program_id" => ["required", "integer", Rule::exists('programs', 'id')],
             "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
             "semester" => ["required", "integer", "min:1", "max:3"],
-            "worked_by" => ["required", "integer", Rule::exists("admins", "user_id")]
+            "admin_id" => ["sometimes", "required", "integer", Rule::exists("admins", "user_id")]
         ]);
 
         $approveResults->update($validated);
+
+        return redirect()->back()->with(["success" => true, "message" => "Result data has been modified successfully"]);
     }
 
-    public function destroy(ApproveResults $approveResults)
+    public function destroy($result_token)
     {
+        $approveResults = ApproveResults::where("result_token",$result_token)->first();
         $approveResults->delete();
+
+        return redirect()->back()->with(["success" => true, "message" => "Result Data Deleted"]);
     }
 
     /**

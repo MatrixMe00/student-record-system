@@ -13,6 +13,29 @@ class ApproveResults extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $table = "approveresults";
+
+    // edit query depending on some results
+    public function newQuery($excludeDeleted = true)
+    {
+        $query = parent::newQuery($excludeDeleted);
+
+        // based on the user role
+        $school_id = auth()->user()?->school?->id ?? null;
+        $program_id = $this->program_id ?? null;
+        $teacher_id = $this->teacher_id ?? null;
+        if($school_id){
+            $query->where('school_id', $school_id);
+        }
+        if($program_id){
+            $query->where('program_id', $program_id);
+        }
+        if($teacher_id){
+            $query->where('teacher_id', $teacher_id);
+        }
+
+        return $query;
+    }
 
     // a result has many grades
     public function grades(): HasMany{

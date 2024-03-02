@@ -1,7 +1,7 @@
-@props(["title", "item_id", "path_head", "sub_title" => "", "content" => null, "avatar_url" => "", "extras" => []])
+@props(["title", "item_id", "path_head", "sub_title" => "", "content" => null, "avatar_url" => "", "extras" => [], "editable" => true, "card_link" => "javascript:void(0)", "removable" => true])
 
 <a
-  href="javascript:void(0)"
+  href="{{ $card_link }}"
   {!! $attributes->merge(["class"=>"relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8"]) !!}
 >
 
@@ -48,7 +48,14 @@
     </dl>
   @endif
   <div class="flex gap-2 text-sm mt-6">
-    <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/edit'">Edit</span>
-    <span class="cursor-pointer text-red-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/delete'">Delete</span>
+    @if ($editable)
+        <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/edit'">Edit</span>
+    @else
+        <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/show'">View</span>
+    @endif
+
+    @if ($removable)
+        <span class="cursor-pointer text-red-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/delete'">Delete</span>
+    @endif
   </div>
 </a>

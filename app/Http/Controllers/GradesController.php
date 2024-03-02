@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApproveResults;
 use App\Models\Grades;
+use App\Models\Program;
 use App\Traits\UserModelTrait;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -33,7 +35,13 @@ class GradesController extends Controller
                 $options = [];
                 break;
             case 4:
-                $options = [];
+                $app_results = new ApproveResults(["teacher_id" => auth()->user()->id]);
+                $options = [
+                    "result_slips" => $app_results::all(),
+                    "result_id" => $this->create_id(),
+                    "classes" => Program::all(["id", "name"])->toArray()
+                    // "classes" => $model->classes()->get()->toArray()
+                ];
                 break;
             case 5:
                 $options = [
@@ -111,5 +119,29 @@ class GradesController extends Controller
     public function destroy(Grades $grades)
     {
         $grades->delete();
+    }
+
+    /**
+     * Create a result id
+     */
+    private function create_id() :string{
+        $token = "";
+
+        //generate three random values
+        for($i = 1; $i <= 3; $i++){
+            $token .= chr(rand(65,90));
+        }
+
+        //add teacher id
+        $token .= str_pad(strval(auth()->user()->id), 3, "0", STR_PAD_LEFT);
+
+        $token = str_shuffle($token);
+
+        //random characters
+        $token .= chr(rand(65,90)). str_pad(auth()->user()->school->id,2,"0",STR_PAD_LEFT);
+        $token = substr(str_shuffle($token.uniqid()), 0, 8);
+        $token .= date("y");
+
+        return strtolower($token);
     }
 }

@@ -1,9 +1,12 @@
-@props(["options", "value" => "", "default" => "", "value_key" => "id", "text_key" => "name"])
+@props([
+    "options", "value" => "", "default" => "Select An Option", "value_key" => "id", "text_key" => "name",
+    "keyword" => "", "min" => 0, "max" => 0
+])
 
 <select
-{!! $attributes->merge(['class' => 'w-full mt-2 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm']) !!}
+{!! $attributes->merge(['class' => 'w-full py-3 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm']) !!}
 >
-@if (is_array($options))
+@if (is_array($options) && !empty($options))
     <option value="">{{ $default }}</option>
     @foreach ($options as $option)
         <option value="{{ $option[$value_key] }}"
@@ -12,6 +15,26 @@
             @endif
         >{{ ucfirst($option[$text_key]) }}</option>
     @endforeach
+@elseif ($options == "auto")
+    <option value="">{{ $default }}</option>
+    @if ($min > $max)
+        @for ($count = $min; $count >= $max; $count--)
+            <option value="{{ $count }}"
+                @if ($value == $count)
+                    {{ "selected" }}
+                @endif
+            >{{ __($keyword." ".$count) }}</option>
+        @endfor
+    @else
+        @for ($count = $min; $count <= $max; $count++)
+            <option value="{{ $count }}"
+                @if ($value == $count)
+                    {{ "selected" }}
+                @endif
+            >{{ __($keyword." ".$count) }}</option>
+        @endfor
+    @endif
+
 @elseif ($options == 0)
     {{ $slot }}
 @else
