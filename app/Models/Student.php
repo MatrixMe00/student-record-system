@@ -31,7 +31,7 @@ class Student extends Model
 
     // student grades
     public function grades(): HasMany{
-        return $this->hasMany(Grades::class);
+        return $this->hasMany(Grades::class, "student_id");
     }
 
     // student belongs to a program

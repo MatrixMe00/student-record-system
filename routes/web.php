@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GradesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SchoolController;
@@ -93,6 +94,9 @@ Route::middleware(['auth', 'school.check'])->group(function () {
 
     // school settings
     Route::get("/my-school", [SchoolController::class, 'show'])->name('my-school');
+
+    // results
+    Route::get("/results", [GradesController::class, "index"])->name("result.all");
 });
 
 require __DIR__.'/auth.php';

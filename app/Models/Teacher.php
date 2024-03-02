@@ -61,6 +61,11 @@ class Teacher extends Model
         return $this->hasManyThrough(Subject::class, TeacherClass::class, localKey: "user_id");
     }
 
+    // teacher has many grades
+    public function grades() :HasMany{
+        return $this->hasMany(Grades::class, "teacher_id");
+    }
+
     // a teacher is a user
     public function user() :BelongsTo{
         return $this->belongsTo(User::class);

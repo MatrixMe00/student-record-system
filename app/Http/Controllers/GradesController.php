@@ -3,17 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Models\Grades;
+use App\Traits\UserModelTrait;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class GradesController extends Controller
 {
+    use UserModelTrait;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $options = $this->create_options();
+
+        return view('results.index', $options);
+    }
+
+    /**
+     * Used to get the necessary options for a user
+     */
+    private function create_options(){
+        $role_id = auth()->user()->role_id;
+        $model = $this->user_model(auth()->user());
+
+        switch($role_id){
+            case 3:
+                $options = [];
+                break;
+            case 4:
+                $options = [];
+                break;
+            case 5:
+                $options = [
+                    "results" => $model->grades
+                ];
+                break;
+        }
+        $options["role_id"] = $role_id;
+
+        return $options;
     }
 
     /**
