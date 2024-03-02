@@ -138,6 +138,11 @@ class UserController extends Controller
                 ];
                 break;
             case 4:
+                $teacher = $this->user_model(auth()->user());
+                $options = [
+                    "teacher" => $teacher
+                ];
+                break;
             case 5:
                 $student = $this->user_model(auth()->user());
                 $options = [
