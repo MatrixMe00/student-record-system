@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ApproveResults;
 use App\Models\Grades;
 use App\Models\Program;
+use App\Models\TeacherClass;
 use App\Traits\UserModelTrait;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -39,7 +40,8 @@ class GradesController extends Controller
                 $options = [
                     "result_slips" => $app_results::all(),
                     "result_id" => $this->create_id(),
-                    "classes" => Program::all(["id", "name"])->toArray()
+                    "classes" => Program::all(["id", "name"])->toArray(),
+                    "subjects" => TeacherClass::where("teacher_id", $model->user_id)->get()->toArray()
                     // "classes" => $model->classes()->get()->toArray()
                 ];
                 break;
@@ -68,16 +70,41 @@ class GradesController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            "student_id" => ["required", "integer", Rule::exists("students", "user_id")],
+            "result_token" => ["required", "string", Rule::exists("approveresults", "result_token")],
+            "student_id.*" => ["required", "integer", Rule::exists("students", "user_id")],
             "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
             "program_id" => ["required", "integer", Rule::exists("programs", "id")],
             "school_id" => ["required", "integer", Rule::exists("schools", "id")],
             "semester" => ["required", "integer", "max: 3", "min: 1"],
-            "class_mark" => ["required", "float", "min:0"],
-            "exam_mark" => ["required", "float", "min:0"]
+            "class_mark.*" => ["required", "numeric", "min:0", "max:50"],
+            "exam_mark.*" => ["required", "numeric", "min:0", "max:50"]
         ]);
 
-        Grades::create($validated);
+        $count = -1;
+        $defaults = array_slice($validated, 0, 5);
+        $stud_data = array_slice($validated, 5, 8);
+
+        // save each entry
+        while(++$count < count($validated["student_id"])){
+            $grade = new Grades(array_merge($defaults, [
+                "student_id" => $stud_data["student_id"][$count],
+                "class_mark" => $stud_data["class_mark"][$count],
+                "exam_mark" => $stud_data["exam_mark"][$count]
+            ]));
+
+            $grade->save();
+        }
+
+        if($request->submit == "save"){
+            $message = "Result entry have been saved";
+        }else{
+            $record = ApproveResults::where("result_token", $validated["result_token"])->first();
+            $record->status = "submitted";
+            $record->update();
+            $message = "Results have been submitted for review";
+        }
+
+        return redirect()->back()->with(["success" => true, "message" => $message]);
     }
 
     /**
@@ -99,18 +126,42 @@ class GradesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Grades $grades)
+    public function update(Request $request)
     {
         $validated = $request->validate([
-            "id" => ["required", "integer", Rule::exists("grades")],
-            "student_id" => ["required", "integer", Rule::exists("students", "user_id")],
-            "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
-            "program_id" => ["required", "integer", Rule::exists("programs", "id")],
-            "school_id" => ["required", "integer", Rule::exists("schools", "id")],
             "semester" => ["required", "integer", "max: 3", "min: 1"],
-            "class_mark" => ["required", "float", "min:0"],
-            "exam_mark" => ["required", "float", "min:0"]
+            "result_token" => ["required", "string", Rule::exists("approveresults", "result_token")],
+            "id.*" => ["required", "numeric"],
+            "student_id.*" => ["required", "integer", Rule::exists("students", "user_id")],
+            "class_mark.*" => ["required", "numeric", "min:0", "max:50"],
+            "exam_mark.*" => ["required", "numeric", "min:0", "max:50"]
         ]);
+
+        $count = -1;
+        $defaults = array_slice($validated, 0, 2);
+        $stud_data = array_slice($validated, 2, 6);
+
+        while(++$count < count($validated["student_id"])){
+            $data = array_merge($defaults, [
+                "student_id" => $stud_data["student_id"][$count],
+                "class_mark" => $stud_data["class_mark"][$count],
+                "exam_mark" => $stud_data["exam_mark"][$count],
+                "id" => $stud_data["id"][$count]
+            ]);
+            $grade = Grades::find($stud_data["id"][$count]);
+            $grade->update($data);
+        }
+
+        if($request->submit == "save"){
+            $message = "Result updates have been saved";
+        }else{
+            $record = ApproveResults::where("result_token", $validated["result_token"])->first();
+            $record->status = "submitted";
+            $record->update();
+            $message = "Results have been submitted for review";
+        }
+
+        return redirect()->back()->with(["success" => true, "message" => $message]);
     }
 
     /**

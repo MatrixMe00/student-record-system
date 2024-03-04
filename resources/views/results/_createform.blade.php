@@ -38,6 +38,13 @@
                 <x-input-error :messages="$errors->get('program_id')" class="mt-2" />
             </div>
 
+            {{-- subject id --}}
+            <div>
+                <x-input-label for="subject_id" :value="__('Select the Subject')" />
+                <x-input-select :options="$subjects" :value="old('subject_id')" default="Select a subject" name="subject_id" />
+                <x-input-error :messages="$errors->get('subject_id')" class="mt-2" />
+            </div>
+
             {{-- semester --}}
             <div>
                 <x-input-label for="semester" :value="__('Select Result Term')" />

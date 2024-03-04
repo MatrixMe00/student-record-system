@@ -100,6 +100,11 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get("/results", [GradesController::class, "index"])->name("result.all");
     Route::post("/results", [ApproveresultsController::class, "store"])->name("result.store");
     Route::get("/result/{result_token}/delete", [ApproveresultsController::class, "destroy"]);
+    Route::get("/result/{result_token}/edit", [ApproveresultsController::class, "edit"]);
+
+    // storing grades
+    Route::post("/grades/store", [GradesController::class, 'store'])->name("grades.create");
+    Route::put("/grades/update", [GradesController::class, 'update'])->name("grades.update");
 });
 
 require __DIR__.'/auth.php';

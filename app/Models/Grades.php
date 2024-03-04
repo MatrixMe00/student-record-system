@@ -15,7 +15,7 @@ class Grades extends Model
 
     // many grades to one student
     public function student(): BelongsTo{
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, "student_id");
     }
 
     // many grades belong to one teacher

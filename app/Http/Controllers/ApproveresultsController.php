@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApproveResults;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -50,6 +51,22 @@ class ApproveresultsController extends Controller
         $approveResults->delete();
 
         return redirect()->back()->with(["success" => true, "message" => "Result Data Deleted"]);
+    }
+
+    public function edit($result_token){
+        $approveResults = ApproveResults::where("result_token", $result_token)->first();
+        $program = Program::find($approveResults->program_id);
+        $students = $program->count() > 0 ? $program->students : null;
+
+        return view("results.edit", [
+            "result" => $approveResults,
+            "program" => $program,
+            "students" => $students,
+            "grades" => $approveResults->grades,
+            "academic_year" => get_academic_year($approveResults->created_at),
+            "edit_all" => in_array($approveResults->status, ["pending", "rejected"]),
+            "edit_once" => $approveResults->status == "pending"
+        ]);
     }
 
     /**

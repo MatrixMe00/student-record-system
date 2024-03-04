@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId("student_id")->constrained("students","user_id");
             $table->foreignId("teacher_id")->constrained("teachers", "user_id");
             $table->foreignId("program_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("subject_id")->constrained()->cascadeOnDelete();
             $table->foreignId("school_id")->constrained()->cascadeOnDelete();
             $table->integer("semester");
             $table->float("class_mark");

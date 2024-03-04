@@ -17,7 +17,7 @@ class TeacherClass extends Model
     // teacher
     public function teacher() :BelongsTo|null{
         if($this->teacher_id > 0){
-            return $this->belongsTo(Teacher::class, ownerKey: "teacher_id");
+            return $this->belongsTo(Teacher::class, "teacher_id");
         }
 
         return null;
@@ -37,10 +37,15 @@ class TeacherClass extends Model
         return null;
     }
 
+    // get program information
+    public function program() :HasOne{
+        return $this->hasOne(Program::class);
+    }
+
     // can have many teachers if a subject is provided
     public function teachers() :HasMany|null{
         if($this->subject_id > 0){
-            return $this->hasMany(Teacher::class);
+            return $this->hasMany(Teacher::class, "teacher_id");
         }
 
         return null;
