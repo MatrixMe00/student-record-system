@@ -6,7 +6,7 @@
     @section("title", "Edit Class Data")
 
     <x-app-main>
-        <div class="flex items-center w-full p-8 mx-auto lg:px-12">
+        <div class="bg-zinc-50 mt-4 flex items-center w-full p-8 mx-auto lg:px-12">
             <div class="w-full">
                 <h1 class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
                     Update {{ $program->name }} details
@@ -77,6 +77,31 @@
                 </form>
             </div>
         </div>
+
+        @if ($class_data->count() > 0)
+            <section class="bg-zinc-50 mt-8 py-6">
+                <x-table-component title="Class Subjects">
+                    @section('thead')
+                        <thead>
+                            <tr>
+                                <x-thead-data>Teacher Name</x-thead-data>
+                                <x-thead-data>Subject Name</x-thead-data>
+                            </tr>
+                        </thead>
+                    @endsection
+                    <tbody>
+                        @foreach ($class_data as $data)
+                            <tr>
+                                <x-table-data>{{ __($data->teacher->lname." ".$data->teacher->oname) }}</x-table-data>
+                                <x-table-data>{{ __($data->subject->name) }}</x-table-data>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </x-table-component>
+            </section>
+        @else
+            <x-empty-div class="lg:w-3/4 lg:mx-auto">{{ __("No Subjects assigned for this class. Assign a class to a teacher") }}</x-empty-div>
+        @endif
 
     </x-app-main>
 </x-app-layout>

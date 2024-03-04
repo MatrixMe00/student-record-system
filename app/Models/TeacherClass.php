@@ -14,27 +14,9 @@ class TeacherClass extends Model
 
     protected $guarded = [];
 
-    // teacher
-    public function teacher() :BelongsTo|null{
-        if($this->teacher_id > 0){
-            return $this->belongsTo(Teacher::class, "teacher_id");
-        }
-
-        return null;
-    }
-
     // subject
     public function subject() :HasOne{
         return $this->hasOne(Subject::class);
-    }
-
-    // can have many programs if a subject is provided
-    public function programs() :HasMany|null{
-        if($this->subject_id > 0){
-            return $this->hasMany(Program::class);
-        }
-
-        return null;
     }
 
     // get program information
@@ -43,11 +25,7 @@ class TeacherClass extends Model
     }
 
     // can have many teachers if a subject is provided
-    public function teachers() :HasMany|null{
-        if($this->subject_id > 0){
-            return $this->hasMany(Teacher::class, "teacher_id");
-        }
-
-        return null;
+    public function teacher() :HasOne{
+        return $this->hasOne(Teacher::class);
     }
 }

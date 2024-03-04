@@ -6,6 +6,7 @@ use App\Models\Program;
 use App\Http\Requests\StoreProgramRequest;
 use App\Http\Requests\UpdateProgramRequest;
 use App\Models\Teacher;
+use App\Models\TeacherClass;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -65,7 +66,8 @@ class ProgramController extends Controller
     {
         return view('admin.classes.edit', [
             "program" => $program,
-            "teachers" => Teacher::all(["user_id", "lname", "oname"])
+            "teachers" => Teacher::all(["user_id", "lname", "oname"]),
+            "class_data" => $program->subjects()
         ]);
     }
 

@@ -25,19 +25,14 @@ class Program extends Model
         return $this->hasMany(Student::class);
     }
 
-    // teachers teaching the class
-    public function teachers() :HasMany{
-        return $this->hasMany(TeacherClass::class);
-    }
-
     // teacher teaching the class
     public function teacher() :HasOne{
         return $this->hasOne(Teacher::class, "user_id", "class_teacher");
     }
 
     // every program has many subjects taught in it
-    public function subjects() :HasManyThrough{
-        return $this->hasManyThrough(Subject::class, TeacherClass::class);
+    public function subjects() :HasMany{
+        return $this->hasMany(TeacherClass::class);
     }
 
     // Override the default newQuery method to add constraints
