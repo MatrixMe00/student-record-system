@@ -16,7 +16,15 @@
             @if ($value == $option[$value_key])
                 {{ "selected" }}
             @endif
-        >{{ ucfirst($option[$text_key]) }}</option>
+        >
+        @if (is_array($text_key))
+            @foreach ($text_key as $txt_k)
+                {{ ucfirst($option[$txt_k])." " }}
+            @endforeach
+        @else
+            {{ ucfirst($option[$text_key]) }}
+        @endif
+        </option>
     @endforeach
 @elseif ($options == "auto")
     <option value="">{{ $default }}</option>

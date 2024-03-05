@@ -25,8 +25,9 @@ class StoreTeacherClassRequest extends FormRequest
         return [
             "school_id" => ["required","integer",Rule::exists("schools", "id")],
             "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
-            "subject_id" => ["required", "integer", Rule::exists("subjects", "id")],
-            "program_id" => ["required", "integer", Rule::exists("programs", "id")]
+            "subject_id.*" => ["required", "integer", Rule::exists("subjects", "id")],
+            "program_id.*" => ["required", "integer", Rule::exists("programs", "id")],
+            "id.*" => ["integer"]
         ];
     }
 }

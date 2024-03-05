@@ -32,6 +32,9 @@
                 <li class="p-2 {{ $disable ?? 'hover:bg-gray-300' }}"><a href="{{ $edit }}" class="block">Edit</a></li>
                 <li class="p-2 {{ $disable ?? 'hover:bg-gray-300' }}"><a href="{{ $delete }}" class="block">Delete</a></li>
                 <li class="p-2 {{ $disable ?? 'hover:bg-gray-300' }}"><a href="{{ $deactivate }}" class="block">{{ $status_text }}</a></li>
+                @if ($user->user->role_id == 4)
+                    <li class="p-2 {{ $disable ?? 'hover:bg-gray-300' }}"><a href="/teacher/subject-assign/{{ $user->user_id }}" class="block">Subjects</a></li>
+                @endif
             </ul>
         </div>
       </div>

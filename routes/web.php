@@ -6,16 +6,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherClassController;
 use App\Http\Controllers\UserController;
-use App\Models\Admin;
-use App\Models\deletedusers;
-use App\Models\other;
-use App\Models\School;
-use App\Models\SchoolAdmin;
-use App\Models\Student;
-use App\Models\Subject;
-use App\Models\Teacher;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -92,6 +84,10 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get("/subject/{subject}/edit", [SubjectController::class, 'edit']);
     Route::put("/subject/{subject}/edit", [SubjectController::class, 'update']);
     Route::get("/subject/{subject}/delete", [SubjectController::class, 'destroy']);
+    Route::get("/teacher/subject-assign", [TeacherClassController::class, "create"])->name("subject.assign");
+    Route::get("/teacher/subject-assign/{teacher}", [TeacherClassController::class, "create"]);
+    Route::get("/teacher/assign-delete/{subject}", [TeacherClassController::class, "destroy"]);
+    Route::post("/teacher/subject-assign", [TeacherClassController::class, "store"])->name("teacher.assign-subject");
 
     // school settings
     Route::get("/my-school", [SchoolController::class, 'show'])->name('my-school');
