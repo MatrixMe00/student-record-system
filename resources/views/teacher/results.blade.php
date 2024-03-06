@@ -22,7 +22,8 @@
                 @endphp
                 <x-content-card class="bg-white hover:bg-neutral-50" title="{{ $result->program->name }}" item_id="{{ $result->result_token }}"
                         sub_title="{{ __(ucfirst($result->status)) }}" path_head="result" :extras="$extras"
-                        :editable="in_array($result->status, ['pending', 'rejected'])" :removable="in_array($result->status, ['pending', 'rejected'])" />
+                        :editable="in_array($result->status, ['pending', 'rejected'])" :removable="in_array($result->status, ['pending', 'rejected'])"
+                        card_link="{{ $result->status != 'pending' ? 'result/'.$result->result_token.'/show' : 'javascript:void(0)' }}" />
             @endforeach
         </x-content-grid>
     @else

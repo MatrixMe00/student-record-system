@@ -40,7 +40,8 @@
                             @endphp
                             <x-content-card class="border-neutral-200 hover:bg-neutral-50 hover:border-neutral-100" title="{{ $result->program->name }}" item_id="{{ $result->result_token }}"
                                     sub_title="{{ __(ucfirst($result->status)) }}" path_head="result" :extras="$extras"
-                                    :editable="false" :removable="in_array($result->status, ['pending', 'rejected'])" />
+                                    :editable="false" :removable="in_array($result->status, ['pending', 'rejected'])"
+                                    card_link="/result/{{ $result->result_token }}/show" />
                         @endforeach
                     </x-content-grid>
                 @else
