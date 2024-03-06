@@ -27,13 +27,15 @@ class GradesController extends Controller
     /**
      * This formats properly the status to be sent
      */
-    private function format_status(string $value){
+    private function format_status(?string $value){
         $response = $value;
 
-        if($value == "rejected"){
-            $response = "reject";
-        }elseif($value == "accepted"){
-            $response = "accept";
+        if(!is_null($value)){
+            if($value == "rejected"){
+                $response = "reject";
+            }elseif($value == "accepted"){
+                $response = "accept";
+            }
         }
 
         return $response;
@@ -178,6 +180,9 @@ class GradesController extends Controller
         $validated = $request->validate([
             "semester" => ["required", "integer", "max: 3", "min: 1"],
             "result_token" => ["required", "string", Rule::exists("approveresults", "result_token")],
+            "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
+            "program_id" => ["required", "integer", Rule::exists("programs", "id")],
+            "school_id" => ["required", "integer", Rule::exists("schools", "id")],
             "id.*" => ["required", "numeric"],
             "student_id.*" => ["required", "integer", Rule::exists("students", "user_id")],
             "class_mark.*" => ["required", "numeric", "min:0", "max:50"],
@@ -186,14 +191,20 @@ class GradesController extends Controller
         ]);
 
         $count = -1;
-        $defaults = array_slice($validated, 0, 2);
-        $stud_data = array_slice($validated, 2, 6);
+        $defaults = array_slice($validated, 0, 5);
+
+        // used to update student status by admin
+        if(isset($validated["status"]) && $is_admin){
+            $defaults["status"] = $validated["status"];
+        }
+
+        $stud_data = array_slice($validated, 5, 9);
 
         while(++$count < count($validated["student_id"])){
             $data = $this->format_update_data($defaults, $stud_data, $count, $is_admin);
 
-            $grade = Grades::find($stud_data["id"][$count]);
-            $grade->update($data);
+            $grade = Grades::find($stud_data["id"][$count] ?? 0);
+            !is_null($grade) ? $grade->update($data) : Grades::create($data);
         }
 
         if($request->submit == "save"){
@@ -201,8 +212,14 @@ class GradesController extends Controller
         }else{
             $record = ApproveResults::where("result_token", $validated["result_token"])->first();
             $record->status = $this->format_status($request->status) ?? "submitted";
+
+            // update the admin id
+            if($is_admin){
+                $record->admin_id = auth()->user()->id;
+            }
+
             $record->update();
-            $message = "Results have been {$request->status}";
+            $message = $record->status != 'pending' ? "Results have been {$record->status}" : 'Results has been enabled for modification';
 
             if($record->status == "submitted"){
                 $message .= " for review";
@@ -226,9 +243,12 @@ class GradesController extends Controller
             $data = array_merge($defaults, [
                 "student_id" => $stud_data["student_id"][$count],
                 "class_mark" => $stud_data["class_mark"][$count],
-                "exam_mark" => $stud_data["exam_mark"][$count],
-                "id" => $stud_data["id"][$count]
+                "exam_mark" => $stud_data["exam_mark"][$count]
             ]);
+
+            if(isset($stud_data["id"][$count])){
+                $data["id"] = $stud_data["id"][$count];
+            }
         }
 
         return $data;

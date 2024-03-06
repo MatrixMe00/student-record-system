@@ -37,7 +37,7 @@
 
     @if ($result->status == "pending")
         <p class="border p-2 text-center w-full cursor-default">
-            {{ "Results is still been written for submission" }}
+            {{ "Results has not been submitted for review." }}
         </p>
     @endif
 </div>

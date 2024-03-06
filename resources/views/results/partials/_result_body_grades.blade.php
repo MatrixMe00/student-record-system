@@ -10,14 +10,20 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($grades as $key => $grade)
+            @php
+                $key = 0;
+            @endphp
+            @foreach($grades as $grade)
                 <x-result-entry-row
                     :student="$grade->student" :key="$key"
                     :classmark="old('class_mark.'.$key, $grade->class_mark)"
                     :exammark="old('exam_mark.'.$key, $grade->exam_mark)"
                     :rowid="$grade->id"
-                    :readonly="$is_admin"
+                    :readonly="$is_admin || $result->status != 'pending'"
                 />
+                @php
+                    $key++;
+                @endphp
             @endforeach
 
             {{-- if new students have been added to the class --}}
@@ -28,7 +34,11 @@
                         :classmark="old('class_mark.'.$key, 0)"
                         :exammark="old('exam_mark.'.$key, 0)"
                         painttd="border-teal-400"
+                        :readonly="$is_admin || $result->status != 'pending'"
                     />
+                    @php
+                        $key++;
+                    @endphp
                 @endforeach
             @endif
         </tbody>
