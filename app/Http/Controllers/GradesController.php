@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ApproveResults;
 use App\Models\Grades;
 use App\Models\Program;
+use App\Models\Subject;
+use App\Models\Teacher;
 use App\Models\TeacherClass;
 use App\Traits\UserModelTrait;
 use Illuminate\Http\Request;
@@ -33,16 +35,29 @@ class GradesController extends Controller
 
         switch($role_id){
             case 3:
-                $options = [];
+                $options = [
+                    "teachers" => Teacher::all(["user_id", "lname", "oname"])->toArray(),
+                    "classes" => Program::all(["id", "name"])->toArray(),
+                    "subjects" => Subject::all(["id", "name"])->toArray(),
+                    "result_id" => $this->create_id(),
+                    "result_slips" => [
+                        ["title" => "Submitted Results", "data" => ApproveResults::where("status", "submitted")->orderBy("created_at")->get()],
+                        ["title" => "Results in Progress", "data" => ApproveResults::where("status", "pending")->orderBy("created_at")->get()],
+                        ["title" => "Rejected Results", "data" => ApproveResults::where("status", "rejected")->orderBy("created_at")->get()],
+                        ["title" => "Approved Results", "data" => ApproveResults::where("status", "approved")->orderBy("created_at")->get()]
+                    ]
+                ];
+                dd($options["result_slips"]);
                 break;
             case 4:
                 $app_results = new ApproveResults(["teacher_id" => auth()->user()->id]);
+
                 $options = [
                     "result_slips" => $app_results::all(),
                     "result_id" => $this->create_id(),
-                    "classes" => Program::all(["id", "name"])->toArray(),
-                    "subjects" => TeacherClass::where("teacher_id", $model->user_id)->get()->toArray()
-                    // "classes" => $model->classes()->get()->toArray()
+                    "teacher_id" => auth()->user()->id,
+                    "subjects" => $model->subjects->toArray(),
+                    "classes" => $model->classes->unique("program_id")
                 ];
                 break;
             case 5:

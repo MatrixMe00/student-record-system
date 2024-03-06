@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\ApproveResults;
 use App\Models\Program;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class ApproveresultsController extends Controller
 {
@@ -23,7 +25,8 @@ class ApproveresultsController extends Controller
             "school_id" => ["required", "integer", Rule::exists('schools', 'id')],
             "program_id" => ["required", "integer", Rule::exists('programs', 'id')],
             "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
-            "semester" => ["required", "integer", "min:1", "max:3"]
+            "semester" => ["required", "integer", "min:1", "max:3"],
+            "subject_id" => ["required", "integer", Rule::exists("subjects", "id")]
         ]);
 
         ApproveResults::create($validated);
@@ -31,16 +34,16 @@ class ApproveresultsController extends Controller
         return redirect()->back()->with(["success" => true, "message" => "Result data has been added"]);
     }
 
-    public function update(Request $request, ApproveResults $approveResults)
+    public function update(Request $request, ApproveResults $result)
     {
         $validated = $request->validate([
-            "program_id" => ["required", "integer", Rule::exists('programs', 'id')],
-            "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
             "semester" => ["required", "integer", "min:1", "max:3"],
-            "admin_id" => ["sometimes", "required", "integer", Rule::exists("admins", "user_id")]
+            "subject_id" => ["required", "integer", Rule::exists("subjects","id")],
+            "admin_id" => ["sometimes", "required", "integer", Rule::exists("admins", "user_id")],
+            "status" => ["sometimes", "required", "string"]
         ]);
 
-        $approveResults->update($validated);
+        $result->update($validated);
 
         return redirect()->back()->with(["success" => true, "message" => "Result data has been modified successfully"]);
     }
@@ -57,12 +60,14 @@ class ApproveresultsController extends Controller
         $approveResults = ApproveResults::where("result_token", $result_token)->first();
         $program = Program::find($approveResults->program_id);
         $students = $program->count() > 0 ? $program->students : null;
+        $teacher = Teacher::find(auth()->user()->id);
 
         return view("results.edit", [
             "result" => $approveResults,
             "program" => $program,
             "students" => $students,
             "grades" => $approveResults->grades,
+            "subjects" => $teacher->subjects->toArray(),
             "academic_year" => get_academic_year($approveResults->created_at),
             "edit_all" => in_array($approveResults->status, ["pending", "rejected"]),
             "edit_once" => $approveResults->status == "pending"

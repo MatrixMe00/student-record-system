@@ -58,7 +58,7 @@ class Teacher extends Model
 
     // teacher teaches many subjects
     public function subjects() :HasManyThrough{
-        return $this->hasManyThrough(Subject::class, TeacherClass::class, localKey: "user_id");
+        return $this->hasManyThrough(Subject::class, TeacherClass::class, "teacher_id", "id", secondLocalKey: "subject_id");
     }
 
     // teacher has many grades

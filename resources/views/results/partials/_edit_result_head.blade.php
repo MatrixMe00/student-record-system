@@ -1,5 +1,5 @@
 <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 border p-4"
-    method="POST" action="/result/{{ $result->result_token }}/edit">
+    method="POST" action="/result/{{ $result->id }}/edit">
     @csrf
     @method("PUT")
 
@@ -8,12 +8,6 @@
         <x-input-label for="result_token" :value="__('Result ID')" />
         <x-text-input id="result_token" type="text" name="result_token" :value="$result->result_token" required readonly />
         <x-input-error :messages="$errors->get('result_token')" class="mt-2" />
-    </div>
-
-    {{-- Display status --}}
-    <div>
-        <x-input-label for="status" :value="__('Result Status')" />
-        <x-text-input id="status" type="text" :value="ucfirst($result->status)" readonly />
     </div>
 
     {{-- school id --}}
@@ -35,6 +29,13 @@
         <x-input-label for="semester" :value="__('Select Result Term')" />
         <x-input-select options="auto" :value="old('semester', $result->semester)" default="Select a Term" keyword="Term" min="1" max="3" name="semester" :abled="$edit_all" />
         <x-input-error :messages="$errors->get('semester')" class="mt-2" />
+    </div>
+
+    {{-- subject id --}}
+    <div>
+        <x-input-label for="subject_id" :value="__('Select the Subject')" />
+        <x-input-select :options="$subjects" :value="old('subject_id', $result->subject_id)" default="Select a subject" name="subject_id" />
+        <x-input-error :messages="$errors->get('subject_id')" class="mt-2" />
     </div>
 
     @if ($edit_all)

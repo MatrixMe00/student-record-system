@@ -97,6 +97,7 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::post("/results", [ApproveresultsController::class, "store"])->name("result.store");
     Route::get("/result/{result_token}/delete", [ApproveresultsController::class, "destroy"]);
     Route::get("/result/{result_token}/edit", [ApproveresultsController::class, "edit"]);
+    Route::put("/result/{result}/edit", [ApproveresultsController::class, "update"]);
 
     // storing grades
     Route::post("/grades/store", [GradesController::class, 'store'])->name("grades.create");

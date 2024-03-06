@@ -1,6 +1,6 @@
 @props([
     "options", "value" => "", "default" => "Select An Option", "value_key" => "id", "text_key" => "name",
-    "keyword" => "", "min" => 0, "max" => 0, "abled" => true
+    "keyword" => "", "min" => 0, "max" => 0, "abled" => true, "method" => false
 ])
 
 <select
@@ -26,6 +26,28 @@
         @endif
         </option>
     @endforeach
+
+@elseif ($method !== false)
+    <option value="">{{ $default }}</option>
+    @foreach ($options as $option)
+        @php
+            $option = $option->$method;
+        @endphp
+        <option value="{{ $option[$value_key] }}"
+            @if ($value == $option[$value_key])
+                {{ "selected" }}
+            @endif
+        >
+        @if (is_array($text_key))
+            @foreach ($text_key as $txt_k)
+                {{ ucfirst($option[$txt_k])." " }}
+            @endforeach
+        @else
+            {{ ucfirst($option[$text_key]) }}
+        @endif
+        </option>
+    @endforeach
+
 @elseif ($options == "auto")
     <option value="">{{ $default }}</option>
     @if ($min > $max)

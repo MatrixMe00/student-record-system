@@ -19,22 +19,24 @@
                 <x-input-error :messages="$errors->get('result_token')" class="mt-2" />
             </div>
 
-            {{-- Display status --}}
-            <div>
-                <x-input-label for="status" :value="__('Result Status')" />
-                <x-text-input id="status" type="text" value="Pending" readonly />
-            </div>
-
             {{-- school id --}}
             <x-text-input id="school_id" type="hidden" name="school_id" value="{{ auth()->user()->school->id }}" />
 
             {{-- teacher id --}}
-            <x-text-input id="teacher_id" type="hidden" name="teacher_id" value="{{ auth()->user()->id }}" />
+            @if (isset($teacher_id))
+                <x-text-input id="teacher_id" type="hidden" name="teacher_id" value="{{ $teacher_id }}" />
+            @else
+                <div>
+                    <x-input-label for="teacher_id" :value="__('Select Teacher')" />
+                    <x-input-select id="teacher_id" name="teacher_id" :value="old('teacher_id')" :options="$teachers" :text_key="['lname','oname']" value_key="user_id" required />
+                    <x-input-error :messages="$errors->get('teacher_id')" class="mt-2" />
+                </div>
+            @endif
 
             {{-- program id --}}
             <div>
                 <x-input-label for="program_id" :value="__('Select the Class')" />
-                <x-input-select :options="$classes" :value="old('program_id')" default="Select a class" name="program_id" />
+                <x-input-select :options="$classes" method="program" :value="old('program_id')" default="Select a class" name="program_id" />
                 <x-input-error :messages="$errors->get('program_id')" class="mt-2" />
             </div>
 

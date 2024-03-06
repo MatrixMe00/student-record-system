@@ -18,7 +18,7 @@
         <div class="flex items-center w-full p-8 mx-auto lg:px-12">
             <div class="w-full">
                 <h1 class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
-                    Edit this result slip [{{ strtoupper($result->result_token) }}]
+                    {{ $edit_all ? "Edit" : "Details for" }} result slip <b>{{ strtoupper($result->result_token) }}</b> [{{ $result->status }}]
                 </h1>
 
                 <p class="mt-4 text-gray-500 dark:text-gray-400">

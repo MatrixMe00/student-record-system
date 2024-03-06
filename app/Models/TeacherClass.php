@@ -20,8 +20,8 @@ class TeacherClass extends Model
     }
 
     // get program information
-    public function program() :HasOne{
-        return $this->hasOne(Program::class);
+    public function program() :BelongsTo{
+        return $this->belongsTo(Program::class);
     }
 
     // can have many programs if a subject is provided

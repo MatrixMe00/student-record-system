@@ -42,6 +42,11 @@ class ApproveResults extends Model
         return $this->hasMany(Grades::class, "result_token", "result_token");
     }
 
+    // results belong to a subject
+    public function subject(): BelongsTo{
+        return $this->belongsTo(Subject::class);
+    }
+
     // every result has a teacher
     public function teacher(): HasOne{
         return $this->hasOne(Teacher::class);

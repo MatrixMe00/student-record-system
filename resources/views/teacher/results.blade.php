@@ -7,11 +7,7 @@
     </x-primary-button>
 </section>
 
-@session('success')
-    <x-session-message class="mb-2">
-        {{ __(session('message')) }}
-    </x-session-message>
-@endsession
+<x-session-component />
 
 <section>
     @if ($result_slips->count() > 0)
@@ -20,7 +16,8 @@
                 @php
                     $extras = [
                         ["title" => "Recorded", "content" => "{$result->grades->count()} Students"],
-                        // ["title" => "Teachers Teaching", "content" => $subject->teachers->count()]
+                        ["title" => "Subject", "content" => $result->subject->name ?? "Not Set"],
+                        ["title" => "Academic Year", "content" => get_academic_year($result->created_at)]
                     ];
                 @endphp
                 <x-content-card class="bg-white hover:bg-neutral-50" title="{{ $result->program->name }}" item_id="{{ $result->result_token }}"
