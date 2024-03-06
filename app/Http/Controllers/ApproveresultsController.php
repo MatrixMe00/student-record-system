@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ApproveResults;
 use App\Models\Program;
 use App\Models\Teacher;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -58,20 +60,53 @@ class ApproveresultsController extends Controller
 
     public function edit($result_token){
         $approveResults = ApproveResults::where("result_token", $result_token)->first();
+        $teacher_id = auth()->user()->role_id == 4 ? auth()->user()->id : $approveResults->teacher_id;
         $program = Program::find($approveResults->program_id);
         $students = $program->count() > 0 ? $program->students : null;
-        $teacher = Teacher::find(auth()->user()->id);
+        $teacher = Teacher::find($teacher_id);
+        $is_admin = auth()->user()->role_id == 3;
 
         return view("results.edit", [
             "result" => $approveResults,
             "program" => $program,
             "students" => $students,
             "grades" => $approveResults->grades,
-            "subjects" => $teacher->subjects->toArray(),
+            "subject" => $approveResults->subject,
             "academic_year" => get_academic_year($approveResults->created_at),
-            "edit_all" => in_array($approveResults->status, ["pending", "rejected"]),
-            "edit_once" => $approveResults->status == "pending"
+            "edit_all" => in_array($approveResults->status, ["pending", "rejected"]) && !$is_admin,
+            "edit_once" => $approveResults->status == "pending",
+            "is_admin" => $is_admin,
+            "unsaved" => $this->unsaved_students($students, $approveResults->grades)
         ]);
+    }
+
+    /**
+     * Get unsaved students
+     */
+    private function unsaved_students(Collection $students, Collection $grades) :Collection{
+        $unsaved = new Collection();
+        $founds = new Collection();
+        foreach($students as $student){
+            $found = false;
+
+            foreach($grades as $grade){
+                $g_student = $grade->student;
+
+                if($g_student == $student){
+                    $found = true; break;
+                }
+            }
+
+            if(!$found){
+                $unsaved->push($student);
+            }
+        }
+
+        return $unsaved;
+    }
+
+    public function show($result_token){
+        return $this->edit($result_token);
     }
 
     /**

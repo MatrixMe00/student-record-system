@@ -11,10 +11,10 @@
     </div>
 
     {{-- school id --}}
-    <x-text-input id="school_id" type="hidden" name="school_id" value="{{ auth()->user()->school->id }}" />
+    <x-text-input id="school_id" type="hidden" name="school_id" value="{{ $result->school_id }}" />
 
     {{-- teacher id --}}
-    <x-text-input id="teacher_id" type="hidden" name="teacher_id" value="{{ auth()->user()->id }}" />
+    <x-text-input id="teacher_id" type="hidden" name="teacher_id" value="{{ $result->teacher_id }}" />
 
     {{-- program id --}}
     <div>
@@ -27,18 +27,19 @@
     {{-- semester --}}
     <div>
         <x-input-label for="semester" :value="__('Select Result Term')" />
-        <x-input-select options="auto" :value="old('semester', $result->semester)" default="Select a Term" keyword="Term" min="1" max="3" name="semester" :abled="$edit_all" />
+        <x-input-select options="auto" :value="old('semester', $result->semester)" default="Select a Term" keyword="Term" min="1" max="3" name="semester" :abled="!$is_admin" />
         <x-input-error :messages="$errors->get('semester')" class="mt-2" />
     </div>
 
     {{-- subject id --}}
     <div>
-        <x-input-label for="subject_id" :value="__('Select the Subject')" />
-        <x-input-select :options="$subjects" :value="old('subject_id', $result->subject_id)" default="Select a subject" name="subject_id" />
+        <x-input-label for="subject_id" :value="__('Result Subject')" />
+        <x-text-input name="subject_id" type="hidden" :value="$subject->id" />
+        <x-text-input id="subject_id" :value="$subject->name" readonly />
         <x-input-error :messages="$errors->get('subject_id')" class="mt-2" />
     </div>
 
-    @if ($edit_all)
+    @if ($edit_all && !$is_admin)
         <div class="md:col-span-2">
             <button type="submit"
                 class="flex items-center justify-between w-full md:w-1/2 lg:w-2/3 lg:mx-auto px-6 py-3 text-sm

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->float("class_mark");
             $table->float("exam_mark");
             $table->string("result_token")->nullable(false);
+            $table->enum("status", ["accepted", "rejected", "pending"])->default("pending");
             $table->timestamps();
         });
     }

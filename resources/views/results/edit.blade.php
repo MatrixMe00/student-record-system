@@ -18,22 +18,35 @@
         <div class="flex items-center w-full p-8 mx-auto lg:px-12">
             <div class="w-full">
                 <h1 class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
-                    {{ $edit_all ? "Edit" : "Details for" }} result slip <b>{{ strtoupper($result->result_token) }}</b> [{{ $result->status }}]
+                    @if ($is_admin)
+                        Details for result slip <b>{{ strtoupper($result->result_token) }}</b> [{{ $result->status }}]
+                    @else
+                        {{ $edit_all ? "Edit" : "Details for" }} result slip <b>{{ strtoupper($result->result_token) }}</b> [{{ $result->status }}]
+                    @endif
                 </h1>
 
-                <p class="mt-4 text-gray-500 dark:text-gray-400">
+                <p class="my-4 text-gray-500 dark:text-gray-400">
                     @php
-                        switch ($result->status) {
-                            case 'accepted':
-                            case 'submitted':
-                                $message = "Form data below is only for viewing";
-                                break;
-                            case 'rejected':
-                                $message = "Result was rejected. Please make necessary changes and resubmit";
-                                break;
-                            default:
-                                $message = "Fill the form below with the needed data";
+                        if($is_admin){
+                            $message = "Verify the status of this result slip";
+                        }else{
+                            switch ($result->status) {
+                                case 'accept':
+                                case 'accepted':
+                                    $message = "Results have been approved as final records";
+                                    break;
+                                case 'submitted':
+                                    $message = "Results data has been submitted and is awaiting review from admin";
+                                    break;
+                                case 'reject':
+                                case 'rejected':
+                                    $message = "Result was rejected. Please make necessary changes and resubmit";
+                                    break;
+                                default:
+                                    $message = "Fill the form below with the needed data";
+                            }
                         }
+
                     @endphp
                     {{ __($message) }}
                 </p>
@@ -45,7 +58,7 @@
 
                     <section class="bg-slate-50 p-2 mt-8 lg:mt-0 lg:col-span-3">
                         <h1 class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
-                            {{ __($program->name.' student list') }}
+                            {{ __($program->name.' result list') }}
                         </h1>
 
                         <form class="grid grid-cols-1 gap-6 mt-8 border p-4"
@@ -96,12 +109,25 @@
                                         <tbody>
                                             @foreach($grades as $key => $grade)
                                                 <x-result-entry-row
-                                                    :student="$grade->student" :key="$key" is_grade="1"
+                                                    :student="$grade->student" :key="$key"
                                                     :classmark="old('class_mark.'.$key, $grade->class_mark)"
                                                     :exammark="old('exam_mark.'.$key, $grade->exam_mark)"
                                                     :rowid="$grade->id"
+                                                    :readonly="$is_admin"
                                                 />
                                             @endforeach
+
+                                            {{-- if new students have been added to the class --}}
+                                            @if ($unsaved->count() > 0 && $result->status == "pending")
+                                                @foreach($unsaved as $key => $student)
+                                                    <x-result-entry-row
+                                                        :student="$student" :key="$key"
+                                                        :classmark="old('class_mark.'.$key, 0)"
+                                                        :exammark="old('exam_mark.'.$key, 0)"
+                                                        painttd="border-teal-400"
+                                                    />
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -120,7 +146,7 @@
                                         <tbody>
                                             @foreach($students as $key => $student)
                                                 <x-result-entry-row
-                                                    :student="$student" :key="$key" is_grade="0"
+                                                    :student="$student" :key="$key"
                                                     :classmark="old('class_mark.'.$key, 0)"
                                                     :exammark="old('exam_mark.'.$key, 0)"
                                                 />
@@ -130,24 +156,72 @@
                                 </div>
                             @endif
 
-                            @if ($show_submit)
+                            @if ($show_submit && !$is_admin)
+                                @if ($edit_once)
+                                    <div class="flex flex-col items-center justify-center md:flex-row gap-4">
+                                        <button type="submit" value="save" name="submit"
+                                            class="flex items-center justify-between w-full md:w-1/2 px-6 py-3 text-sm
+                                                tracking-wide text-white capitalize group transform bg-teal-500 rounded-md
+                                                hover:bg-teal-400 focus:outline-none focus:ring focus:ring-teal-300
+                                                focus:ring-opacity-50">
+                                            <span>Save For Later</span>
+                                            <i class="far fa-save group-hover:mr-2 transition-all duration-500"></i>
+                                        </button>
+                                        <button type="submit" value="submit" name="submit"
+                                            class="flex items-center justify-between w-full md:w-1/2 px-6 py-3 text-sm
+                                                tracking-wide text-white capitalize group transform bg-blue-500 rounded-md
+                                                hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300
+                                                focus:ring-opacity-50">
+                                            <span>Submit as Final</span>
+                                            <i class="fas fa-angle-right group-hover:mr-2 transition-all duration-500"></i>
+                                        </button>
+                                    </div>
+                                @endif
+
+
+                            @elseif ($is_admin)
                                 <div class="flex flex-col items-center justify-center md:flex-row gap-4">
-                                    <button type="submit" value="save" name="submit"
-                                        class="flex items-center justify-between w-full md:w-1/2 px-6 py-3 text-sm
-                                            tracking-wide text-white capitalize group transform bg-teal-500 rounded-md
-                                            hover:bg-teal-400 focus:outline-none focus:ring focus:ring-teal-300
-                                            focus:ring-opacity-50">
-                                        <span>Save For Later</span>
-                                        <i class="far fa-save group-hover:mr-2 transition-all duration-500"></i>
-                                    </button>
-                                    <button type="submit" value="submit" name="submit"
+                                    {{-- set pending status --}}
+                                    @if (in_array($result->status, ["submitted", "accepted", "accept", "rejected", "reject"]))
+                                        <button type="submit" value="pending" name="submit"
                                         class="flex items-center justify-between w-full md:w-1/2 px-6 py-3 text-sm
                                             tracking-wide text-white capitalize group transform bg-blue-500 rounded-md
-                                            hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300
+                                            hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300
                                             focus:ring-opacity-50">
-                                        <span>Submit as Final</span>
-                                        <i class="fas fa-angle-right group-hover:mr-2 transition-all duration-500"></i>
+                                        <span>Save for Editing</span>
+                                        <i class="far fa-edit group-hover:mr-2 transition-all duration-500"></i>
                                     </button>
+                                    @endif
+
+                                    {{-- set save status --}}
+                                    @if (in_array($result->status, ["submitted", "rejected", "reject"]))
+                                        <button type="submit" value="accepted" name="submit"
+                                        class="flex items-center justify-between w-full md:w-1/2 px-6 py-3 text-sm
+                                            tracking-wide text-white capitalize group transform bg-teal-500 rounded-md
+                                            hover:bg-teal-600 focus:outline-none focus:ring focus:ring-teal-300
+                                            focus:ring-opacity-50">
+                                        <span>Approve Results</span>
+                                        <i class="fas fa-check group-hover:mr-2 transition-all duration-500"></i>
+                                    </button>
+                                    @endif
+
+                                    {{-- set reject status --}}
+                                    @if (in_array($result->status, ["submitted", "accepted", "accept"]))
+                                        <button type="submit" value="reject" name="submit"
+                                        class="flex items-center justify-between w-full md:w-1/2 px-6 py-3 text-sm
+                                            tracking-wide text-white capitalize group transform bg-red-500 rounded-md
+                                            hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300
+                                            focus:ring-opacity-50">
+                                        <span>Reject Results</span>
+                                        <i class="fas fa-times group-hover:mr-2 transition-all duration-500"></i>
+                                    </button>
+                                    @endif
+
+                                    @if ($result->status == "pending")
+                                        <p class="border p-2 text-center w-full cursor-default">
+                                            {{ "Results is still been written for submission" }}
+                                        </p>
+                                    @endif
                                 </div>
                             @endif
                         </form>

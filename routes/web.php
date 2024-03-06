@@ -96,6 +96,7 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get("/results", [GradesController::class, "index"])->name("result.all");
     Route::post("/results", [ApproveresultsController::class, "store"])->name("result.store");
     Route::get("/result/{result_token}/delete", [ApproveresultsController::class, "destroy"]);
+    Route::get("/result/{result_token}/show", [ApproveresultsController::class, "show"]);
     Route::get("/result/{result_token}/edit", [ApproveresultsController::class, "edit"]);
     Route::put("/result/{result}/edit", [ApproveresultsController::class, "update"]);
 

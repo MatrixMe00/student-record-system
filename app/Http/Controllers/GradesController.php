@@ -17,6 +17,29 @@ class GradesController extends Controller
     use UserModelTrait;
 
     /**
+     * status for grades
+     */
+    protected array $statuses = [
+        "pending", "submitted", "rejected", "accepted",
+        "reject", "accept"
+    ];
+
+    /**
+     * This formats properly the status to be sent
+     */
+    private function format_status(string $value){
+        $response = $value;
+
+        if($value == "rejected"){
+            $response = "reject";
+        }elseif($value == "accepted"){
+            $response = "accept";
+        }
+
+        return $response;
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -40,7 +63,7 @@ class GradesController extends Controller
                     "classes" => Program::all(["id", "name"])->toArray(),
                     "subjects" => Subject::all(["id", "name"])->toArray(),
                     "result_id" => $this->create_id(),
-                    "result_slips" => ApproveResults::orderBy('created_at')->get()
+                    "result_slips" => ApproveResults::orderBy('status', 'desc')->orderBy('updated_at','desc')->get()
                                         ->groupBy('status')->map(function ($items, $key) {
                                             return [
                                                 'title' => ucfirst($key) . ' Results',
@@ -57,7 +80,7 @@ class GradesController extends Controller
                     "result_slips" => $app_results::all(),
                     "result_id" => $this->create_id(),
                     "teacher_id" => auth()->user()->id,
-                    "subjects" => $model->subjects->toArray(),
+                    "subjects" => $model->subjects->unique('name')->toArray(),
                     "classes" => $model->classes->unique("program_id")
                 ];
                 break;
@@ -144,13 +167,22 @@ class GradesController extends Controller
      */
     public function update(Request $request)
     {
+        $is_admin = false;
+
+        // set status
+        if(auth()->user()->role_id == 3){
+            $is_admin = true;
+            $request->merge(["status" => $request->submit]);
+        }
+
         $validated = $request->validate([
             "semester" => ["required", "integer", "max: 3", "min: 1"],
             "result_token" => ["required", "string", Rule::exists("approveresults", "result_token")],
             "id.*" => ["required", "numeric"],
             "student_id.*" => ["required", "integer", Rule::exists("students", "user_id")],
             "class_mark.*" => ["required", "numeric", "min:0", "max:50"],
-            "exam_mark.*" => ["required", "numeric", "min:0", "max:50"]
+            "exam_mark.*" => ["required", "numeric", "min:0", "max:50"],
+            "status" => ["sometimes", "required", Rule::in($this->statuses)]
         ]);
 
         $count = -1;
@@ -158,12 +190,8 @@ class GradesController extends Controller
         $stud_data = array_slice($validated, 2, 6);
 
         while(++$count < count($validated["student_id"])){
-            $data = array_merge($defaults, [
-                "student_id" => $stud_data["student_id"][$count],
-                "class_mark" => $stud_data["class_mark"][$count],
-                "exam_mark" => $stud_data["exam_mark"][$count],
-                "id" => $stud_data["id"][$count]
-            ]);
+            $data = $this->format_update_data($defaults, $stud_data, $count, $is_admin);
+
             $grade = Grades::find($stud_data["id"][$count]);
             $grade->update($data);
         }
@@ -172,12 +200,38 @@ class GradesController extends Controller
             $message = "Result updates have been saved";
         }else{
             $record = ApproveResults::where("result_token", $validated["result_token"])->first();
-            $record->status = "submitted";
+            $record->status = $this->format_status($request->status) ?? "submitted";
             $record->update();
-            $message = "Results have been submitted for review";
+            $message = "Results have been {$request->status}";
+
+            if($record->status == "submitted"){
+                $message .= " for review";
+            }
         }
 
         return redirect()->back()->with(["success" => true, "message" => $message]);
+    }
+
+    /**
+     * This is used to help with the update of records, sets the kind of data to be parsed
+     */
+    private function format_update_data($defaults, $stud_data, $count, $is_admin) :array{
+        $data = [];
+        if($is_admin){
+            $data = [
+                "id" => $stud_data["id"][$count],
+                "status" => request()->status
+            ];
+        }else{
+            $data = array_merge($defaults, [
+                "student_id" => $stud_data["student_id"][$count],
+                "class_mark" => $stud_data["class_mark"][$count],
+                "exam_mark" => $stud_data["exam_mark"][$count],
+                "id" => $stud_data["id"][$count]
+            ]);
+        }
+
+        return $data;
     }
 
     /**

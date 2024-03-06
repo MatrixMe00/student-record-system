@@ -16,9 +16,10 @@ return new class extends Migration
             $table->string("result_token")->unique();
             $table->foreignId("school_id")->constrained()->cascadeOnDelete();
             $table->foreignId("program_id")->constrained();
+            $table->foreignId("subject_id")->constrained()->cascadeOnDelete();
             $table->foreignId("teacher_id")->constrained("teachers", "user_id");
             $table->integer("semester");
-            $table->enum("status", ["pending","reject", "accept", "submitted"])->default("new");
+            $table->enum("status", ["pending","rejected", "accepted", "submitted"])->default("new");
             $table->foreignId("admin_id")->nullable();
             $table->timestamps();
         });
