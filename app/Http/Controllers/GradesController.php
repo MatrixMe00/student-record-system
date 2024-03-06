@@ -40,14 +40,15 @@ class GradesController extends Controller
                     "classes" => Program::all(["id", "name"])->toArray(),
                     "subjects" => Subject::all(["id", "name"])->toArray(),
                     "result_id" => $this->create_id(),
-                    "result_slips" => [
-                        ["title" => "Submitted Results", "data" => ApproveResults::where("status", "submitted")->orderBy("created_at")->get()],
-                        ["title" => "Results in Progress", "data" => ApproveResults::where("status", "pending")->orderBy("created_at")->get()],
-                        ["title" => "Rejected Results", "data" => ApproveResults::where("status", "rejected")->orderBy("created_at")->get()],
-                        ["title" => "Approved Results", "data" => ApproveResults::where("status", "approved")->orderBy("created_at")->get()]
-                    ]
+                    "result_slips" => ApproveResults::orderBy('created_at')->get()
+                                        ->groupBy('status')->map(function ($items, $key) {
+                                            return [
+                                                'title' => ucfirst($key) . ' Results',
+                                                'id' => $key, 'data' => $items
+                                            ];
+                                        })
                 ];
-                dd($options["result_slips"]);
+
                 break;
             case 4:
                 $app_results = new ApproveResults(["teacher_id" => auth()->user()->id]);
