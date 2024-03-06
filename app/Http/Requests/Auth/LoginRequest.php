@@ -62,7 +62,7 @@ class LoginRequest extends FormRequest
                 Auth::guard('web')->logout();
 
                 throw ValidationException::withMessages([
-                    'role_id' => "Requested user is not bound to this login type1",
+                    'role_id' => "Requested user is not bound to this login type",
                 ]);
             }
         }elseif($request_role > 3 && $request_role <= 5){
@@ -72,7 +72,7 @@ class LoginRequest extends FormRequest
                 Auth::guard('web')->logout();
 
                 throw ValidationException::withMessages([
-                    'role_id' => "Requested user is not bound to this login type1",
+                    'role_id' => "Requested user is not bound to this login type",
                 ]);
             }
         }
