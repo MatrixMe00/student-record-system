@@ -100,7 +100,7 @@
                 </x-table-component>
             </section>
         @else
-            <x-empty-div class="lg:w-3/4 lg:mx-auto">{{ __("No Subjects assigned for this class. Assign a class to a teacher") }}</x-empty-div>
+            <x-empty-div class="lg:w-3/4 lg:mx-auto">{{ __("No Subjects assigned for this class. Assign subjects to teachers who teach this class") }}</x-empty-div>
         @endif
 
     </x-app-main>

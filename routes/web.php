@@ -66,6 +66,24 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // school settings
+    Route::get("/my-school", [SchoolController::class, 'show'])->name('my-school');
+
+    // results
+    Route::get("/results", [GradesController::class, "index"])->name("result.all");
+    Route::post("/results", [ApproveresultsController::class, "store"])->name("result.store");
+    Route::get("/result/{result_token}/delete", [ApproveresultsController::class, "destroy"]);
+    Route::get("/result/{result_token}/show", [ApproveresultsController::class, "show"]);
+    Route::get("/result/{result_token}/edit", [ApproveresultsController::class, "edit"]);
+    Route::put("/result/{result}/edit", [ApproveresultsController::class, "update"]);
+
+    // storing grades
+    Route::post("/grades/store", [GradesController::class, 'store'])->name("grades.create");
+    Route::put("/grades/update", [GradesController::class, 'update'])->name("grades.update");
+});
+
+// routes for just school admins
+Route::middleware(['auth','school.check','school.admin'])->group(function(){
     // users
     Route::get("/users", [UserController::class, 'index'])->name("users.all");
     Route::get("/user/{username}/edit", [UserController::class, "edit"]);
@@ -88,21 +106,6 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get("/teacher/subject-assign/{teacher}", [TeacherClassController::class, "create"]);
     Route::get("/teacher/assign-delete/{subject}", [TeacherClassController::class, "destroy"]);
     Route::post("/teacher/subject-assign", [TeacherClassController::class, "store"])->name("teacher.assign-subject");
-
-    // school settings
-    Route::get("/my-school", [SchoolController::class, 'show'])->name('my-school');
-
-    // results
-    Route::get("/results", [GradesController::class, "index"])->name("result.all");
-    Route::post("/results", [ApproveresultsController::class, "store"])->name("result.store");
-    Route::get("/result/{result_token}/delete", [ApproveresultsController::class, "destroy"]);
-    Route::get("/result/{result_token}/show", [ApproveresultsController::class, "show"]);
-    Route::get("/result/{result_token}/edit", [ApproveresultsController::class, "edit"]);
-    Route::put("/result/{result}/edit", [ApproveresultsController::class, "update"]);
-
-    // storing grades
-    Route::post("/grades/store", [GradesController::class, 'store'])->name("grades.create");
-    Route::put("/grades/update", [GradesController::class, 'update'])->name("grades.update");
 });
 
 require __DIR__.'/auth.php';
