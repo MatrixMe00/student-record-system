@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId("subject_id")->constrained()->cascadeOnDelete();
             $table->foreignId("teacher_id")->constrained("teachers", "user_id");
             $table->integer("semester");
-            $table->enum("status", ["pending","rejected", "accepted", "submitted"])->default("new");
+            $table->enum("status", ["pending","rejected", "accepted", "submitted"])->default("pending");
             $table->foreignId("admin_id")->nullable();
             $table->timestamps();
         });

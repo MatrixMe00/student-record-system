@@ -13,6 +13,15 @@ class Grades extends Model
 
     protected $guarded = [];
 
+    /**
+     * Make edits to the status
+     */
+    public function setStatusAttribute($value){
+        if(in_array($value, ["accept", "reject"])){
+            $this->status = $value."ed";
+        }
+    }
+
     // many grades to one student
     public function student(): BelongsTo{
         return $this->belongsTo(Student::class, "student_id");

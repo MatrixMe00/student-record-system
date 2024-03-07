@@ -73,7 +73,7 @@ class ApproveresultsController extends Controller
             "grades" => $approveResults->grades,
             "subject" => $approveResults->subject,
             "academic_year" => get_academic_year($approveResults->created_at),
-            "edit_all" => in_array($approveResults->status, ["pending", "rejected"]) && !$is_admin,
+            "edit_all" => in_array($approveResults->status, ["pending", "rejected", "reject"]) && !$is_admin,
             "edit_once" => $approveResults->status == "pending",
             "is_admin" => $is_admin,
             "unsaved" => $this->unsaved_students($students, $approveResults->grades)

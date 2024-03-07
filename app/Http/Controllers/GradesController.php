@@ -211,12 +211,14 @@ class GradesController extends Controller
             $message = "Result updates have been saved";
         }else{
             $record = ApproveResults::where("result_token", $validated["result_token"])->first();
-            $record->status = $this->format_status($request->status) ?? "submitted";
+            $record->status = $this->format_status($request->submit) ?? "submitted";
 
             // update the admin id
             if($is_admin){
                 $record->admin_id = auth()->user()->id;
             }
+
+            dd($record->getConnection()->getSchemaBuilder()->getColumns('approveresults'));
 
             $record->update();
             $message = $record->status != 'pending' ? "Results have been {$record->status}" : 'Results has been enabled for modification';

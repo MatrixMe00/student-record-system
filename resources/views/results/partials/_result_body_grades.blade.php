@@ -19,7 +19,7 @@
                     :classmark="old('class_mark.'.$key, $grade->class_mark)"
                     :exammark="old('exam_mark.'.$key, $grade->exam_mark)"
                     :rowid="$grade->id"
-                    :readonly="$is_admin || $result->status != 'pending'"
+                    :readonly="$is_admin || !$edit_once"
                 />
                 @php
                     $key++;
@@ -34,7 +34,7 @@
                         :classmark="old('class_mark.'.$key, 0)"
                         :exammark="old('exam_mark.'.$key, 0)"
                         painttd="border-teal-400"
-                        :readonly="$is_admin || $result->status != 'pending'"
+                        :readonly="$is_admin || !$edit_once"
                     />
                     @php
                         $key++;
