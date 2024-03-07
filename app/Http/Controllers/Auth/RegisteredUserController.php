@@ -68,7 +68,7 @@ class RegisteredUserController extends Controller
         }elseif(intval($user->role_id) == 2 && $new_system){
             return redirect('/');
         }elseif(intval($user->role_id) == 3 && $new_school){
-            return redirect()->route("school.create")->with(["admin_id" => $user->id]);
+            return redirect()->route("school.create")->with(["admin_id" => $user->id, "ignore_school_check" => true]);
         }else{
             return redirect()->back(200);
         }

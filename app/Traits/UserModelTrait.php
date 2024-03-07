@@ -126,6 +126,15 @@ trait UserModelTrait
                 break;
             case 3:
                 $model = SchoolAdmin::find($user->id);
+
+                if(is_null($model)){
+                    // user is in admin state
+                    $admin = Admin::find($user->id);
+                    if($admin){
+                        $model = new SchoolAdmin();
+                        $model->fill($admin->toArray());
+                    }
+                }
                 break;
             case 4:
                 $model = Teacher::find($user->id);

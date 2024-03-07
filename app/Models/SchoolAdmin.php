@@ -34,8 +34,8 @@ class SchoolAdmin extends Model
     }
 
     // admin has a school
-    public function school(): BelongsTo{
-        return $this->belongsTo(School::class);
+    public function school(): BelongsTo|null{
+        return $this->school_id ? $this->belongsTo(School::class) : null;
     }
 
     // admin is a user

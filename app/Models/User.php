@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Traits\UserModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,7 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, UserModelTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -57,22 +59,10 @@ class User extends Authenticatable
     }
 
     // some users belong to schools
-    public function school() :BelongsTo|null{
+    public function school(){
         if($this->role_id >= 3){
-            switch($this->role_id){
-                case 3:
-                    $school_admin = SchoolAdmin::find($this->id);
-                    return $school_admin->school();
-                case 4:
-                    $teacher = Teacher::find($this->id);
-                    return $teacher->school();
-                case 5:
-                    $student = Student::find($this->id);
-                    return $student->school();
-                default:
-                    $other = other::find($this->id);
-                    return $other->school();
-            }
+            $user = $this->user_model($this);
+            return $user?->school();
         }
 
         return null;

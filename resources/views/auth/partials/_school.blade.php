@@ -94,7 +94,7 @@
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
 
-                    <x-text-input name="admin_id" id="admin_id" type="text" value="{{ auth()->user()?->id ?? $admin_id }}" />
+                    <x-text-input name="admin_id" id="admin_id" type="text" value="{{ $admin_id }}" />
 
                     <button
                         class="flex items-center justify-between w-full px-6 py-3 text-sm
