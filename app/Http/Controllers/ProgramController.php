@@ -85,7 +85,7 @@ class ProgramController extends Controller
         return view('admin.classes.edit', [
             "program" => $program,
             "teachers" => Teacher::all(["user_id", "lname", "oname"]),
-            "class_data" => $program->subjects()
+            "class_data" => $program->subjects
         ]);
     }
 

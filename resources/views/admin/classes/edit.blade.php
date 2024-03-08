@@ -51,16 +51,9 @@
                     {{-- Class teacher --}}
                     <div>
                         <x-input-label for="class_teacher" :value="__('Class Teacher')" />
-                        <x-input-select :options="0" name="class_teacher" id="class_teacher" :value="old('class_teacher')">
-                            <option value="">Select A Class Teacher</option>
-                            @foreach ($teachers as $teacher)
-                                <option value="{{ $teacher->user_id }}"
-                                    @if ($teacher->user_id == $program->class_teacher)
-                                        {{ "selected" }}
-                                    @endif
-                                >{{ ucwords($teacher->lname." ".$teacher->oname) }}</option>
-                            @endforeach
-                        </x-input-select>
+                        <x-input-select :options="$teachers->toArray()" name="class_teacher" id="class_teacher"
+                            :value="old('class_teacher', $program->class_teacher)"
+                            default="Select A Class Teacher" value_key="user_id" :text_key="['lname', 'oname']" />
                         <x-input-error :messages="$errors->get('class_teacher')" />
                     </div>
 
@@ -80,7 +73,7 @@
 
         @if ($class_data->count() > 0)
             <section class="bg-zinc-50 mt-8 py-6">
-                <x-table-component title="Class Subjects">
+                <x-table-component title="Class Subjects [{{ $class_data->count() }}]">
                     @section('thead')
                         <thead>
                             <tr>

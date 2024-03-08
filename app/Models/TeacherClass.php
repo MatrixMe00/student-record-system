@@ -16,7 +16,7 @@ class TeacherClass extends Model
 
     // subject
     public function subject() :HasOne{
-        return $this->hasOne(Subject::class);
+        return $this->hasOne(Subject::class, "id", "subject_id");
     }
 
     // get program information
@@ -44,6 +44,6 @@ class TeacherClass extends Model
 
     // can have many teachers if a subject is provided
     public function teacher() :HasOne{
-        return $this->hasOne(Teacher::class);
+        return $this->hasOne(Teacher::class, "user_id", "teacher_id");
     }
 }
