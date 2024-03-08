@@ -21,7 +21,7 @@ class ApproveResults extends Model
         $query = parent::newQuery($excludeDeleted);
 
         // based on the user role
-        $school_id = auth()->user()?->school?->id ?? null;
+        $school_id = session('school_id') ?? null;
         $program_id = $this->program_id ?? null;
         $teacher_id = $this->teacher_id ?? null;
         if($school_id){

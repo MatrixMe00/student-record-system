@@ -63,7 +63,7 @@ class TeacherClassController extends Controller
 
             return redirect("teacher/subject-assign/".$validated["teacher_id"]);
         }else{
-            $request->merge(["school_id" => auth()->user()->school->id]);
+            $request->merge(["school_id" => session('school_id')]);
             $req = new StoreTeacherClassRequest();
             $req = $req->createFrom($request);
 

@@ -14,12 +14,15 @@
                     type="button">
                     {{ __("Add New User") }}
                 </x-primary-button>
-                <a href="{{ route('subject.assign') }}">
-                    <x-primary-button
-                        type="button">
-                        {{ __("Assign Subject Teacher") }}
-                    </x-primary-button>
-                </a>
+
+                @if (auth()->user()->role_id == 3)
+                    <a href="{{ route('subject.assign') }}">
+                        <x-primary-button
+                            type="button">
+                            {{ __("Assign Subject Teacher") }}
+                        </x-primary-button>
+                    </a>
+                @endif
             </section>
         @endif
 

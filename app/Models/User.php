@@ -57,14 +57,4 @@ class User extends Authenticatable
     public function activityLogs(): HasMany{
         return $this->hasMany(ActivityLog::class);
     }
-
-    // some users belong to schools
-    public function school(){
-        if($this->role_id >= 3){
-            $user = $this->user_model($this);
-            return $user?->school();
-        }
-
-        return null;
-    }
 }

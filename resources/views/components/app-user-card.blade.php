@@ -39,7 +39,7 @@
         </div>
       </div>
       <p class="text-gray-400 text-sm my-1">Active</p>
-      @if (!is_null($user->school_id) && is_null(auth()->user()->school()))
+      @if (!is_null($user->school_id) && is_null(session('school_id')))
         <p class="text-gray-400 text-sm my-1">{{ $user->school->school_name }}</p>
       @endif
     </div>

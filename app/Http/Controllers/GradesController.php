@@ -264,7 +264,7 @@ class GradesController extends Controller
         $token = str_shuffle($token);
 
         //random characters
-        $token .= chr(rand(65,90)). str_pad(auth()->user()->school->id,2,"0",STR_PAD_LEFT);
+        $token .= chr(rand(65,90)). str_pad(session('school_id'),2,"0",STR_PAD_LEFT);
         $token = substr(str_shuffle($token.uniqid()), 0, 8);
         $token .= date("y");
 

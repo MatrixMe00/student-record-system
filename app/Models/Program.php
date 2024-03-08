@@ -41,7 +41,7 @@ class Program extends Model
         $query = parent::newQuery($excludeDeleted);
 
         // based on the user role
-        $school_id = auth()->user()?->school->id ?? null;
+        $school_id = session('school_id') ?? null;
         if($school_id){
             $query->where('school_id', $school_id);
         }

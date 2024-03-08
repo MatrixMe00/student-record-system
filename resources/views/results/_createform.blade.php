@@ -20,7 +20,7 @@
             </div>
 
             {{-- school id --}}
-            <x-text-input id="school_id" type="hidden" name="school_id" value="{{ auth()->user()->school->id }}" />
+            <x-text-input id="school_id" type="hidden" name="school_id" value="{{ session('school_id') }}" />
 
             {{-- teacher id --}}
             @if (isset($teacher_id))

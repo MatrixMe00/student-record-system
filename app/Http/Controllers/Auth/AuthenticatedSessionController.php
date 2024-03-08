@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
+use App\Traits\UserModelTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,6 +16,8 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+    use UserModelTrait;
+
     /**
      * Display the login view.
      */
@@ -40,7 +43,18 @@ class AuthenticatedSessionController extends Controller
         $response = $this->create_cookie();
         $cookie = $response->headers->getCookies()[0];
 
+        // add the school id as a session
+        $this->add_school_id();
+
         return redirect()->intended(RouteServiceProvider::HOME)->withCookie($cookie);
+    }
+
+    /**
+     * Creates a school id session
+     */
+    private function add_school_id(){
+        $model = $this->user_model(auth()->user());
+        session(["school_id" => $model->school_id]);
     }
 
     /**

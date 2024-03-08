@@ -16,7 +16,7 @@ class SubjectController extends Controller
     {
         return view("admin.subjects.index", [
             "subjects" => Subject::all(),
-            "school_id" => auth()->user()?->school?->id
+            "school_id" => auth()->user()->role_id > 2 ? session('school_id') : null
         ]);
     }
 
@@ -104,7 +104,7 @@ class SubjectController extends Controller
 
         $exists = $is_update ?
             Subject::where('name', $name)->where("id", "!=", $subject_id)->exists() :
-            Subject::where('name', $name)->where("school_id", auth()->user()->school->id)->exists();
+            Subject::where('name', $name)->where("school_id", session('school_id'))->exists();
 
         return $exists;
     }
@@ -119,7 +119,7 @@ class SubjectController extends Controller
         if(!empty($slug)){
             $exists = $is_update ?
                 Subject::where('slug', $slug)->where("id", "!=", $subject_id)->where('slug', "!=", "")->exists() :
-                Subject::where('slug', $slug)->where("school_id", auth()->user()->school->id)->exists();
+                Subject::where('slug', $slug)->where("school_id", session('school_id'))->exists();
         }
 
         return $exists;
