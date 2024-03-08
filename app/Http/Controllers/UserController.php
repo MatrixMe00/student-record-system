@@ -50,7 +50,7 @@ class UserController extends Controller
                     "students" => Student::all(),
                     "others" => other::all()
                 ];
-                $school_id = $user->school->id;
+                $school_id = session('school_id');
                 $roles = Role::where("id", ">", "2")->where("school_id", 0)->orWhere("school_id", $school_id)->get()->toArray();
                 break;
             default:

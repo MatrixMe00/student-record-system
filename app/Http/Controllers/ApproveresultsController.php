@@ -15,9 +15,7 @@ class ApproveresultsController extends Controller
 {
     public function index()
     {
-        $user = request()->user();
-
-        return ApproveResults::where("school_id", $user->school_id)->get();
+        return ApproveResults::where("school_id", session('school_id'))->get();
     }
 
     public function store(Request $request)

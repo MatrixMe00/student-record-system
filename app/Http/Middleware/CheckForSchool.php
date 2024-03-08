@@ -17,7 +17,7 @@ class CheckForSchool
     {
         if(($user = auth()->user()) !== null){
             if($user->role_id == 3){
-                if(!is_null($user->school()) && $user->school->id){
+                if(session('school_id')){
                     if($request->routeIs('school.create')){
                         return redirect()->route('dashboard');
                     }
