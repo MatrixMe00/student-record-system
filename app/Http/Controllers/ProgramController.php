@@ -40,10 +40,28 @@ class ProgramController extends Controller
         // check if the name already exists
         if(($message = $this->check_name_slug()) === true){
             $validated = $request->validate($request->rules());
-            $program = Program::create($validated);
 
-            $success = true;
-            $message = "$program->name has been created successfully";
+            // check if class teacher hasn't been assigned a class
+            $teacher = Teacher::find($validated["class_teacher"]);
+            if($teacher->class_teacher == true){
+                $success = false;
+                $message = "Class could not be added. $teacher->lname has already been assigned a class";
+
+                throw ValidationException::withMessages([
+                    'class_teacher' => "Teacher already assigned ".$teacher->teacher_class->name
+                ]);
+            }else{
+                $program = Program::create($validated);
+
+                // store class details into teacher
+                $teacher->class_teacher = true;
+                $teacher->program_id = $program->id;
+                $teacher->update();
+
+                $success = true;
+                $message = "$program->name has been created successfully";
+            }
+
         }else{
             $success = false;
         }
@@ -79,10 +97,27 @@ class ProgramController extends Controller
         // check the name and slug
         if(($message = $this->check_name_slug(true, $program->id)) === true){
             $validated = $request->validate($request->rules());
-            $program->update($validated);
 
-            $success = true;
-            $message = "Update for $program->name was successful";
+            // check if class teacher hasn't been assigned a class
+            $teacher = Teacher::find($validated["class_teacher"]);
+            if($teacher->class_teacher == true && $teacher->program_id != $program->id){
+                $success = false;
+                $message = "Update not successful. $teacher->lname has already been assigned a class";
+
+                throw ValidationException::withMessages([
+                    'class_teacher' => "Teacher already assigned ".$teacher->teacher_class->name
+                ]);
+            }else{
+                $program->update($validated);
+
+                // store class details into teacher
+                $teacher->class_teacher = true;
+                $teacher->program_id = $program->id;
+                $teacher->update();
+
+                $success = true;
+                $message = "Update for $program->name was successful";
+            }
         }else{
             $success = false;
         }
