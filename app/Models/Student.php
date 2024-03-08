@@ -57,7 +57,10 @@ class Student extends Model
 
     // calculate the grades
     public function average_grade(){
-        return 0;
+        $class = Grades::where("student_id", $this->user_id)->where('status','accepted')->avg("class_mark");
+        $exam = Grades::where("student_id", $this->user_id)->where('status','accepted')->avg("exam_mark");
+
+        return $class + $exam;
     }
 
     // grade value
