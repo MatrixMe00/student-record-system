@@ -10,5 +10,8 @@
 {{-- program id --}}
 <x-text-input type="hidden" name="program_id" value="{{ $program->id }}" />
 
+{{-- subject id --}}
+<x-text-input type="hidden" name="subject_id" value="{{ $result->subject_id }}" />
+
 {{-- program id --}}
 <x-text-input type="hidden" name="semester" value="{{ $result->semester }}" />

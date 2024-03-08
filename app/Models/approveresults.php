@@ -37,17 +37,6 @@ class ApproveResults extends Model
         return $query;
     }
 
-    /**
-     * set the attribute properly
-     */
-    public function setStatusAttribute($value){
-        if(in_array($value, ["accept", "reject"])){
-            $this->status = $value."ed";
-        }elseif($value == "submit"){
-            $this->status = "submitted";
-        }
-    }
-
     // a result has many grades
     public function grades(): HasMany{
         return $this->hasMany(Grades::class, "result_token", "result_token");

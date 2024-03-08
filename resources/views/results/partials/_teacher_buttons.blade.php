@@ -8,7 +8,7 @@
             <span>Save For Later</span>
             <i class="far fa-save group-hover:mr-2 transition-all duration-500"></i>
         </button>
-        <button type="submit" value="submit" name="submit"
+        <button type="submit" value="submitted" name="submit"
             class="flex items-center justify-between w-full md:w-1/2 px-6 py-3 text-sm
                 tracking-wide text-white capitalize group transform bg-blue-500 rounded-md
                 hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300
@@ -30,7 +30,7 @@
     </button>
 </div>
 
-@else
+@elseif ($result->status == "submitted")
     <p class="border p-2 text-center w-full cursor-default">
         {{ "This result slip is been reviewed by the admin. Please check later for response" }}
     </p>

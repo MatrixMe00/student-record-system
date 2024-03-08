@@ -10,6 +10,7 @@ use App\Models\Teacher;
 use App\Models\TeacherClass;
 use App\Traits\UserModelTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class GradesController extends Controller
@@ -20,26 +21,8 @@ class GradesController extends Controller
      * status for grades
      */
     protected array $statuses = [
-        "pending", "submitted", "rejected", "accepted",
-        "reject", "accept"
+        "pending", "submitted", "rejected", "accepted"
     ];
-
-    /**
-     * This formats properly the status to be sent
-     */
-    private function format_status(?string $value){
-        $response = $value;
-
-        if(!is_null($value)){
-            if($value == "rejected"){
-                $response = "reject";
-            }elseif($value == "accepted"){
-                $response = "accept";
-            }
-        }
-
-        return $response;
-    }
 
     /**
      * Display a listing of the resource.
@@ -116,14 +99,15 @@ class GradesController extends Controller
             "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
             "program_id" => ["required", "integer", Rule::exists("programs", "id")],
             "school_id" => ["required", "integer", Rule::exists("schools", "id")],
+            "subject_id" => ["required", "integer", Rule::exists("subjects", "id")],
             "semester" => ["required", "integer", "max: 3", "min: 1"],
             "class_mark.*" => ["required", "numeric", "min:0", "max:50"],
             "exam_mark.*" => ["required", "numeric", "min:0", "max:50"]
         ]);
 
         $count = -1;
-        $defaults = array_slice($validated, 0, 5);
-        $stud_data = array_slice($validated, 5, 8);
+        $defaults = array_slice($validated, 0, 6);
+        $stud_data = array_slice($validated, 6, 9);
 
         // save each entry
         while(++$count < count($validated["student_id"])){
@@ -183,6 +167,7 @@ class GradesController extends Controller
             "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
             "program_id" => ["required", "integer", Rule::exists("programs", "id")],
             "school_id" => ["required", "integer", Rule::exists("schools", "id")],
+            "subject_id" => ["required", "integer", Rule::exists("subjects", "id")],
             "id.*" => ["required", "numeric"],
             "student_id.*" => ["required", "integer", Rule::exists("students", "user_id")],
             "class_mark.*" => ["required", "numeric", "min:0", "max:50"],
@@ -191,14 +176,14 @@ class GradesController extends Controller
         ]);
 
         $count = -1;
-        $defaults = array_slice($validated, 0, 5);
+        $defaults = array_slice($validated, 0, 6);
 
         // used to update student status by admin
         if(isset($validated["status"]) && $is_admin){
             $defaults["status"] = $validated["status"];
         }
 
-        $stud_data = array_slice($validated, 5, 9);
+        $stud_data = array_slice($validated, 6, 10);
 
         while(++$count < count($validated["student_id"])){
             $data = $this->format_update_data($defaults, $stud_data, $count, $is_admin);
@@ -211,14 +196,12 @@ class GradesController extends Controller
             $message = "Result updates have been saved";
         }else{
             $record = ApproveResults::where("result_token", $validated["result_token"])->first();
-            $record->status = $this->format_status($request->submit) ?? "submitted";
+            $record->status = $request->submit ?? "submitted";
 
             // update the admin id
             if($is_admin){
                 $record->admin_id = auth()->user()->id;
             }
-
-            dd($record->getConnection()->getSchemaBuilder()->getColumns('approveresults'));
 
             $record->update();
             $message = $record->status != 'pending' ? "Results have been {$record->status}" : 'Results has been enabled for modification';
