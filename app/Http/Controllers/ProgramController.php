@@ -19,7 +19,7 @@ class ProgramController extends Controller
     {
         return view('admin.classes.index', [
             "programs" => Program::all(),
-            "school_id" => auth()->user()?->school->id,
+            "school_id" => session("school_id"),
             "teachers" => Teacher::all(["user_id", "lname", "oname"])
         ]);
     }
