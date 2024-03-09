@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Admin;
 use App\Models\deletedusers;
 use App\Models\other;
@@ -12,6 +13,7 @@ use App\Models\SchoolAdmin;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\TeacherClass;
 use App\Models\User;
 use App\Traits\UserModelTrait;
 use Illuminate\Http\Request;
@@ -158,7 +160,17 @@ class UserController extends Controller
                     "student_count" => Student::all()->count(),
                     "teacher_count" => Teacher::all()->count(),
                     "subject_count" => Subject::all()->count(),
-                    "delete_count" => deletedusers::all()->count()
+                    "class_count" => Program::all()->count(),
+                    "delete_count" => deletedusers::all()->count(),
+                    "activity_log" => ActivityLog::all()->take(15)
+                ];
+
+                $options["tasks"] = [
+                    "add_teacher" => $options["teacher_count"],
+                    "add_class" => $options["class_count"],
+                    "add_subject" => $options["subject_count"],
+                    "add_student" => $options["student_count"],
+                    "teach_subj" => TeacherClass::where("school_id", session('school_id'))->get()->count()
                 ];
         }
 
