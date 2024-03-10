@@ -60,7 +60,7 @@
                         tracking-wide text-white capitalize group transform bg-blue-500 rounded-md
                         hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300
                         focus:ring-opacity-50">
-                    <span>Add Subject</span>
+                    <span>Create Result Slip</span>
                     <i class="fas fa-angle-right group-hover:mr-2 transition-all duration-500"></i>
                 </button>
             </div>

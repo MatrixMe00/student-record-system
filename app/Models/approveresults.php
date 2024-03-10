@@ -25,7 +25,7 @@ class ApproveResults extends Model
         $program_id = $this->program_id ?? null;
         $teacher_id = $this->teacher_id ?? null;
         if($school_id){
-            $query->where('school_id', $school_id);
+            $query->where(self::getTable().'.school_id', $school_id);
         }
         if($program_id){
             $query->where('program_id', $program_id);

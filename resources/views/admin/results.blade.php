@@ -13,8 +13,7 @@
     $tags = array_keys($result_slips->toArray());
     $icons = [
         "pending" => "far fa-edit", "submitted" => "fas fa-check",
-        "rejected" => "far fa-thumbs-down", "accepted" => "far fa-thumbs-up",
-        "accept" => "far fa-thumbs-up", "reject" => "far fa-thumbs-down"
+        "rejected" => "far fa-thumbs-down", "accepted" => "far fa-thumbs-up"
     ];
 @endphp
 
@@ -22,7 +21,7 @@
     @if (count($tags) > 0)
         <x-group-buttons-container class="sticky top-2 mx-auto w-full">
             @foreach ($tags as $tag)
-                <x-group-button :icon="$icons[$tag]" text="{{ in_array($tag, ['accept','reject']) ? $tag.'ed' : $tag }}" :first="$loop->first" :last="$loop->last" @click="tag='{{ $tag }}'" />
+                <x-group-button :icon="$icons[$tag]" text="{{ $tag }}" :first="$loop->first" :last="$loop->last" @click="tag='{{ $tag }}'" />
             @endforeach
         </x-group-buttons-container>
 

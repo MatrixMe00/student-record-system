@@ -62,7 +62,7 @@ class GradesController extends Controller
                 $app_results = new ApproveResults(["teacher_id" => auth()->user()->id]);
 
                 $options = [
-                    "result_slips" => $app_results::all(),
+                    "result_slips" => $app_results::orderBy("updated_at", "desc")->get(),
                     "result_id" => $this->create_id(),
                     "teacher_id" => auth()->user()->id,
                     "subjects" => $model->subjects->unique('name')->toArray(),
@@ -71,7 +71,8 @@ class GradesController extends Controller
                 break;
             case 5:
                 $options = [
-                    "results" => $model->grades
+                    // "results" => $model->results->where("status","accepted")
+                    "results" => $model->results->unique('program_id')
                 ];
                 break;
         }

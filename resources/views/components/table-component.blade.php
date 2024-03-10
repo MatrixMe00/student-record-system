@@ -1,5 +1,5 @@
 @props(["tabledata" => null, "title" => "", "thead" => [], "tbody" => [], "btn_text" => false, "btnaction" => ""])
-<div {{ $attributes->merge(["class"=>"w-full xl:w-8/12 px-4 mx-auto"]) }}>
+<div {{ $attributes->merge(["class"=>"w-full xl:w-8/12 mx-auto"]) }}>
     <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
         @if (!empty($title))
             <div class="rounded-t mb-0 px-4 py-3 border-0">

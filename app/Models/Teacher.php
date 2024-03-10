@@ -24,7 +24,7 @@ class Teacher extends Model
         // based on the user role
         $school_id = session('school_id') ?? null;
         if($school_id){
-            $query->where('school_id', $school_id);
+            $query->where(self::getTable().'.school_id', $school_id);
         }
 
         return $query;

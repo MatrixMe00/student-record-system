@@ -50,6 +50,8 @@
   <div class="flex gap-2 text-sm mt-6">
     @if ($editable)
         <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/edit'">Edit</span>
+    @elseif ($card_link != "javascript:void(0)")
+        <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='{{ $card_link }}'">View</span>
     @else
         <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/show'">View</span>
     @endif

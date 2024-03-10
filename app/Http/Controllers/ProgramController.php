@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Program;
 use App\Http\Requests\StoreProgramRequest;
 use App\Http\Requests\UpdateProgramRequest;
+use App\Models\Grades;
+use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\TeacherClass;
 use Illuminate\Support\Facades\DB;
@@ -134,6 +136,33 @@ class ProgramController extends Controller
         $program->delete();
 
         return redirect()->back()->with(["success" => true, "message" => "$class_name has been deleted"]);
+    }
+
+    /**
+     * Get student results
+     */
+    public function results(Program $program, ?Student $student = null, $semester = 1){
+        if($program){
+            $student = $student ?? Student::find(auth()->user()->id);
+
+            if($student){
+                $grade = new Grades(["student_id" => $student->user_id, "program_id" => $program->id, "semester" => $semester]);
+                $results = $grade->my_results();
+                $students = $grade->student_count();
+
+
+                return view("student.my-result", [
+                    "program" => $program,
+                    "results" => $results,
+                    "semester" => $semester,
+                    "rows" => $students
+                ]);
+            }
+
+            abort(404, "Student Not Found");
+        }
+
+        abort(404, "Class Not Found");
     }
 
     /**

@@ -76,6 +76,9 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get("/result/{result_token}/show", [ApproveresultsController::class, "show"]);
     Route::get("/result/{result_token}/edit", [ApproveresultsController::class, "edit"]);
     Route::put("/result/{result}/edit", [ApproveresultsController::class, "update"]);
+    // student results
+    Route::get("/my-result/{program}", [ProgramController::class, "results"]);
+    Route::get("/my-result/{program}/{semester}", [ProgramController::class, "results"]);
 
     // storing grades
     Route::post("/grades/store", [GradesController::class, 'store'])->name("grades.create");

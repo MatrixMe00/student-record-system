@@ -24,15 +24,15 @@ class Student extends Model
         $school_id = session('school_id') ?? null;
 
         if($school_id){
-            $query->where('school_id', $school_id);
+            $query->where(self::getTable().'.school_id', $school_id);
         }
 
         return $query;
     }
 
     // student grades
-    public function grades(): HasMany{
-        return $this->hasMany(Grades::class, "student_id");
+    public function results(): HasManyThrough{
+        return $this->hasManyThrough(ApproveResults::class, Grades::class, "student_id", "result_token", null, "result_token");
     }
 
     // student belongs to a program
