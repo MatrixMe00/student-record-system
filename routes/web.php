@@ -7,6 +7,8 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherClassController;
+use App\Http\Controllers\TeacherRemarksController;
+use App\Http\Controllers\TeachersRemarkController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -83,6 +85,12 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     // storing grades
     Route::post("/grades/store", [GradesController::class, 'store'])->name("grades.create");
     Route::put("/grades/update", [GradesController::class, 'update'])->name("grades.update");
+
+    // teacher remarks
+    Route::get("/remarks", [TeacherRemarksController::class, "index"])->name("remarks.all");
+    Route::post("/remarks", [TeacherRemarksController::class, "store"])->name("remarks.store");
+    Route::post("/remarks/slip", [TeachersRemarkController::class, "store"])->name("remarks-slip.store");
+    Route::get("/remark/{token}/show", [TeachersRemarkController::class, "show"]);
 });
 
 // routes for just school admins
