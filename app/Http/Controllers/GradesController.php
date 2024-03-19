@@ -47,7 +47,7 @@ class GradesController extends Controller
                     "teachers" => Teacher::all(["user_id", "lname", "oname"])->toArray(),
                     "classes" => Program::all(["id", "name"])->toArray(),
                     "subjects" => Subject::all(["id", "name"])->toArray(),
-                    "result_id" => $this->create_id(),
+                    "result_id" => create_id(),
                     "result_slips" => ApproveResults::orderBy('status', 'desc')->orderBy('updated_at','desc')->get()
                                         ->groupBy('status')->map(function ($items, $key) {
                                             return [
@@ -63,7 +63,7 @@ class GradesController extends Controller
 
                 $options = [
                     "result_slips" => $app_results::orderBy("updated_at", "desc")->get(),
-                    "result_id" => $this->create_id(),
+                    "result_id" => create_id(),
                     "teacher_id" => auth()->user()->id,
                     "subjects" => $model->subjects->unique('name')->toArray(),
                     "classes" => $model->classes->unique("program_id")
@@ -246,29 +246,5 @@ class GradesController extends Controller
     public function destroy(Grades $grades)
     {
         $grades->delete();
-    }
-
-    /**
-     * Create a result id
-     */
-    private function create_id() :string{
-        $token = "";
-
-        //generate three random values
-        for($i = 1; $i <= 3; $i++){
-            $token .= chr(rand(65,90));
-        }
-
-        //add teacher id
-        $token .= str_pad(strval(auth()->user()->id), 3, "0", STR_PAD_LEFT);
-
-        $token = str_shuffle($token);
-
-        //random characters
-        $token .= chr(rand(65,90)). str_pad(session('school_id'),2,"0",STR_PAD_LEFT);
-        $token = substr(str_shuffle($token.uniqid()), 0, 8);
-        $token .= date("y");
-
-        return strtolower($token);
     }
 }

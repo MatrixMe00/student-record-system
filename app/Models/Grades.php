@@ -53,7 +53,7 @@ class Grades extends Model
             $result_token = Grades::where("student_id", $this->student_id)
                               ->where('program_id', $this->program_id)
                               ->where('semester', $this->semester)
-                              ->take(1)->first()->result_token;
+                              ->take(1)->first()?->result_token;
             $count = Grades::where("result_token", $result_token)->get()->count();
         }
 
@@ -69,5 +69,31 @@ class Grades extends Model
                      ->where("semester", $this->semester)
                     //  ->where("status", "accepted")
                      ->get();
+    }
+
+    /**
+     * Used by the remarks section to retrieve data for a specific class
+     */
+    public function class_results(){
+        $results = Grades::where("semester", $this->semester)
+                         ->where("program_id", $this->program_id)
+                         ->where("teacher_id", $this->teacher_id)
+                         ->where("has_remark", false)
+                         ->get();
+        $results = $results->groupBy("student_id");
+        $totals = $results->map(function($result){
+            $class_total = $result->sum("class_mark");
+            $exam_total = $result->sum("exam_mark");
+
+            return [
+                "student" => Student::find($result->first()->student_id),
+                "class_total" => $class_total,
+                "exam_total" => $exam_total,
+                "total" => intval($exam_total + $class_total)
+            ];
+        });
+
+        return $totals->sortBy("total", false);
+
     }
 }
