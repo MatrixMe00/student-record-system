@@ -6,6 +6,7 @@ use App\Models\School;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
 use App\Models\Admin;
+use App\Models\SchoolAdmin;
 
 class SchoolController extends Controller
 {
@@ -46,19 +47,19 @@ class SchoolController extends Controller
      */
     public function store(StoreSchoolRequest $request)
     {
-        // dd($request);
         // get the logo path
-        $request->merge([
-            "logo_path" => $this->store_logo()
-        ]);
+        $logo_path = $this->store_logo();
 
         $validated = $request->validate($request->rules());
+        $validated["logo_path"] = $logo_path;
         $school = School::create($validated);
 
         // store school id into user school
         $this->update_user($school->id, $request->admin_id);
 
         if(auth()->user()){
+            // update the session school id
+            session(["school_id" => $school->id]);
             return redirect()->route('dashboard');
         }
 
@@ -106,9 +107,13 @@ class SchoolController extends Controller
     private function update_user(int $school_id, int $admin_id){
         $admin = Admin::find($admin_id);
 
+        if(!$admin){
+            $admin = SchoolAdmin::find($admin_id);
+        }
+
         // admin would be found regardless
         $admin->school_id = $school_id;
-        $admin->save();
+        $admin->update();
     }
 
     /**

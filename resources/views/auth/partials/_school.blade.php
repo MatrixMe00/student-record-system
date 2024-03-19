@@ -94,28 +94,30 @@
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
 
-                    <x-text-input name="admin_id" id="admin_id" type="text" value="{{ $admin_id }}" />
+                    <x-text-input name="admin_id" id="admin_id" type="hidden" value="{{ $admin_id }}" />
 
-                    <button
-                        class="flex items-center justify-between w-full px-6 py-3 text-sm
-                            tracking-wide text-white capitalize group transform bg-blue-500 rounded-md
-                            hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300
-                            focus:ring-opacity-50">
-                        <span>Set Up My School</span>
-                        <i class="fas fa-angle-right group-hover:mr-2 transition-all duration-500"></i>
-                    </button>
-                    <div class="flex items-center justify-end mt-4">
-                        @if(auth()->user())
-                        <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('logout') }}">
-                            {{ __('Log Out') }}
-                        </a>
-                        @else
-                            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('admin.login') }}">
-                                {{ __('Cancel Registration') }}
-                            </a>
-                        @endif
-
+                    <div class="md:col-span-2 flex justify-between gap-2">
+                        <button
+                            class="flex items-center justify-between w-full sm:w-2/5 px-6 py-3 text-sm
+                                tracking-wide text-white capitalize group transform bg-blue-500 rounded-md
+                                hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300
+                                focus:ring-opacity-50">
+                            <span>Set Up My School</span>
+                            <i class="fas fa-angle-right group-hover:mr-2 transition-all duration-500"></i>
+                        </button>
+                        <div class="flex items-center justify-end mt-4">
+                            @auth
+                                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('logout') }}">
+                                    {{ __('Log Out') }}
+                                </a>
+                            @else
+                                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('admin.login') }}">
+                                    {{ __('Cancel Registration') }}
+                                </a>
+                            @endauth
+                        </div>
                     </div>
+
                 </form>
             </div>
         </div>
