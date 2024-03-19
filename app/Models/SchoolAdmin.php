@@ -19,8 +19,8 @@ class SchoolAdmin extends Model
         $query = parent::newQuery($excludeDeleted);
 
         // based on the user school
-        if($this->school_id !== null){
-            $query->where('school_id', $this->school_id);
+        if($this->school_id !== null || session('school_id')){
+            $query->where('school_id', ($this->school_id ?? session('school_id')));
         }else{
             $query->where('school_id', '>', 0);
         }
