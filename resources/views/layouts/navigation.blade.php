@@ -7,7 +7,8 @@
         ["name" => "Users", "route" => "users.all", "users" => [1,2,3]],
         ["name" => "Classes", "route" => "program.all", "users" => [3]],
         ["name" => "Subjects", "route" => "subject.all", "users" => [3]],
-        ["name" => "Results", "route" => "result.all", "users" => [3,4,5]]
+        ["name" => "Results", "route" => "result.all", "users" => [3,4,5]],
+        ["name" => "Remarks", "route" => "remarks.all", "users" => [3,4]]
     ];
     $menu_links = [
         // ["name" => "", "route" => ""]
