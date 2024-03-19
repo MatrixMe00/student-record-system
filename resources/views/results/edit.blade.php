@@ -24,14 +24,12 @@
                             $message = "Verify the status of this result slip";
                         }else{
                             switch ($result->status) {
-                                case 'accept':
                                 case 'accepted':
                                     $message = "Results have been approved as final records";
                                     break;
                                 case 'submitted':
                                     $message = "Results data has been submitted and is awaiting review from admin";
                                     break;
-                                case 'reject':
                                 case 'rejected':
                                     $message = "Result was rejected. Please make necessary changes and resubmit";
                                     break;
