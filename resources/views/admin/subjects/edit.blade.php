@@ -51,9 +51,9 @@
                     {{-- subject optional or not --}}
                     <div>
                         <x-input-label for="optional" :value="__('Is Subject Optional?')" />
-                        <x-input-select options="0">
-                            <option value="0" {{ ($subject->optional ?? old('optional')) == "0" ? "selected" : "" }}>No</option>
-                            <option value="1" {{ ($subject->optional ?? old('optional')) == "1" ? "selected" : "" }}>Yes</option>
+                        <x-input-select options="0" name="optional">
+                            <option value="0" {{ (old('optional', $subject->optional)) == "0" ? "selected" : "" }}>No</option>
+                            <option value="1" {{ (old('optional', $subject->optional)) == "1" ? "selected" : "" }}>Yes</option>
                         </x-input-select>
                     </div>
 
