@@ -103,6 +103,7 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
     // programs
     Route::get("/classes", [ProgramController::class, 'index'])->name("program.all");
     Route::post("/class/add", [ProgramController::class, 'store'])->name("add-program");
+    Route::post("/class/add/multiple", [ProgramController::class, 'multi_store'])->name("add-multiple-program");
     Route::get("/class/{program}/delete", [ProgramController::class, 'destroy']);
     Route::get("/class/{program}/edit", [ProgramController::class, 'edit']);
     Route::put("/class/{program}/edit", [ProgramController::class, 'update']);

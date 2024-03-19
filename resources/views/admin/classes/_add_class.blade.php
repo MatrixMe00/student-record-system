@@ -37,14 +37,18 @@
             <div>
                 <x-input-label for="class_teacher" :value="__('Class Teacher')" />
                 <x-input-select :options="0" name="class_teacher" id="class_teacher" :value="old('class_teacher')">
-                    <option value="">Select A Class Teacher</option>
-                    @foreach ($teachers as $teacher)
-                        <option value="{{ $teacher->user_id }}"
-                            @if ($teacher->user_id == old('class_teacher'))
-                                {{ "selected" }}
-                            @endif
-                        >{{ ucwords($teacher->lname." ".$teacher->oname) }}</option>
-                    @endforeach
+                    @if ($teachers->count() > 0)
+                        <option value="">Select A Class Teacher</option>
+                        @foreach ($teachers as $teacher)
+                            <option value="{{ $teacher->user_id }}"
+                                @if ($teacher->user_id == old('class_teacher'))
+                                    {{ "selected" }}
+                                @endif
+                            >{{ ucwords($teacher->lname." ".$teacher->oname) }}</option>
+                        @endforeach
+                    @else
+                        <option value="">No available teacher</option>
+                    @endif
                 </x-input-select>
                 <x-input-error :messages="$errors->get('class_teacher')" />
             </div>

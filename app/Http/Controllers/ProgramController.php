@@ -8,8 +8,6 @@ use App\Http\Requests\UpdateProgramRequest;
 use App\Models\Grades;
 use App\Models\Student;
 use App\Models\Teacher;
-use App\Models\TeacherClass;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class ProgramController extends Controller
@@ -22,7 +20,7 @@ class ProgramController extends Controller
         return view('admin.classes.index', [
             "programs" => Program::all(),
             "school_id" => session("school_id"),
-            "teachers" => Teacher::all(["user_id", "lname", "oname"])
+            "teachers" => Teacher::where("program_id", null)->get()
         ]);
     }
 
@@ -69,6 +67,43 @@ class ProgramController extends Controller
         }
 
         return redirect()->back()->with(["success" => $success, "message" => $message]);
+    }
+
+    public function multi_store(){
+        $count = 0;
+        $created = 0;
+
+        // primary
+        while(++$count <= 6){
+            $class = "Class $count";
+
+            // skip if class is already found
+            $found = Program::where("name", $class)->where("school_id", session('school_id'))->exists();
+            if(!$found){
+                Program::create([
+                    "name" => $class, "school_id" => session('school_id')
+                ]);
+                ++$created;
+            }
+        }
+
+        // jhs
+        $count = 0;
+
+        while(++$count <= 3){
+            $class = "JHS $count";
+
+            // skip if class is already found
+            $found = Program::where("name", $class)->where("school_id", session('school_id'))->exists();
+            if(!$found){
+                Program::create([
+                    "name" => $class, "school_id" => session('school_id')
+                ]);
+                ++$created;
+            }
+        }
+
+        return redirect()->back()->with(["success" => true, "message" => "$created classes added to your school"]);
     }
 
     /**

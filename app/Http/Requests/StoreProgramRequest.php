@@ -28,7 +28,7 @@ class StoreProgramRequest extends FormRequest
             "name" => ["required","string"],
             "slug" => ["sometimes", "nullable", "string"],
             "school_id" => ["required", "integer", Rule::exists("schools", "id")],
-            "class_teacher" => ["required", "integer", Rule::exists("teachers", "user_id")]
+            "class_teacher" => ["nullable", "required", "integer", Rule::exists("teachers", "user_id")]
         ];
     }
 }
