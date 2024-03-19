@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId("teacher_id")->constrained("teachers", "user_id");
             $table->integer("semester");
             $table->enum("status", ["pending","rejected", "accepted", "submitted"])->default("pending");
+            $table->enum("remark_status", ["pending","accepted","rejected"])->default("pending");
             $table->foreignId("admin_id")->nullable();
             $table->timestamps();
         });

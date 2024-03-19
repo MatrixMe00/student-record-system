@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('teachers_remarks', function (Blueprint $table) {
             $table->id();
-            $table->string("remark_token");
+            $table->string("remark_token")->unique();
             $table->foreignId("school_id")->constrained();
             $table->foreignId("teacher_id")->constrained("teachers", "user_id");
             $table->foreignId("program_id")->constrained();
             $table->integer("semester");
             $table->enum("status", ["pending", "rejected", "accepted"])->default("pending");
-            $table->foreignId("admin_id")->constrained("admins", "user_id");
+            $table->foreignId("admin_id")->nullable();
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string("oname");
             $table->string("primary_phone");
             $table->string("secondary_phone")->nullable();
-            $table->foreignId("school_id")->constrained()->nullOnDelete();
+            $table->foreignId("school_id")->nullable()->constrained()->nullOnDelete();
             $table->boolean("class_teacher")->default(false);
             $table->foreignId("program_id")->nullable()->comment("This is the class this teacher is class teacher of");
             $table->timestamps();

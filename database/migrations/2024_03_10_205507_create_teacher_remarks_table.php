@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId("student_id")->constrained("students", "user_id");
             $table->integer("semester");
             $table->integer("total_marks");
+            $table->integer("attendance");
             $table->integer("position");
             $table->string("remark");
             $table->enum("status", ["pending", "accepted", "rejected"])->default("pending");

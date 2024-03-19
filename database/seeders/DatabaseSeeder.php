@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Role;
 use App\Models\Settings;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
@@ -16,8 +17,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // disable foreign key checks
+        DB::statement("SET FOREIGN_KEY_CHECKS=0");
+
         Role::truncate();
         Settings::truncate();
+
+        // enable temporal foreign key check
+        DB::statement("SET FOREIGN_KEY_CHECKS=1");
+
 
         // reset system
         Storage::disk('local')->delete('super.txt');
