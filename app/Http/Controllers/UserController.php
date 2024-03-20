@@ -19,6 +19,7 @@ use App\Traits\UserModelTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -60,7 +61,13 @@ class UserController extends Controller
 
         //
 
-        return view("users", ["options" => $options, "roles" => $roles, "school_id" => $school_id, "programs" => $user->role_id == 3 ? Program::all(["id", "name"])->toArray() : null]);
+        return view("users", [
+            "options" => $options,
+            "roles" => $roles, "school_id" => $school_id,
+            "programs" => $user->role_id == 3 ?
+                Program::all(["id", "name"])->toArray() : null,
+            "index_number" => generateIndexNumber(session('school_id'))
+        ]);
     }
 
     /**
@@ -109,6 +116,142 @@ class UserController extends Controller
         $model = $this->user_model($user);
 
         return $controller->update($request, $model);
+    }
+
+    /**
+     * This function is used to add multiple users
+     */
+    public function multi_add(Request $request){
+        $types = [
+            "student" => [
+                "head" => true, "head_rows" => 1, "head_cols" => 6
+            ]
+        ];
+        $error = ""; $message = ""; $success = false;
+        $type = $types[$request->user_type] ?? false;
+
+        if($type){
+            if(empty($request->program_id)){
+                $error = "No Class type was specified";
+            }else{
+                $file_data = ExcelController::file_data("upload_file", $type["head"], $type["head_rows"]);
+
+                if(count($file_data[0]) == $type["head_cols"]){
+                    switch($request->user_type){
+                        case "student":
+                            $response = $this->students_create($file_data, $type);
+                            break;
+                        default:
+                            $response = "User role specified is invalid";
+                    }
+
+                    $error = is_int($response) ? "" : $response;
+                    $success = is_int($response) ? true : false;
+                    $message = "$response {$request->user_type}s added";
+                }else{
+                    $error = "Document provided does not match user type";
+                }
+            }
+        }else{
+            $error = "";
+        }
+
+        if(!empty($error)){
+            throw ValidationException::withMessages([
+                "upload_error" => $error
+            ]);
+            $success = false; $message = $error;
+        }
+
+        return redirect()->back()->with(["success" => $success, "message" => $message]);
+
+    }
+
+    /**
+     * This gets the program id
+     */
+    public function get_program_id(string $program_name) :int|false{
+        $program = Program::where("name", $program_name)->where("school_id", session('school_id'))->first();
+
+        return $program ? $program->id : false;
+    }
+
+    /**
+     * This is used to create multiple students
+     */
+    private function students_create($file_data, $type){
+        $keys = ["lname","oname","primary_phone","secondary_phone","next_of_kin", "program_id"];
+        $programs = [];
+        $count = 0;
+
+        if(request()->program_id == "mixed"){
+            foreach($file_data as $data){
+                $student = [];
+
+                foreach($keys as $pos => $key){
+                    if($pos == 5){
+                        if(in_array(strtolower($data[$pos]), array_keys($programs))){
+                            $program_id = $programs[strtolower($data[$pos])];
+                        }else{
+                            $program_id = $this->get_program_id($data[$pos]);
+                            $programs[strtolower($data[$pos])] = $program_id;
+                        }
+
+                        if($program_id === false){
+                            return "{The class name '$data[$pos]}' for '{$data[0]} {$data[1]}' is not recognized in your school";
+                        }
+
+                        $data[$pos] = $program_id;
+                    }
+
+                    $student[$key] = $data[$pos];
+                }
+
+                // defaults
+                $student["school_id"] = session('school_id');
+
+                // create user
+                $user = User::create([
+                    "username" => generateIndexNumber(session('school_id')),
+                    "role_id" => 5,
+                    "password" => "Password@1"
+                ]);
+
+                $student["user_id"] = $user->id;
+
+                Student::create($student);
+                ++$count;
+            }
+        }else{
+            $program_id = request()->program_id;
+            foreach($file_data as $data){
+                $student = [];
+
+                foreach($keys as $pos => $key){
+                    if($pos == 5){
+                        $data[$pos] = $program_id;
+                    }
+
+                    $student[$key] = $data[$pos];
+                }
+
+                // defaults
+                $student["school_id"] = session('school_id');
+
+                // create user
+                $user = User::create([
+                    "username" => generateIndexNumber(session('school_id')),
+                    "role_id" => 5,
+                    "password" => "Password@1"
+                ]);
+
+                $student["user_id"] = $user->id;
+
+                Student::create($student);
+                ++$count;
+            }
+        }
+        return $count;
     }
 
     /**

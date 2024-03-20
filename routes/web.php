@@ -97,6 +97,7 @@ Route::middleware(['auth', 'school.check'])->group(function () {
 Route::middleware(['auth','school.check','school.admin'])->group(function(){
     // users
     Route::get("/users", [UserController::class, 'index'])->name("users.all");
+    Route::post('users/add', [UserController::class,  'multi_add'])->name("users.add");
     Route::get("/user/{username}/edit", [UserController::class, "edit"]);
     Route::put("/user/{username}/edit", [UserController::class, "update"]);
 

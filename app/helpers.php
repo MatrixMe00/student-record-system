@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Student;
+use App\Models\User;
+
 /**
  * This function is used to generate the academic year for a selected period
  * @param string $date This takes the date of which academic calendar is presented
@@ -90,4 +93,25 @@ function create_id() :string{
     $token .= date("y");
 
     return strtolower($token);
+}
+
+/**
+ * This function is used to provide an index number for a candidate
+ * @param int $school_id This is the school id of the user logged in
+ * @return string returns a formated index number
+ */
+function generateIndexNumber(int $school_id):string{
+    $student_count = Student::all()->count();
+
+    do{
+        $school_id = str_pad($school_id, 3, "0", STR_PAD_LEFT);
+        $current_year = date("y");
+        $student_number = str_pad((($student_count % 9999) + 1),4,"0",STR_PAD_LEFT);
+
+        $index_number = "$school_id$current_year$student_number";
+        $found = User::where("username", $index_number)->exists();
+        ++$student_count;
+    }while($found);
+
+    return $index_number;
 }
