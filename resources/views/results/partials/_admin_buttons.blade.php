@@ -1,6 +1,6 @@
 <div class="flex flex-col items-center justify-center md:flex-row gap-4">
     {{-- set pending status --}}
-    @if (in_array($result->status, ["submitted", "accepted", "rejected", "reject"]))
+    @if (in_array(($result->status ?? $remark_head->status), ["submitted", "accepted", "rejected", "reject"]))
         <button type="submit" value="pending" name="submit"
             class="flex items-center justify-between w-full md:w-1/2 px-6 py-3 text-sm
                 tracking-wide text-white capitalize group transform bg-blue-500 rounded-md
@@ -12,7 +12,7 @@
     @endif
 
     {{-- set save status --}}
-    @if (in_array($result->status, ["submitted", "rejected", "reject"]))
+    @if (in_array(($result->status ?? $remark_head->status), ["submitted", "rejected", "reject"]))
         <button type="submit" value="accepted" name="submit"
         class="flex items-center justify-between w-full md:w-1/2 px-6 py-3 text-sm
             tracking-wide text-white capitalize group transform bg-teal-500 rounded-md
@@ -24,7 +24,7 @@
     @endif
 
     {{-- set reject status --}}
-    @if (in_array($result->status, ["submitted", "accepted"]))
+    @if (in_array(($result->status ?? $remark_head->status), ["submitted", "accepted"]))
         <button type="submit" value="rejected" name="submit"
         class="flex items-center justify-between w-full md:w-1/2 px-6 py-3 text-sm
             tracking-wide text-white capitalize group transform bg-red-500 rounded-md
@@ -35,7 +35,7 @@
     </button>
     @endif
 
-    @if ($result->status == "pending")
+    @if (($result->status ?? $remark_head->status) == "pending")
         <p class="border p-2 text-center w-full cursor-default">
             {{ "Results has not been submitted for review." }}
         </p>

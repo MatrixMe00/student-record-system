@@ -66,28 +66,49 @@ class TeacherRemarksController extends Controller
         $message = $status == "save" ? "Entry has been saved for later" : "Entry has been $status";
         $is_admin = Auth::user()->role_id == 3;
 
-        while(++$count < count($validated["student_id"])){
-            $data = array_merge($default,[
-                "student_id" => $array["student_id"][$count],
-                "total_marks" => $array["total_marks"][$count],
-                "position" => $array["position"][$count],
-                "attendance" => $array["attendance"][$count],
-                "remark" => $array["remark"][$count],
-                "status" => $status
-            ]);
+        if(!$is_admin){
+            $is_new = in_array("position", array_keys($validated));
+            while(++$count < count($validated["student_id"])){
+                $merge_data = [
+                    "student_id" => $array["student_id"][$count],
+                    "total_marks" => $array["total_marks"][$count],
+                    "attendance" => $array["attendance"][$count],
+                    "status" => $status
+                ];
+                if($is_new){
+                    $merge_data["position"] = $array["position"][$count];
+                    $merge_data["remark"] = $array["remark"][$count];
+                }
+                $data = array_merge($default, $merge_data);
 
-            $detail = TeacherRemarks::where("student_id", $data["student_id"])->where("remark_token", $data["remark_token"])->first();
+                $detail = TeacherRemarks::where("student_id", $data["student_id"])->where("remark_token", $data["remark_token"])->first();
 
-            // update if exists or create if not exist
-            if($detail){
-                $detail->total_marks = $data["total_marks"];
-                $detail->position = $data["position"];
-                $detail->attendance = $data["attendance"];
-                $detail->status = $data["status"];
+                // update if exists or create if not exist
+                if($detail){
+                    $detail->total_marks = $data["total_marks"];
+                    $detail->attendance = $data["attendance"];
+                    $detail->status = $data["status"];
 
-                $detail->update();
-            }else{
-                TeacherRemarks::create($data);
+                    if($is_new){
+                        $detail->position = $data["position"];
+                    }
+
+                    $detail->update();
+                }else{
+                    TeacherRemarks::create($data);
+                }
+            }
+        }else{
+            while(++$count < count($validated["student_id"])){
+                $student_id = $array["student_id"][$count];
+
+                $detail = TeacherRemarks::where("student_id", $student_id)->where("remark_token", $default["remark_token"])->first();
+
+                // update if exists or create if not exist
+                if($detail){
+                    $detail->status = $status;
+                    $detail->update();
+                }
             }
         }
 
