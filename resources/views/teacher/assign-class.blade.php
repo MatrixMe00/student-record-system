@@ -6,7 +6,7 @@
     @section("title", "Subject Assign")
 
     <x-app-main class="py-4">
-        <div class="flex bg-zinc-50 items-center w-full p-8 mx-auto lg:px-12" x-data="{ selected_role:'{{ old('role_id') }}', email_val:'{{ old('email') }}' }" x-init="email_val='{{ old('email') }}'">
+        <div class="flex bg-zinc-50 items-center w-full p-8 mx-auto lg:px-12">
             <div class="w-full">
                 <h1 class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
                     Assign Subjects
@@ -47,7 +47,7 @@
                             <x-input-error :messages="$errors->get('teacher_id')" class="mt-2" />
                         </div>
                         <div class="md:col-span-2 bg-zinc-50 py-4">
-                            <x-table-component title="Teacher Subjects" x-data="{items:[], count:0}">
+                            <x-table-component title="Teacher Subjects">
                                 @section("thead")
                                     <thead>
                                         <tr>
@@ -59,7 +59,7 @@
                                 @endsection
 
                                 @section("button")
-                                    <x-primary-button type="button" @click="items.push(count++)">
+                                    <x-primary-button type="button" @click="addBlock()">
                                         Add A Field
                                     </x-primary-button>
                                 @endsection
@@ -100,7 +100,7 @@
                                         @endforeach
                                     @endif
 
-                                    <template x-for="(item, index) in items" :key="index">
+                                    <template>
                                         <tr>
                                             <x-table-data>
                                                 <x-input-select :options="$classes" name="program_id[]" />
@@ -110,7 +110,7 @@
                                             </x-table-data>
                                             <x-text-input type="hidden" name="id[]" value="0" />
                                             <x-table-data>
-                                                <i title="Remove Field" class="fas fa-trash-alt text-lg text-red-500 cursor-pointer hover:text-red-600" @click="items.splice(index,1)"></i>
+                                                <i title="Remove Field" class="fas fa-trash-alt text-lg text-red-500 cursor-pointer hover:text-red-600" @click="remPar()"></i>
                                             </x-table-data>
                                         </tr>
                                     </template>
@@ -120,6 +120,14 @@
 
                         @push("scripts")
                             <script>
+                                function addBlock(){
+                                    $("tbody").append($("template").html());
+                                }
+                                function remPar(){
+                                    element = event.target;
+                                    $(element).parents("tr").remove();
+                                }
+
                                 function removeElement(element, id){
                                     $.ajax({
                                         url: "/teacher/assign-delete/" + id,

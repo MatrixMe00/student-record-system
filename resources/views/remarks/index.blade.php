@@ -13,6 +13,12 @@
                 type="button">
                 {{ __("Make New Entry") }}
             </x-primary-button>
+
+            @if (auth()->user()->role_id == 3)
+                <x-primary-button onclick="location.href='{{ route('remark-options') }}'">
+                    Add Remark Options
+                </x-primary-button>
+            @endif
         </section>
 
         {{-- session messages --}}

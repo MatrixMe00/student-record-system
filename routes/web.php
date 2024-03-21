@@ -4,6 +4,7 @@ use App\Http\Controllers\ApproveresultsController;
 use App\Http\Controllers\GradesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\RemarkOptionsController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherClassController;
@@ -91,6 +92,9 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::post("/remarks", [TeacherRemarksController::class, "store"])->name("remarks.store");
     Route::post("/remarks/slip", [TeachersRemarkController::class, "store"])->name("remarks-slip.store");
     Route::get("/remark/{token}/show", [TeachersRemarkController::class, "show"]);
+    Route::get("/remark/options", [RemarkOptionsController::class, "index"])->name("remark-options");
+    Route::post("/remark/options", [RemarkOptionsController::class, "store"])->name("remark-options.add");
+    Route::get("/remark/options/delete/{option}", [RemarkOptionsController::class, "destroy"]);
 });
 
 // routes for just school admins

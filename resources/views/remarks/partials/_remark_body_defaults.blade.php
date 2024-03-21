@@ -1,4 +1,4 @@
-{{-- result_token --}}
+{{-- remark token --}}
 <x-text-input type="hidden" name="remark_token" :value="$remark_head->remark_token" />
 
 {{-- school id --}}
@@ -12,3 +12,10 @@
 
 {{-- program id --}}
 <x-text-input type="hidden" name="semester" value="{{ $remark_head->semester }}" />
+
+{{-- total attendance --}}
+<div>
+    <x-input-label>Total Attendance</x-input-label>
+    <x-text-input type="number" name="total_attendance" :value="old('total_attendance')" placeholder="Term Total Attendance" />
+    <x-input-error :messages="$errors->get('total_attendance')" class="mt-2" />
+</div>

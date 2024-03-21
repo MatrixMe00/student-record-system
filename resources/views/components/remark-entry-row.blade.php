@@ -35,8 +35,8 @@
         <x-input-error :messages="$errors->get('position.'.$key)" class="mt-2" />
     </td>
 
-    {{-- position --}}
-    <td>
+    {{-- remark --}}
+    <td class="min-w-[200px]">
         <x-input-select name="remark[]" :options="$remarks" :value="old('remark.'.$key)" default="Select a remark" />
         <x-input-error :messages="$errors->get('remark.'.$key)" class="mt-2" />
     </td>
