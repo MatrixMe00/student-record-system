@@ -10,6 +10,8 @@ use App\Models\RemarkOptions;
 use App\Models\Teacher;
 use App\Models\TeachersRemark;
 use App\Traits\UserModelTrait;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class TeacherRemarksController extends Controller
 {
@@ -56,7 +58,59 @@ class TeacherRemarksController extends Controller
      */
     public function store(StoreTeacherRemarksRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $default = array_slice($validated, 0, 5);
+        $array = array_slice($validated, 5);
+        $count = -1;
+        $status = $request->submit == "save" ? "pending" : $request->submit;
+        $message = $status == "save" ? "Entry has been saved for later" : "Entry has been $status";
+        $is_admin = Auth::user()->role_id == 3;
+
+        while(++$count < count($validated["student_id"])){
+            $data = array_merge($default,[
+                "student_id" => $array["student_id"][$count],
+                "total_marks" => $array["total_marks"][$count],
+                "position" => $array["position"][$count],
+                "attendance" => $array["attendance"][$count],
+                "remark" => $array["remark"][$count],
+                "status" => $status
+            ]);
+
+            $detail = TeacherRemarks::where("student_id", $data["student_id"])->where("remark_token", $data["remark_token"])->first();
+
+            // update if exists or create if not exist
+            if($detail){
+                $detail->total_marks = $data["total_marks"];
+                $detail->position = $data["position"];
+                $detail->attendance = $data["attendance"];
+                $detail->status = $data["status"];
+
+                $detail->update();
+            }else{
+                TeacherRemarks::create($data);
+            }
+        }
+
+        // change main token status
+        $main_remark = TeachersRemark::where("remark_token", $validated["remark_token"])->first();
+        $main_remark->status = $status;
+
+        if($is_admin){
+            $main_remark->admin_id = Auth::user()->id;
+        }else{
+            if($request->total_attendance)
+                $main_remark->total_attendance = $request->total_attendance;
+            else{
+                throw ValidationException::withMessages([
+                    "total_attendance" => "Please provide the total attendance"
+                ]);
+            }
+
+        }
+
+        $main_remark->update();
+
+        return redirect()->back()->with(["status" => true, "messages" => $message]);
     }
 
     /**

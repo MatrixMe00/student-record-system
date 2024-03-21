@@ -93,7 +93,7 @@ class Grades extends Model
             ];
         });
 
-        return $totals->sortBy("total", false);
+        return $totals->sortByDesc("total");
 
     }
 }

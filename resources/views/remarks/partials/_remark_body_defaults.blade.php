@@ -16,6 +16,6 @@
 {{-- total attendance --}}
 <div>
     <x-input-label>Total Attendance</x-input-label>
-    <x-text-input type="number" name="total_attendance" :value="old('total_attendance')" placeholder="Term Total Attendance" />
+    <x-text-input type="number" name="total_attendance" :value="old('total_attendance', $remark_head->total_attendance)" placeholder="Term Total Attendance" :disabled="$is_admin || $remark_head->status != 'pending'" />
     <x-input-error :messages="$errors->get('total_attendance')" class="mt-2" />
 </div>

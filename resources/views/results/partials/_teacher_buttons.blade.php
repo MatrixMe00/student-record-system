@@ -30,7 +30,7 @@
     </button>
 </div>
 
-@elseif ($result->status == "submitted")
+@elseif (($result->status ?? $remark_head->status) == "submitted")
     <p class="border p-2 text-center w-full cursor-default">
         {{ "This result slip is been reviewed by the admin. Please check later for response" }}
     </p>

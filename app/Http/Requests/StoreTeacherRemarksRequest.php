@@ -2,11 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Program;
-use App\Models\School;
-use App\Models\Student;
-use App\Models\Teacher;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTeacherRemarksRequest extends FormRequest
 {
@@ -28,13 +25,14 @@ class StoreTeacherRemarksRequest extends FormRequest
     {
         return [
             "remark_token" => ["required", "string"],
-            "school_id" => ["required", "integer", "exists:".School::class],
-            "teacher_id" => ["required", "integer", "exists:".Teacher::class],
-            "program_id" => ["required", "integer", "exists:".Program::class],
+            "school_id" => ["required", "integer", Rule::exists("schools", "id")],
+            "teacher_id" => ["required", "integer", Rule::exists("teachers", "user_id")],
+            "program_id" => ["required", "integer", Rule::exists("programs", "id")],
             "semester" => ["required", "integer", "min:1", "max:3"],
             "status" => ["sometimes", "required", "string", "in:pending,accepted,rejected"],
-            "student_id.*" => ["required", "integer", "exists:".Student::class],
+            "student_id.*" => ["required", "integer", Rule::exists("students", "user_id")],
             "total_marks.*" => ["required", "integer", "min:0"],
+            "attendance.*" => ["required", "integer", "min:0"],
             "position.*" => ["required", "integer", "min:1"],
             "remark.*" => ["required", "string"]
         ];

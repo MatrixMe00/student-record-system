@@ -17,10 +17,13 @@
             @foreach($remarks as $remark)
                 <x-remark-entry-row
                     :student="$remark->student" :key="$key"
-                    :totalmark="$remark->total_mark"
+                    :totalmark="$remark->total_marks"
                     :rowid="$remark->id"
                     :attendance="$remark->attendance"
                     :readonly="$is_admin || !$edit_once"
+                    :total_studs="$remarks->count()"
+                    :remarks="$remark_options->toArray()"
+                    :remarkval="$remark->remark"
                 />
                 @php
                     $key++;

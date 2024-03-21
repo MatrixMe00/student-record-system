@@ -2,8 +2,7 @@
     {{ __($program->name.' result summary list') }}
 </h1>
 
-<form class="grid grid-cols-1 gap-6 mt-8 border p-4"
-    method="POST" action="">
+<x-form-element mdcols="" action="{{ route('remarks.store') }}" method="POST">
     @csrf
 
     @php
@@ -22,8 +21,6 @@
             {{ __("No Student data was found for this class") }}
         </p>
     @elseif ($remarks->count() > 0)
-        @method("PUT")
-
         {{-- table with grades --}}
         @include('remarks.partials._remark_body_grades')
     @else
@@ -39,4 +36,4 @@
         {{-- submission buttons for admin --}}
         @include("results.partials._admin_buttons")
     @endif
-</form>
+</x-form-element>

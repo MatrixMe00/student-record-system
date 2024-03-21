@@ -1,4 +1,4 @@
-@props(["student", "key", "totalmark", "attendance" => 0, "remarks", "total_studs", "rowid" => 0, "readonly" => false, "painttd" => ""])
+@props(["student", "key", "totalmark", "attendance" => 0, "remarks", "total_studs", "rowid" => 0, "readonly" => false, "painttd" => "", "remarkval" => ""])
 
 <tr
     {{ $attributes->merge(["class" => ""]) }}
@@ -31,13 +31,13 @@
 
     {{-- position --}}
     <td>
-        <x-input-select name="position[]" options="auto" min="1" :max="$total_studs" :value="old('position.'.($key+1), $key+1)" default="Verify Position" />
+        <x-input-select name="position[]" options="auto" min="1" :max="$total_studs" :value="old('position.'.($key+1), $key+1)" default="Verify Position" :abled="!$readonly" />
         <x-input-error :messages="$errors->get('position.'.$key)" class="mt-2" />
     </td>
 
     {{-- remark --}}
     <td class="min-w-[200px]">
-        <x-input-select name="remark[]" :options="$remarks" :value="old('remark.'.$key)" default="Select a remark" />
+        <x-input-select name="remark[]" :options="$remarks" :value="old('remark.'.$key, $remarkval)" value_key="name" default="Select a remark" :abled="!$readonly" />
         <x-input-error :messages="$errors->get('remark.'.$key)" class="mt-2" />
     </td>
 </tr>

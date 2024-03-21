@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer("attendance");
             $table->integer("position");
             $table->string("remark");
-            $table->enum("status", ["pending", "accepted", "rejected"])->default("pending");
+            $table->enum("status", ["pending", "accepted", "rejected", "submitted"])->default("pending");
             $table->timestamps();
         });
     }

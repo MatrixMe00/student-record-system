@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId("program_id")->constrained();
             $table->integer("semester");
             $table->integer("total_attendance")->nullable();
-            $table->enum("status", ["pending", "rejected", "accepted"])->default("pending");
+            $table->enum("status", ["pending", "rejected", "accepted", "submitted"])->default("pending");
             $table->foreignId("admin_id")->nullable();
             $table->timestamps();
         });
