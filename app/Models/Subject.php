@@ -35,14 +35,12 @@ class Subject extends Model
     }
 
     // classes learning this subject
-    public function programs() :HasMany|null{
-        $tc = new TeacherClass(["school_id" => $this->school_id, "subject_id" => $this->id]);
-        return $tc->programs();
+    public function programs() :HasManyThrough{
+        return $this->hasManyThrough(Program::class, TeacherClass::class, "subject_id", "id", secondLocalKey:"program_id");
     }
 
     // teacher for this subject
-    public function teachers() :HasMany|null{
-        $tc = new TeacherClass(["school_id" => $this->school_id, "subject_id" => $this->id]);
-        return $tc->teachers();
+    public function teachers() :HasManyThrough|null{
+        return $this->hasManyThrough(Teacher::class, TeacherClass::class, "subject_id", "user_id", secondLocalKey: "teacher_id");
     }
 }

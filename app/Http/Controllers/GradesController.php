@@ -10,6 +10,7 @@ use App\Models\Teacher;
 use App\Models\TeacherClass;
 use App\Traits\UserModelTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
@@ -38,8 +39,9 @@ class GradesController extends Controller
      * Used to get the necessary options for a user
      */
     private function create_options(){
-        $role_id = auth()->user()->role_id;
-        $model = $this->user_model(auth()->user());
+        $user = Auth::user();
+        $role_id = $user->role_id;
+        $model = $this->user_model($user);
 
         switch($role_id){
             case 3:

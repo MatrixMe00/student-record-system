@@ -121,7 +121,7 @@ class ProgramController extends Controller
     {
         return view('admin.classes.edit', [
             "program" => $program,
-            "teachers" => Teacher::all(["user_id", "lname", "oname"]),
+            "teachers" => Teacher::where("class_teacher", false)->orWhere("user_id", $program->class_teacher)->get(),
             "class_data" => $program->subjects
         ]);
     }
