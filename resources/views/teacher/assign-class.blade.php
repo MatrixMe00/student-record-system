@@ -59,7 +59,7 @@
                                 @endsection
 
                                 @section("button")
-                                    <x-primary-button type="button" @click="addBlock()">
+                                    <x-primary-button type="button" onclick="addBlock()">
                                         Add A Field
                                     </x-primary-button>
                                 @endsection
@@ -110,7 +110,7 @@
                                             </x-table-data>
                                             <x-text-input type="hidden" name="id[]" value="0" />
                                             <x-table-data>
-                                                <i title="Remove Field" class="fas fa-trash-alt text-lg text-red-500 cursor-pointer hover:text-red-600" @click="remPar()"></i>
+                                                <i title="Remove Field" class="fas fa-trash-alt text-lg text-red-500 cursor-pointer hover:text-red-600" onclick="remPar()"></i>
                                             </x-table-data>
                                         </tr>
                                     </template>
