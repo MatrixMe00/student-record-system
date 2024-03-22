@@ -49,7 +49,7 @@
                                     @php
                                         $extras = [
                                             ["title" => "Recorded", "content" => "{$result->remarks->count()} Students"],
-                                            // ["title" => "Teacher", "content" => $result->teacher->lname." ".$result->teacher->oname ?? "Not Set"],
+                                            ["title" => "Term", "content" => "Term $result->semester"],
                                             ["title" => "Academic Year", "content" => get_academic_year($result->created_at)]
                                         ];
                                         if(auth()->user()->role_id == 3)
