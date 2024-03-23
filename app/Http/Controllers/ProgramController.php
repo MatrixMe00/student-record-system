@@ -6,9 +6,12 @@ use App\Models\Program;
 use App\Http\Requests\StoreProgramRequest;
 use App\Http\Requests\UpdateProgramRequest;
 use App\Models\Grades;
+use App\Models\School;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\TeacherRemarks;
 use Illuminate\Validation\ValidationException;
+use Spatie\LaravelPdf\Facades\Pdf;
 
 class ProgramController extends Controller
 {
@@ -184,13 +187,56 @@ class ProgramController extends Controller
                 $grade = new Grades(["student_id" => $student->user_id, "program_id" => $program->id, "semester" => $semester]);
                 $results = $grade->my_results();
                 $students = $grade->student_count();
-
+                $remark = TeacherRemarks::where("student_id", $student->user_id)
+                                        ->where("program_id", $program->id)
+                                        ->where("semester", $semester)
+                                        ->first();
 
                 return view("student.my-result", [
                     "program" => $program,
                     "results" => $results,
                     "semester" => $semester,
-                    "rows" => $students
+                    "rows" => $students,
+                    "remark" => $remark
+                ]);
+            }
+
+            abort(404, "Student Not Found");
+        }
+
+        abort(404, "Class Not Found");
+    }
+
+    /**
+     * Print Student Results
+     */
+    public function print(Program $program, ?Student $student = null, $semester = 1){
+        if($program){
+            $student = $student ?? Student::find(auth()->user()->id);
+
+            if($student){
+                $grade = new Grades(["student_id" => $student->user_id, "program_id" => $program->id, "semester" => $semester]);
+                $results = $grade->my_results();
+                $students = $grade->student_count();
+                $remark = TeacherRemarks::where("student_id", $student->user_id)
+                                        ->where("program_id", $program->id)
+                                        ->where("semester", $semester)
+                                        ->first();
+                $school = School::find(session('school_id'));
+
+                // if no remark details were found, abort
+                if(is_null($remark)){
+                    abort(404, "User data not found");
+                }
+
+                return view("student.result-print", [
+                    "program" => $program,
+                    "results" => $results,
+                    "semester" => $semester,
+                    "rows" => $students,
+                    "remark" => $remark,
+                    "school" => $school,
+                    "student" => $student
                 ]);
             }
 

@@ -115,3 +115,21 @@ function generateIndexNumber(int $school_id):string{
 
     return $index_number;
 }
+
+/**
+ * This function converts integers into positions
+ * @param int $number This is the number to be converted
+ * @return string returns the converted number as a string
+ */
+function positionFormat(int $number):string{
+    $suffix = "";
+
+    switch($number % 10){
+        case 1: $suffix = $number > 20 || $number < 10 ? "st" : "th"; break;
+        case 2: $suffix = $number > 20 || $number < 10 ? "nd" : "th"; break;
+        case 3: $suffix = $number > 20 || $number < 10 ? "rd" : "th"; break;
+        default: $suffix = "th";
+    }
+
+    return "$number$suffix";
+}

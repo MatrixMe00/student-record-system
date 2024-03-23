@@ -67,7 +67,7 @@ class Grades extends Model
         return Grades::where("student_id", $this->student_id)
                      ->where("program_id", $this->program_id)
                      ->where("semester", $this->semester)
-                    //  ->where("status", "accepted")
+                     ->where("status", "accepted")
                      ->get();
     }
 

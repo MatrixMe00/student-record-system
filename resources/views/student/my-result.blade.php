@@ -18,16 +18,18 @@
 
         <x-section-component title="Term {{ $semester }}" class="mt-4">
             @if ($results->count() > 0)
-                <x-primary-button type="button" class="mt-4">Print Results</x-primary-button>
+                <x-primary-button type="button" class="mt-4" onclick="location.href='/my-result/{{ $program->id.'/'.$semester }}/print'">Print Results</x-primary-button>
 
                 <section class="mt-3">
                     <x-table-component>
                         <tbody>
                             <tr class="border-t">
                                 <x-thead-data>Position</x-thead-data>
-                                <x-table-data>1st</x-table-data>
+                                <x-table-data>{{ positionFormat($remark?->position) }}</x-table-data>
                                 <x-thead-data>Total Students</x-thead-data>
                                 <x-table-data>{{ $rows }}</x-table-data>
+                                <x-thead-data>Attendance</x-thead-data>
+                                <x-table-data>{{ $remark?->attendance." of ".$remark?->head_remark->total_attendance }}</x-table-data>
                             </tr>
                         </tbody>
                     </x-table-component>
@@ -80,8 +82,8 @@
                                 <x-table-data>{{ grade_description(($total / $results->count())) }}</x-table-data>
                             </tr>
                             <tr class="border-t">
-                                <x-thead-data>{{ __("Teacher Remarks") }}</x-thead-data>
-                                <x-table-data colspan="4" class="text-wrap">No Remarks provided</x-table-data>
+                                <x-thead-data>{{ __("Teacher's Remark") }}</x-thead-data>
+                                <x-table-data colspan="4" class="text-wrap">{{ __($remark?->remark ?  $remark->remark : "No Remarks provided") }}</x-table-data>
                             </tr>
                         </tfoot>
                     </x-table-component>

@@ -1,6 +1,6 @@
-@props(["tabledata" => null, "title" => "", "thead" => [], "tbody" => [], "btn_text" => false, "btnaction" => ""])
+@props(["tabledata" => null, "title" => "", "thead" => [], "tbody" => [], "btn_text" => false, "btnaction" => "", "shadow" => "shadow-lg" ])
 <div {{ $attributes->merge(["class"=>"w-full xl:w-8/12 mx-auto"]) }}>
-    <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
+    <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 {{ $shadow }} rounded ">
         @if (!empty($title))
             <div class="rounded-t mb-0 px-4 py-3 border-0">
                 <div class="flex flex-wrap items-center">

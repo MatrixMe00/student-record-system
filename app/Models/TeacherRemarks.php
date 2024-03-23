@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class TeacherRemarks extends Model
 {
@@ -45,5 +46,10 @@ class TeacherRemarks extends Model
     // belongs to a school
     public function school() :BelongsTo{
         return $this->belongsTo(School::class);
+    }
+
+    // this will be used to get the head remark
+    public function head_remark() :BelongsTo{
+        return $this->belongsTo(TeachersRemark::class, "remark_token", "remark_token");
     }
 }
