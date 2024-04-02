@@ -107,6 +107,10 @@ class TeacherRemarksController extends Controller
                 // update if exists or create if not exist
                 if($detail){
                     $detail->status = $status;
+
+                    if($request->promotion_class > -1){
+                        $detail->promoted = true;
+                    }
                     $detail->update();
                 }
             }
@@ -118,6 +122,11 @@ class TeacherRemarksController extends Controller
 
         if($is_admin){
             $main_remark->admin_id = Auth::user()->id;
+
+            if($request->is_promotion){
+                $main_remark->is_promotion = $request->is_promotion;
+                $main_remark->promotion_class = $request->promotion_class ?? -1;
+            }
         }else{
             if($request->total_attendance)
                 $main_remark->total_attendance = $request->total_attendance;

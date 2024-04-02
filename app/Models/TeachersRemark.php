@@ -43,4 +43,9 @@ class TeachersRemark extends Model
     public function remarks() :HasMany{
         return $this->hasMany(TeacherRemarks::class, "remark_token", "remark_token");
     }
+
+    // promoted class
+    public function promoted_class() :BelongsTo{
+        return $this->belongsTo(Program::class, "promotion_class");
+    }
 }

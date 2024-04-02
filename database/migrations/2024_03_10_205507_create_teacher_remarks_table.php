@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer("position");
             $table->string("remark");
             $table->enum("status", ["pending", "accepted", "rejected", "submitted"])->default("pending");
+            $table->boolean("promoted")->default(false);
             $table->timestamps();
         });
     }

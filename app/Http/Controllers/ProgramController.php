@@ -10,6 +10,7 @@ use App\Models\School;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\TeacherRemarks;
+use App\Models\TeachersRemark;
 use Illuminate\Validation\ValidationException;
 use Spatie\LaravelPdf\Facades\Pdf;
 
@@ -197,7 +198,8 @@ class ProgramController extends Controller
                     "results" => $results,
                     "semester" => $semester,
                     "rows" => $students,
-                    "remark" => $remark
+                    "remark" => $remark,
+                    "remark_head" => TeachersRemark::where("remark_token", $remark->remark_token)->first()
                 ]);
             }
 
@@ -235,6 +237,7 @@ class ProgramController extends Controller
                     "semester" => $semester,
                     "rows" => $students,
                     "remark" => $remark,
+                    "remark_head" => TeachersRemark::where("remark_token", $remark->remark_token)->first(),
                     "school" => $school,
                     "student" => $student
                 ]);

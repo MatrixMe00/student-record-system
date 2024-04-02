@@ -34,7 +34,8 @@ class StoreTeacherRemarksRequest extends FormRequest
             "total_marks.*" => ["required", "integer", "min:0"],
             "attendance.*" => ["required", "integer", "min:0"],
             "position.*" => ["required", "integer", "min:1"],
-            "remark.*" => ["required", "string"]
+            "remark.*" => ["required", "string"],
+            "promoted.*" => ["sometimes", "boolean"]
         ];
     }
 }

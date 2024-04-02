@@ -42,6 +42,9 @@
                             <img src="{{ url("storage/".$school->logo_path) }}" alt="" class="w-[20mm] h-[20mm]">
                         </x-table-data>
                     </tr>
+                    <tr>
+                        <x-thead-data class="text-center" colspan="2">Terminal Report</x-thead-data>
+                    </tr>
                 </table>
 
                 <section class="mt-3">
@@ -50,17 +53,17 @@
                         <tbody>
                             <tr class="border-t">
                                 <x-thead-data>Name</x-thead-data>
-                                <x-table-data colspan="2">{{ "$student->lname $student->oname" }}</x-table-data>
-                                <x-thead-data>Class</x-thead-data>
+                                <x-table-data colspan="2" style="border-right: thin solid lightgrey">{{ "$student->lname $student->oname" }}</x-table-data>
+                                {{-- <x-thead-data>Class</x-thead-data> --}}
                                 <x-table-data colspan="2">{{ $program->name }}</x-table-data>
                             </tr>
                             <tr class="border-t">
                                 <x-thead-data class>Position</x-thead-data>
-                                <x-table-data class="border-b">{{ positionFormat($remark?->position)." of ".$rows }}</x-table-data>
+                                <x-table-data class="border-b" style="border-right: thin solid lightgrey">{{ positionFormat($remark?->position) }}</x-table-data>
                                 <x-thead-data class>Attendance</x-thead-data>
-                                <x-table-data class="border-b">{{ $remark?->attendance." of ".$remark?->head_remark->total_attendance }}</x-table-data>
-                                <x-thead-data>Semester</x-thead-data>
-                                <x-table-data>{{ "Term $semester" }}</x-table-data>
+                                <x-table-data class="border-b" style="border-right: thin solid lightgrey">{{ $remark?->attendance." of ".$remark?->head_remark->total_attendance }}</x-table-data>
+                                <x-thead-data>Term</x-thead-data>
+                                <x-table-data>{{ $semester }}</x-table-data>
                             </tr>
                         </tbody>
                     </table>
@@ -105,16 +108,25 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <x-thead-data>{{ __("Total") }}</x-thead-data>
-                                <x-table-data>{{ $class_total }}</x-table-data>
-                                <x-table-data>{{ $exam_total }}</x-table-data>
-                                <x-table-data>{{ $total = $class_total + $exam_total }}</x-table-data>
-                                <x-table-data>{{ grade_description(($total / $results->count())) }}</x-table-data>
+                                <x-thead-data colspan="3">{{ __("Overall Score") }}</x-thead-data>
+                                {{-- <x-table-data>{{ $class_total }}</x-table-data>
+                                <x-table-data>{{ $exam_total }}</x-table-data> --}}
+                                <x-table-data colspan="2">{{ $total = $class_total + $exam_total }}</x-table-data>
+                                {{-- <x-table-data>{{ grade_description(($total / $results->count())) }}</x-table-data> --}}
                             </tr>
                             <tr class="border-t">
                                 <x-thead-data>{{ __("Teacher's Remark") }}</x-thead-data>
                                 <x-table-data colspan="4" class="text-wrap">{{ __($remark?->remark ?  $remark->remark : "No Remarks provided") }}</x-table-data>
                             </tr>
+
+                            @if ($semester == 3)
+                                <tr class="border-t">
+                                    {{-- <x-thead-data>{{ __("Promoted") }}</x-thead-data>
+                                    <x-table-data class="text-wrap">{{ __($remark->promoted == true ? "Yes" : "No") }}</x-table-data> --}}
+                                    <x-thead-data>{{ __("Promoted To") }}</x-thead-data>
+                                    <x-table-data class="text-wrap">{{ __($remark->promoted == true ? $remark_head->promoted_class->name : "N/A") }}</x-table-data>
+                                </tr>
+                            @endif
                         </tfoot>
                     </table>
 

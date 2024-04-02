@@ -69,10 +69,11 @@
     @endif
 
 @elseif ($options == 0)
-    {{ $slot }}
+    {{-- {{ $slot }} --}}
 @else
     <option value="">No Options Data</option>
 @endif
 
+{{ $slot }}
 
 </select>

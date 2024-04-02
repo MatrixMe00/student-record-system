@@ -8,6 +8,9 @@
                 <th>Attendance</th>
                 <th>Position</th>
                 <th>Remark</th>
+                @if ($is_admin)
+                    <th>Promote</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -24,6 +27,8 @@
                     :total_studs="$remarks->count()"
                     :remarks="$remark_options->toArray()"
                     :remarkval="$remark->remark"
+                    :semester="$remark->semester"
+                    :is_admin="$is_admin"
                 />
                 @php
                     $key++;

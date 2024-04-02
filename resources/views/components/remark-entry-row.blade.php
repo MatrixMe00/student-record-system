@@ -1,4 +1,4 @@
-@props(["student", "key", "totalmark", "attendance" => 0, "remarks", "total_studs", "rowid" => 0, "readonly" => false, "painttd" => "", "remarkval" => ""])
+@props(["student", "key", "totalmark", "semester" => 0, "is_admin" => false, "attendance" => 0, "remarks", "total_studs", "rowid" => 0, "readonly" => false, "painttd" => "", "remarkval" => ""])
 
 <tr
     {{ $attributes->merge(["class" => ""]) }}
@@ -40,4 +40,13 @@
         <x-input-select name="remark[]" :options="$remarks" :value="old('remark.'.$key, $remarkval)" value_key="name" default="Select a remark" :abled="!$readonly" />
         <x-input-error :messages="$errors->get('remark.'.$key)" class="mt-2" />
     </td>
+
+    @if ($semester == 3 && $is_admin)
+        <td>
+            <x-input-select name="promoted" class="w-[100px]" options="0">
+                <option value="1" {!! old('promoted.'.$key, 1) == 1 ? "selected" : '' !!}>Yes</option>
+                <option value="0" {!! old('promoted.'.$key, 1) == 0 ? "selected" : '' !!}>No</option>
+            </x-input-select>
+        </td>
+    @endif
 </tr>

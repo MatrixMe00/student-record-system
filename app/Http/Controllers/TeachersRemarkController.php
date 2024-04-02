@@ -54,6 +54,13 @@ class TeachersRemarkController extends Controller
         $students = $this->get_student_marks($this_remark);
         $is_admin = auth()->user()->role_id == 3;
 
+        if($this_remark->semester == 3){
+            $programs = Program::where("id", "!=", $this_remark->program->id)->get();
+        }else{
+            $programs = null;
+        }
+
+
         return view("remarks.edit",[
             "remarks" => $remarks,
             "remark_head" => $this_remark,
@@ -63,7 +70,8 @@ class TeachersRemarkController extends Controller
             "is_admin" => $is_admin,
             "program" => $this_remark->program,
             "edit_all" => in_array($this_remark->status, ["pending", "rejected"]) && !$is_admin,
-            "edit_once" => $this_remark->status == "pending"
+            "edit_once" => $this_remark->status == "pending",
+            "programs" => $programs
         ]);
     }
 
@@ -71,7 +79,6 @@ class TeachersRemarkController extends Controller
      * Get the initial student marks
      */
     private function get_student_marks(TeachersRemark $remark){
-        // dd($remark);
         $grade = new Grades(["semester" => $remark->semester, "program_id" => $remark->program_id, "teacher_id" => $remark->teacher_id]);
 
         return $grade->class_results();
