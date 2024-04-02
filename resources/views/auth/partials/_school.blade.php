@@ -55,11 +55,18 @@
                         <x-input-error :messages="$errors->get('logo_path')" class="mt-2" />
                     </div>
 
-                    <!-- School Location -->
+                    <!-- School Location / Circuit -->
                     <div>
-                        <x-input-label for="location" :value="__('Location')" />
-                        <x-text-input id="location" type="text" name="location" :value="old('location')" placeholder="Location of School" required />
-                        <x-input-error :messages="$errors->get('location')" class="mt-2" />
+                        <x-input-label for="circuit" :value="__('Circuit')" />
+                        <x-text-input id="circuit" type="text" name="circuit" :value="old('circuit')" placeholder="Circuit of School" required />
+                        <x-input-error :messages="$errors->get('circuit')" class="mt-2" />
+                    </div>
+
+                    <!-- District -->
+                    <div>
+                        <x-input-label for="district" :value="__('District')" />
+                        <x-text-input id="district" type="text" name="district" :value="old('district')" placeholder="P.O.Box XX" required />
+                        <x-input-error :messages="$errors->get('district')" class="mt-2" />
                     </div>
 
                     <!-- GPS Address -->

@@ -16,9 +16,10 @@ return new class extends Migration
             $table->string("school_name")->unique();
             $table->string("school_slug");
             $table->string("logo_path")->nullable();
-            $table->string("location");
+            $table->string("circuit");
             $table->string("gps_address", 15);
             $table->string("box_number")->unique();
+            $table->string("district")->nullable();
             $table->enum("school_type", ["public", "private"]);
             $table->text("description");
             $table->string("school_email");
