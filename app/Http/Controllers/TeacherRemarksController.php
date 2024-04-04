@@ -61,7 +61,6 @@ class TeacherRemarksController extends Controller
         $validated = $request->validated();
         $default = array_slice($validated, 0, 5);
         $array = array_slice($validated, 5);
-        // dd($validated, $default, $array);
 
         $count = -1;
         $status = $request->submit == "save" ? "pending" : $request->submit;
@@ -107,6 +106,7 @@ class TeacherRemarksController extends Controller
                 }
             }
         }else{
+            $head_remark = in_array("h_remark", array_keys($validated));
             while(++$count < count($validated["student_id"])){
                 $student_id = $array["student_id"][$count];
 
@@ -115,6 +115,11 @@ class TeacherRemarksController extends Controller
                 // update if exists or create if not exist
                 if($detail){
                     $detail->status = $status;
+
+                    // attach headmaster remark
+                    if($head_remark){
+                        $detail->h_remark = $array["h_remark"][$count];
+                    }
 
                     if($request->promotion_class > -1){
                         $detail->promoted = true;

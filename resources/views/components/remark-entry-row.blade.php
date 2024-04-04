@@ -1,6 +1,5 @@
-@props(["remarkhead", "result" => "", "student" => "", "key", "totalmark", "semester" => 0,
-    "is_admin" => false, "remarks", "total_studs", "readonly" => false, "painttd" => "", "remarkval" => "",
-    "head_status" => ""])
+@props(["remarkhead", "result" => "", "student" => "", "key", "totalmark",
+    "is_admin" => false, "remarks", "total_studs", "readonly" => false, "painttd" => ""])
 
 @php
     if($result){
@@ -21,7 +20,7 @@
     </td>
 
     {{-- fullname --}}
-    <td class="sticky left-0">
+    <td class="sticky left-0 z-10">
         <span class="{{ empty($painttd) ? 'bg-white' : $painttd }} border rounded-md mt-2 block py-3 px-2 {{ count(explode(' ', $student->oname)) < 2 ? 'text-nowrap' : '' }}">{{ $student->lname.' '.$student->oname }}</span>
     </td>
 
@@ -50,32 +49,32 @@
     </td>
 
     {{-- headmaster remark --}}
-    @if ($is_admin || $head_status == "accepted")
+    @if ($is_admin || $remarkhead->status == "accepted")
         <td>
-            <x-input-select name="h_remark[]" :options="$remarks" :value="old('h_remark.'.$key, $result->h_remark ?? '')" value_key="name" default="Select a remark" :abled="!$readonly" />
+            <x-input-select name="h_remark[]" :options="$remarks" :value="old('h_remark.'.$key, $result->h_remark ?? '')" value_key="name" default="Select a remark" :abled="$remarkhead->status == 'submitted'" />
             <x-input-error :messages="$errors->get('h_remark.'.$key)" class="mt-2" />
         </td>
     @endif
 
     {{-- student conduct --}}
     <td>
-        <x-text-input name="conduct[]" placeholder="Conduct" :value="old('conduct.'.$key, $result->conduct ?? '')" />
+        <x-text-input name="conduct[]" placeholder="Conduct" :value="old('conduct.'.$key, $result->conduct ?? '')" :readonly="$readonly" />
         <x-input-error :messages="$errors->get('conduct.'.$key)" class="mt-2" />
     </td>
 
     {{-- student interest --}}
     <td>
-        <x-text-input name="interest[]" placeholder="Interest" :value="old('interest.'.$key, $result->interest ?? '')" />
+        <x-text-input name="interest[]" placeholder="Interest" :value="old('interest.'.$key, $result->interest ?? '')" :readonly="$readonly" />
         <x-input-error :messages="$errors->get('interest.'.$key)" class="mt-2" />
     </td>
 
     {{-- student attitude --}}
     <td>
-        <x-text-input name="attitude[]" placeholder="Attitude" :value="old('attitude.'.$key, $result->attitude ?? '')" />
+        <x-text-input name="attitude[]" placeholder="Attitude" :value="old('attitude.'.$key, $result->attitude ?? '')" :readonly="$readonly" />
         <x-input-error :messages="$errors->get('attitude.'.$key)" class="mt-2" />
     </td>
 
-    @if ($semester == 3 && $is_admin)
+    @if ($remarkhead->semester == 3 && $is_admin)
         <td>
             <x-input-select name="promoted" class="w-[100px]" options="0">
                 <option value="1" {!! old('promoted.'.$key, 1) == 1 ? "selected" : '' !!}>Yes</option>

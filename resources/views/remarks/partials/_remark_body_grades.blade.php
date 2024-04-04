@@ -9,7 +9,7 @@
                 <th class="min-w-[80px]">Position</th>
                 <th class="min-w-[200px]">T. Remark</th>
 
-                @if ($is_admin || $remark_head->status == "approved")
+                @if ($is_admin || $remark_head->status == "accepted")
                     <th class="min-w-[200px]">H. Remark</th>
                 @endif
 
@@ -17,7 +17,7 @@
                 <th class="min-w-[200px]">Interest</th>
                 <th class="min-w-[200px]">Attitude</th>
 
-                @if ($is_admin)
+                @if ($is_admin && $remark_head->semester == 3)
                     <th class="min-w-[80px]">Promote</th>
                 @endif
             </tr>
