@@ -14,10 +14,16 @@
 <x-text-input type="hidden" name="semester" value="{{ $remark_head->semester }}" />
 
     <div class="flex gap-2 flex-wrap">
+        {{-- academic year --}}
+        <div>
+            <x-input-label>Academic Year</x-input-label>
+            <x-text-input type="text" name="academic_year" :value="old('academic_year', $academic_year)" readonly />
+        </div>
+
         {{-- total attendance --}}
         <div class="flex-1">
             <x-input-label>Total Attendance</x-input-label>
-            <x-text-input type="number" name="total_attendance" :value="old('total_attendance', $remark_head->total_attendance)" placeholder="Term Total Attendance" :readonly="$is_admin || $remark_head->status != 'pending'" />
+            <x-text-input type="number" name="total_attendance" :value="old('total_attendance', $remark_head->total_attendance)" placeholder="Term Total Attendance [Max: 80]" max="80" :readonly="$is_admin || $remark_head->status != 'pending'" />
             <x-input-error :messages="$errors->get('total_attendance')" class="mt-2" />
         </div>
 

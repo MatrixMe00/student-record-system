@@ -23,6 +23,8 @@ class TeachersRemarkController extends Controller
             "teacher_id" => ["sometimes", "required", "integer", "exists:teachers,user_id"],
             "program_id" => ["sometimes", "required", "integer", "exists:programs,id"],
             "semester" => ["sometimes", "required", "integer", "min:1", "max:3"],
+            "reopening" => ["sometimes", "required", "date"],
+            "academic_year" => ["required", "string"],
             "status" => ["sometimes", "required", "string", "in:pending,rejected,accepted"],
             "admin_id" => ["sometimes","required","integer", "exists:admins, user_id"]
         ];
@@ -32,7 +34,7 @@ class TeachersRemarkController extends Controller
     public function store(Request $request){
         $validated = $request->validate($this->rules());
 
-        if($this->result_exists()){
+        if($this->result_exists($validated)){
             $status = false;
             $message = "Result already exists";
            throw ValidationException::withMessages([
@@ -96,7 +98,11 @@ class TeachersRemarkController extends Controller
     }
 
     // this verifies that the result token has not been already provided
-    private function result_exists(): bool{
-        return false;
+    private function result_exists(array $validated): bool{
+        return TeachersRemark::where("school_id", session('school_id'))
+                               ->where("program_id", $validated["program_id"])
+                               ->where("semester", $validated["semester"])
+                               ->where("academic_year", $validated["academic_year"])
+                               ->exists();
     }
 }

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer("total_attendance")->nullable();
             $table->enum("status", ["pending", "rejected", "accepted", "submitted"])->default("pending");
             $table->foreignId("admin_id")->nullable();
+            $table->date("reopening")->nullable();
+            $table->string("academic_year");
             $table->boolean("is_promotion")->default(false);
             $table->integer("promotion_class")->default(-1);
             $table->timestamps();

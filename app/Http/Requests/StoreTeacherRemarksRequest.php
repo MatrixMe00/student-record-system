@@ -32,9 +32,13 @@ class StoreTeacherRemarksRequest extends FormRequest
             "status" => ["sometimes", "required", "string", "in:pending,accepted,rejected"],
             "student_id.*" => ["required", "integer", Rule::exists("students", "user_id")],
             "total_marks.*" => ["required", "integer", "min:0"],
-            "attendance.*" => ["required", "integer", "min:0"],
+            "attendance.*" => ["required", "integer", "min:0", "max: 80"],
             "position.*" => ["required", "integer", "min:1"],
             "remark.*" => ["required", "string"],
+            "h_remark.*" => ["sometimes", "required", "string"],
+            "interest.*" => ["sometimes", "required", "string"],
+            "conduct.*" => ["sometimes", "required", "string"],
+            "attitude.*" => ["sometimes", "required", "string"],
             "promoted.*" => ["sometimes", "boolean"]
         ];
     }

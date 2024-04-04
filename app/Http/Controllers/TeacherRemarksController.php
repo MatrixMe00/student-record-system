@@ -61,9 +61,11 @@ class TeacherRemarksController extends Controller
         $validated = $request->validated();
         $default = array_slice($validated, 0, 5);
         $array = array_slice($validated, 5);
+        // dd($validated, $default, $array);
+
         $count = -1;
         $status = $request->submit == "save" ? "pending" : $request->submit;
-        $message = $status == "save" ? "Entry has been saved for later" : "Entry has been $status";
+        $message = $status == "save" || $status == "pending" ? "Entry has been saved for later" : "Entry has been $status";
         $is_admin = Auth::user()->role_id == 3;
 
         if(!$is_admin){
@@ -73,6 +75,9 @@ class TeacherRemarksController extends Controller
                     "student_id" => $array["student_id"][$count],
                     "total_marks" => $array["total_marks"][$count],
                     "attendance" => $array["attendance"][$count],
+                    "interest" => $array["interest"][$count],
+                    "conduct" => $array["conduct"][$count],
+                    "attitude" => $array["attitude"][$count],
                     "status" => $status
                 ];
                 if($is_new){
@@ -87,6 +92,9 @@ class TeacherRemarksController extends Controller
                 if($detail){
                     $detail->total_marks = $data["total_marks"];
                     $detail->attendance = $data["attendance"];
+                    $detail->interest = $data["interest"];
+                    $detail->conduct = $data["conduct"];
+                    $detail->attitude = $data["attitude"];
                     $detail->status = $data["status"];
 
                     if($is_new){
@@ -128,9 +136,18 @@ class TeacherRemarksController extends Controller
                 $main_remark->promotion_class = $request->promotion_class ?? -1;
             }
         }else{
-            if($request->total_attendance)
-                $main_remark->total_attendance = $request->total_attendance;
-            else{
+            // maximum weeks in a term and maximum days in a week
+            $max_weeks = 16; $max_days = 5;
+            $maximum_attendance = $max_weeks * $max_days;
+            if($request->total_attendance){
+                if($request->total_attendance <= $maximum_attendance){
+                    $main_remark->total_attendance = $request->total_attendance;
+                }else{
+                    throw ValidationException::withMessages([
+                        "total_attendance" => "Total attendance cannot exceed $maximum_attendance"
+                    ]);
+                }
+            }else{
                 throw ValidationException::withMessages([
                     "total_attendance" => "Please provide the total attendance"
                 ]);

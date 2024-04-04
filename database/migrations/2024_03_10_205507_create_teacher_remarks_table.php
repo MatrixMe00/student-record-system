@@ -23,6 +23,10 @@ return new class extends Migration
             $table->integer("attendance");
             $table->integer("position");
             $table->string("remark");
+            $table->string("h_remark")->nullable();
+            $table->string("interest");
+            $table->string("conduct");
+            $table->string("attitude");
             $table->enum("status", ["pending", "accepted", "rejected", "submitted"])->default("pending");
             $table->boolean("promoted")->default(false);
             $table->timestamps();

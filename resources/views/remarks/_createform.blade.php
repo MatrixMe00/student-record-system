@@ -56,8 +56,8 @@
 
             {{-- display an academic year --}}
             <div>
-                <x-input-label for="academic" :value="__('Academic Year')" />
-                <x-text-input id="academic" :value="get_academic_year(date('d-m-Y'))" readonly />
+                <x-input-label for="academic_year" :value="__('Academic Year')" />
+                <x-text-input id="academic_year" name="academic_year" :value="get_academic_year(date('d-m-Y'))" readonly />
             </div>
 
             {{-- is user admin --}}
