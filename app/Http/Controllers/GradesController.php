@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ApproveResults;
 use App\Models\Grades;
+use App\Models\Payment;
 use App\Models\Program;
 use App\Models\Student;
 use App\Models\Subject;
@@ -76,7 +77,13 @@ class GradesController extends Controller
             case 5:
                 $options = [
                     // "results" => $model->results->where("status","accepted")
-                    "results" => $model->results->unique('program_id')
+                    "results" => $model->results->unique('program_id'),
+                    "active_payment" => Payment::where('student_id', Auth::user()->id)
+                                        ->where('expiry_date', ">", date("Y-m-d"))
+                                        ->orderBy('expiry_date', 'desc')->limit(1)->exists(),
+                    "payments" => Payment::where("student_id", Auth::user()->id)
+                                         ->where("payment_type", "results")
+                                         ->get()->sortByDesc('expiry_date')
                 ];
                 break;
         }

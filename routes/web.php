@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ApproveresultsController;
 use App\Http\Controllers\GradesController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaystackController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\RemarkOptionsController;
@@ -96,6 +98,14 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get("/remark/options", [RemarkOptionsController::class, "index"])->name("remark-options");
     Route::post("/remark/options", [RemarkOptionsController::class, "store"])->name("remark-options.add");
     Route::get("/remark/options/delete/{option}", [RemarkOptionsController::class, "destroy"]);
+
+    // payments
+    Route::get("/payment/create/{type}", [PaymentController::class, 'create'])->name("payment.create");
+    Route::post("/payment/store", [PaymentController::class, 'store'])->name("payment.store");
+
+    // paystack processing
+    Route::get("/paystack/callback", [PaystackController::class, "callback"])->name("paystack.callback");
+    Route::get("/paystack/success", [PaystackController::class, "success"])->name("paystack.success");
 });
 
 // routes for just school admins

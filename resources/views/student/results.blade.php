@@ -10,7 +10,7 @@
                 <x-content-card class="bg-white hover:bg-neutral-50" title="{{ $result->program->name }}" item_id="{{ $result->program_id }}"
                         path_head="my-result" :extras="$extras"
                         :editable="false" :removable="false"
-                        card_link="{{ $result->status != 'pending' ? 'my-result/'.$result->program_id : 'javascript:void(0)' }}" />
+                        card_link="{{ $result->status != 'pending' && $active_payment ? 'my-result/'.$result->program_id : 'javascript:void(0)' }}" />
             @endforeach
         </x-content-grid>
     @else

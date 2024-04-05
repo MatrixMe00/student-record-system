@@ -19,8 +19,15 @@ return new class extends Migration
             $table->string("contact_email");
             $table->string("contact_phone");
             $table->string("payment_type");
+            $table->float("amount");
+            $table->float("deduction")->default(0);
+            $table->string("payment_status")->default("pending");
+            $table->string("payment_method")->default("mobile_money");
             $table->foreignId("student_id")->constrained('students', 'user_id');
             $table->timestamps();
+            $table->dateTime("expiry_date")->default(function(){
+                return now()->addMonth(4);
+            });
         });
     }
 
