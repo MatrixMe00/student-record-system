@@ -17,7 +17,7 @@
         <script src="{{ asset('jquery/compressed_jquery.js') }}"></script>
         <style>
             @page{
-                size: A4; margin: 0;
+                size: A4; margin-left: 0
             }
             @media print{
                 html, body{
@@ -30,13 +30,16 @@
     <body>
         <x-app-main class="">
             <x-section-component class="">
-                <table class="w-full mx-auto" shadow="">
+                <table class="w-full border mx-auto" shadow="">
                     {{-- school data --}}
                     <tr class="border-y">
                         <x-thead-data class="border-0 text-center flex flex-col gap-1">
                             <span class="text-[12pt]">{{ $school->school_name }}</span>
-                            <span>{{ $school->box_number }}</span>
-                            <span>{{ $school->gps_address.", ".$school->location }}</span>
+                            <span>{{ "$school->box_number | $school->gps_address" }}</span>
+                            <span>{{ "$school->circuit Circuit" }}</span>
+                            @if ($school->district)
+                                <span>{{ "$school->district District" }}</span>
+                            @endif
                         </x-thead-data>
                         <x-table-data class="p-0">
                             <img src="{{ url("storage/".$school->logo_path) }}" alt="" class="w-[20mm] h-[20mm]">
@@ -75,6 +78,7 @@
                             <x-thead-data>Class Score</x-thead-data>
                             <x-thead-data>Exam Score</x-thead-data>
                             <x-thead-data>Total Score</x-thead-data>
+                            <x-thead-data>Position</x-thead-data>
                             <x-thead-data>Description</x-thead-data>
                         </thead>
 
@@ -93,6 +97,7 @@
                                 <x-table-data>{{ $grade->class_mark }}</x-table-data>
                                 <x-table-data>{{ $grade->exam_mark }}</x-table-data>
                                 <x-table-data>{{ $total = $grade->class_mark + $grade->exam_mark }}</x-table-data>
+                                <x-table-data>{{ positionFormat($grade->position) }}</x-table-data>
                                 <x-table-data>{{ grade_description($total) }}</x-table-data>
                             </tr>
 
@@ -116,7 +121,17 @@
                             </tr>
                             <tr class="border-t">
                                 <x-thead-data>{{ __("Teacher's Remark") }}</x-thead-data>
-                                <x-table-data colspan="4" class="text-wrap">{{ __($remark?->remark ?  $remark->remark : "No Remarks provided") }}</x-table-data>
+                                <x-table-data class="text-wrap">{{ __($remark?->remark ?  $remark->remark : "No Remarks provided") }}</x-table-data>
+                                <x-thead-data>{{ __("Head Master's Remark") }}</x-thead-data>
+                                <x-table-data colspan="2" class="text-wrap">{{ __($remark?->h_remark ?  $remark->h_remark : "No Remark provided") }}</x-table-data>
+                            </tr>
+                            <tr class="border-t">
+                                <x-thead-data>{{ __("Interest") }}</x-thead-data>
+                                <x-table-data class="text-wrap">{{ __($remark?->interest ? $remark?->interest : "No information provided") }}</x-table-data>
+                                <x-thead-data>{{ __("Conduct") }}</x-thead-data>
+                                <x-table-data class="text-wrap">{{ __($remark?->conduct ? $remark?->conduct : "No information provided") }}</x-table-data>
+                                <x-thead-data>{{ __("Attitude") }}</x-thead-data>
+                                <x-table-data class="text-wrap">{{ __($remark?->attitude ? $remark?->attitude : "No information provided") }}</x-table-data>
                             </tr>
 
                             @if ($semester == 3)

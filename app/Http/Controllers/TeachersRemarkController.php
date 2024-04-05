@@ -81,7 +81,12 @@ class TeachersRemarkController extends Controller
      * Get the initial student marks
      */
     private function get_student_marks(TeachersRemark $remark){
-        $grade = new Grades(["semester" => $remark->semester, "program_id" => $remark->program_id, "teacher_id" => $remark->teacher_id]);
+        $grade = new Grades([
+            "semester" => $remark->semester,
+            "program_id" => $remark->program_id,
+            "teacher_id" => $remark->teacher_id,
+            "academic_year" => get_academic_year($remark->created_at)
+        ]);
 
         return $grade->class_results();
     }

@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\ApproveResults;
 use App\Models\Grades;
 use App\Models\Program;
+use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\TeacherClass;
 use App\Traits\UserModelTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -111,13 +113,15 @@ class GradesController extends Controller
         $count = -1;
         $defaults = array_slice($validated, 0, 6);
         $stud_data = array_slice($validated, 6, 9);
+        $academic_year = get_academic_year(date("d-m-Y"));
 
         // save each entry
         while(++$count < count($validated["student_id"])){
             $grade = new Grades(array_merge($defaults, [
                 "student_id" => $stud_data["student_id"][$count],
                 "class_mark" => $stud_data["class_mark"][$count],
-                "exam_mark" => $stud_data["exam_mark"][$count]
+                "exam_mark" => $stud_data["exam_mark"][$count],
+                "academic_year" => $academic_year
             ]));
 
             $grade->save();
@@ -130,9 +134,47 @@ class GradesController extends Controller
             $record->status = "submitted";
             $record->update();
             $message = "Results have been submitted for review";
+
+            // work on the positions
+            $this->arrange_grades($validated["result_token"]);
         }
 
         return redirect()->back()->with(["success" => true, "message" => $message]);
+    }
+
+    /**
+     * Arrange the grades in descending order
+     */
+    private function arrange_grades(string $result_token){
+        $results = Grades::where("result_token", $result_token)->get();
+        $totals = new Collection();
+
+        foreach($results as $result){
+            $totals->push([
+                "grade_id" => $result->id,
+                "student_id" => $result->student_id,
+                "total" => ($result->class_mark + $result->exam_mark)
+            ]);
+        }
+
+        $this->enter_positions($totals->sortByDesc("total")->toArray(), $result_token);
+    }
+
+    /**
+     * This enters the positions into the database
+     */
+    private function enter_positions($students, $result_token){
+        $cur_pos = 0;
+        $last_total = 0;
+
+        foreach($students as $count => $student){
+            $grade = Grades::find($student["grade_id"]);
+            $cur_pos = $last_total == $student["total"] ? $cur_pos : ($count + 1);
+            $last_total = $student["total"];
+
+            $grade->position = $cur_pos;
+            $grade->update();
+        }
     }
 
     /**
@@ -212,6 +254,9 @@ class GradesController extends Controller
             if($record->status == "submitted"){
                 $message .= " for review";
             }
+
+            // update grade positions
+            $this->arrange_grades($validated["result_token"]);
         }
 
         return redirect()->back()->with(["success" => true, "message" => $message]);

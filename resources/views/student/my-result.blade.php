@@ -41,6 +41,7 @@
                                 <x-thead-data>Class Score</x-thead-data>
                                 <x-thead-data>Exam Score</x-thead-data>
                                 <x-thead-data>Total Score</x-thead-data>
+                                <x-thead-data>Position</x-thead-data>
                                 <x-thead-data>Description</x-thead-data>
                             </thead>
                         @endsection
@@ -60,6 +61,7 @@
                                 <x-table-data>{{ $grade->class_mark }}</x-table-data>
                                 <x-table-data>{{ $grade->exam_mark }}</x-table-data>
                                 <x-table-data>{{ $total = $grade->class_mark + $grade->exam_mark }}</x-table-data>
+                                <x-table-data>{{ positionFormat($grade->position) }}</x-table-data>
                                 <x-table-data>{{ grade_description($total) }}</x-table-data>
                             </tr>
 
@@ -83,7 +85,17 @@
                             </tr>
                             <tr class="border-t">
                                 <x-thead-data>{{ __("Teacher's Remark") }}</x-thead-data>
-                                <x-table-data colspan="4" class="text-wrap">{{ __($remark?->remark ?  $remark->remark : "No Remarks provided") }}</x-table-data>
+                                <x-table-data class="text-wrap">{{ __($remark?->remark ?  $remark->remark : "No Remarks provided") }}</x-table-data>
+                                <x-thead-data>{{ __("Head Master's Remark") }}</x-thead-data>
+                                <x-table-data colspan="2" class="text-wrap">{{ __($remark?->h_remark ?  $remark->h_remark : "No Remark provided") }}</x-table-data>
+                            </tr>
+                            <tr class="border-t">
+                                <x-thead-data>{{ __("Interest") }}</x-thead-data>
+                                <x-table-data class="text-wrap">{{ __($remark?->interest ? $remark?->interest : "No information provided") }}</x-table-data>
+                                <x-thead-data>{{ __("Conduct") }}</x-thead-data>
+                                <x-table-data class="text-wrap">{{ __($remark?->conduct ? $remark?->conduct : "No information provided") }}</x-table-data>
+                                <x-thead-data>{{ __("Attitude") }}</x-thead-data>
+                                <x-table-data class="text-wrap">{{ __($remark?->attitude ? $remark?->attitude : "No information provided") }}</x-table-data>
                             </tr>
                             @if ($semester == 3)
                                 <tr class="border-t">

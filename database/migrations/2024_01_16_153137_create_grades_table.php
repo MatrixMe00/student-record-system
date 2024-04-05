@@ -23,7 +23,8 @@ return new class extends Migration
             $table->float("exam_mark");
             $table->string("result_token")->nullable(false);
             $table->enum("status", ["accepted", "rejected", "pending"])->default("pending");
-            $table->boolean("has_remark")->default(false);
+            $table->integer("position")->default(0);
+            $table->string("academic_year");
             $table->timestamps();
         });
     }
