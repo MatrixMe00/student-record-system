@@ -199,7 +199,7 @@ class ProgramController extends Controller
                     "semester" => $semester,
                     "rows" => $students,
                     "remark" => $remark,
-                    "remark_head" => TeachersRemark::where("remark_token", $remark->remark_token)->first()
+                    "remark_head" => $remark ? TeachersRemark::where("remark_token", $remark->remark_token)->first() : null
                 ]);
             }
 

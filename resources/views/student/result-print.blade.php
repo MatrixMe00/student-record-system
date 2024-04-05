@@ -121,7 +121,7 @@
                             </tr>
                             <tr class="border-t">
                                 <x-thead-data>{{ __("Teacher's Remark") }}</x-thead-data>
-                                <x-table-data class="text-wrap">{{ __($remark?->remark ?  $remark->remark : "No Remarks provided") }}</x-table-data>
+                                <x-table-data colspan="2" class="text-wrap">{{ __($remark?->remark ?  $remark->remark : "No Remarks provided") }}</x-table-data>
                                 <x-thead-data>{{ __("Head Master's Remark") }}</x-thead-data>
                                 <x-table-data colspan="2" class="text-wrap">{{ __($remark?->h_remark ?  $remark->h_remark : "No Remark provided") }}</x-table-data>
                             </tr>
