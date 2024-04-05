@@ -13,8 +13,6 @@
             @section("sub-title", "Create or remove remark options for remark allocation to results by class teachers")
 
             <x-form-element action="" method="POST">
-                @csrf
-
                 <div class="md:col-span-2 bg-zinc-50 py-4">
                     <x-table-component title="Class Remark Options">
                         @section("thead")

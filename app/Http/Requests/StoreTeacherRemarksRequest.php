@@ -39,7 +39,7 @@ class StoreTeacherRemarksRequest extends FormRequest
             "interest.*" => ["sometimes", "required", "string"],
             "conduct.*" => ["sometimes", "required", "string"],
             "attitude.*" => ["sometimes", "required", "string"],
-            "promoted.*" => ["sometimes", "boolean"]
+            "promoted.*" => ["sometimes", "integer", "min:-1", "max:1"]
         ];
     }
 }

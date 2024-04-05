@@ -84,18 +84,20 @@
                                 {{-- <x-table-data>{{ grade_description(($total / $results->count())) }}</x-table-data> --}}
                             </tr>
                             <tr class="border-t">
-                                <x-thead-data>{{ __("Teacher's Remark") }}</x-thead-data>
-                                <x-table-data class="text-wrap">{{ __($remark?->remark ?  $remark->remark : "No Remarks provided") }}</x-table-data>
-                                <x-thead-data>{{ __("Head Master's Remark") }}</x-thead-data>
-                                <x-table-data colspan="2" class="text-wrap">{{ __($remark?->h_remark ?  $remark->h_remark : "No Remark provided") }}</x-table-data>
-                            </tr>
-                            <tr class="border-t">
                                 <x-thead-data>{{ __("Interest") }}</x-thead-data>
                                 <x-table-data class="text-wrap">{{ __($remark?->interest ? $remark?->interest : "No information provided") }}</x-table-data>
                                 <x-thead-data>{{ __("Conduct") }}</x-thead-data>
                                 <x-table-data class="text-wrap">{{ __($remark?->conduct ? $remark?->conduct : "No information provided") }}</x-table-data>
                                 <x-thead-data>{{ __("Attitude") }}</x-thead-data>
                                 <x-table-data class="text-wrap">{{ __($remark?->attitude ? $remark?->attitude : "No information provided") }}</x-table-data>
+                            </tr>
+                            <tr class="border-t">
+                                <x-thead-data>{{ __("Teacher's Remark") }}</x-thead-data>
+                                <x-table-data colspan="5" class="text-wrap">{{ __($remark?->remark ?  $remark->remark : "No Remarks provided") }}</x-table-data>
+                            </tr>
+                            <tr class="border-t">
+                                <x-thead-data>{{ __("Head Teacher's Remark") }}</x-thead-data>
+                                <x-table-data colspan="5" class="text-wrap">{{ __($remark?->h_remark ?  $remark->h_remark : "No Remark provided") }}</x-table-data>
                             </tr>
                             @if ($semester == 3)
                                 <tr class="border-t">

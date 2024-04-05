@@ -44,14 +44,14 @@
 
     {{-- remark --}}
     <td>
-        <x-input-select name="remark[]" :options="$remarks" :value="old('remark.'.$key, $result->remark ?? '')" value_key="name" default="Select a remark" :abled="!$readonly" />
+        <x-input-datalist name="remark[]" :options="$remarks" :value="old('remark.'.$key, $result->remark ?? '')" :readonly="$readonly" />
         <x-input-error :messages="$errors->get('remark.'.$key)" class="mt-2" />
     </td>
 
     {{-- headmaster remark --}}
     @if ($is_admin || $remarkhead->status == "accepted")
         <td>
-            <x-input-select name="h_remark[]" :options="$remarks" :value="old('h_remark.'.$key, $result->h_remark ?? '')" value_key="name" default="Select a remark" :abled="$remarkhead->status == 'submitted'" />
+            <x-input-datalist name="h_remark[]" :options="$remarks" :value="old('h_remark.'.$key, $result->h_remark ?? '')"  :readonly="$remarkhead->status != 'submitted'" />
             <x-input-error :messages="$errors->get('h_remark.'.$key)" class="mt-2" />
         </td>
     @endif
@@ -79,6 +79,7 @@
             <x-input-select name="promoted" class="w-[100px]" options="0">
                 <option value="1" {!! old('promoted.'.$key, 1) == 1 ? "selected" : '' !!}>Yes</option>
                 <option value="0" {!! old('promoted.'.$key, 1) == 0 ? "selected" : '' !!}>No</option>
+                <option value="-1" {!! old('promoted.'.$key, 1) == -1 ? "selected" : '' !!}>Probation</option>
             </x-input-select>
         </td>
     @endif

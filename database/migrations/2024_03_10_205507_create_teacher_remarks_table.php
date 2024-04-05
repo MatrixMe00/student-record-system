@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string("conduct");
             $table->string("attitude");
             $table->enum("status", ["pending", "accepted", "rejected", "submitted"])->default("pending");
-            $table->boolean("promoted")->default(false);
+            $table->tinyInteger("promoted")->default(0);
             $table->timestamps();
         });
     }
