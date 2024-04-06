@@ -78,9 +78,7 @@ class GradesController extends Controller
                 $options = [
                     // "results" => $model->results->where("status","accepted")
                     "results" => $model->results->unique('program_id'),
-                    "active_payment" => Payment::where('student_id', Auth::user()->id)
-                                        ->where('expiry_date', ">", date("Y-m-d"))
-                                        ->orderBy('expiry_date', 'desc')->limit(1)->exists(),
+                    "active_payment" => session('payment_result'),
                     "payments" => Payment::where("student_id", Auth::user()->id)
                                          ->where("payment_type", "results")
                                          ->get()->sortByDesc('expiry_date')
