@@ -30,7 +30,7 @@
     </tbody>
 
     <tfoot>
-        <tr>
+        <tr class="border-y">
             <x-thead-data>Total Payments</x-thead-data>
             <x-table-data colspan="7">{{ $payments->count() }}</x-table-data>
         </tr>
