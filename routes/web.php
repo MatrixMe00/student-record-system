@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApproveresultsController;
+use App\Http\Controllers\DebtorsListController;
 use App\Http\Controllers\GradesController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaystackController;
@@ -106,6 +107,9 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     // paystack processing
     Route::get("/paystack/callback", [PaystackController::class, "callback"])->name("paystack.callback");
     Route::get("/paystack/success", [PaystackController::class, "success"])->name("paystack.success");
+
+    // bece controls
+    Route::get("/bece-menu", [DebtorsListController::class, "index"])->name("bece.all")->middleware("student.payment-debt");
 });
 
 // routes for just school admins
