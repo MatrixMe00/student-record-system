@@ -5,7 +5,7 @@
         {{-- <x-dashboard-card icon="fas fa-book-open-reader" context="{{ $subject_count }}" title="Subjects" /> --}}
         <x-dashboard-card icon="fas fa-clipboard-user" context="{{ $current_class }}" title="Current Class" />
         <x-dashboard-card icon="fas fa-clipboard-user" context="{{ $grade_value }}" title="Average Score" />
-        <x-dashboard-card icon="fas fa-clipboard-user" context="{{ $average_grade }}" title="Average Grade" />
+        <x-dashboard-card icon="fas fa-clipboard-user" context="{{ round($average_grade, 1) }}" title="Average Grade" />
         <x-dashboard-card icon="fas fa-clipboard-user" context="{{ $grade_description }}" title="Grade Description" />
 
     </div>
