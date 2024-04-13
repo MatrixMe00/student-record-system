@@ -8,7 +8,8 @@
         ["name" => "Classes", "route" => "program.all", "users" => [3]],
         ["name" => "Subjects", "route" => "subject.all", "users" => [3]],
         ["name" => "Results", "route" => "result.all", "users" => [3,4,5]],
-        ["name" => "Remarks", "route" => "remarks.all", "users" => [3,4]]
+        ["name" => "Remarks", "route" => "remarks.all", "users" => [3,4]],
+        ["name" => "BECE Menu", "route" => "bece.all", "users" => [3,5], 'class' => 'text-nowrap'],
     ];
     $menu_links = [
         // ["name" => "", "route" => ""]
@@ -33,10 +34,10 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex overflow-x-auto">
                     @foreach ($nav_links as $nav_link)
                         @if ($nav_link["users"] == [0] || in_array($user->role_id, $nav_link["users"]))
-                            <x-nav-link :href="route($nav_link['route'])" :active="request()->routeIs($nav_link['route'])">
+                            <x-nav-link :href="route($nav_link['route'])" :active="request()->routeIs($nav_link['route'])" class="{{ $nav_link['class'] ?? '' }}">
                                 {{ __($nav_link["name"]) }}
                             </x-nav-link>
                         @endif

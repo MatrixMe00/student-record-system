@@ -16,7 +16,7 @@
             @case(5)
                 <div>
                     @if (!$active_payment)
-                        <x-primary-button onclick="location.href='payment/create/results'">
+                        <x-primary-button onclick="location.href='{{ route('payment.create', ['type' => 'results']) }}'">
                             Make Payment
                         </x-primary-button>
                     @else
