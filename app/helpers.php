@@ -146,3 +146,19 @@ function format_academic_year(string $academic_year, bool $db_spacing = true) :s
 
     return $db_spacing ? "$p_year / $n_year" : "$p_year/$n_year";
 }
+
+/**
+ * This formats an array into an encoded data
+ * @return string
+ */
+function encode_array(array $data) :string{
+    return base64_encode(serialize($data));
+}
+
+/**
+ * This formats an encoded array from string to array
+ * @return array
+ */
+function decode_array(string $data) :array{
+    return unserialize(base64_decode($data));
+}
