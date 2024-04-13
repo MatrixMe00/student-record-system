@@ -133,3 +133,16 @@ function positionFormat(int $number):string{
 
     return "$number$suffix";
 }
+
+/**
+ * This formats a string of years into acceptable string format
+ * @param string $academic_year The academic year to be formatted
+ * @param bool $db_spacing If it should be formatted with spaces as seen in db
+ * @return string
+ */
+function format_academic_year(string $academic_year, bool $db_spacing = true) :string{
+    $academic_year = str_replace(" ", "", $academic_year);
+    list($p_year, $n_year) = array_values(explode("/", $academic_year));
+
+    return $db_spacing ? "$p_year / $n_year" : "$p_year/$n_year";
+}
