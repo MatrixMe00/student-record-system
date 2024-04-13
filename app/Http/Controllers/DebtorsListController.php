@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\DebtorsList;
 use App\Http\Requests\StoreDebtorsListRequest;
 use App\Http\Requests\UpdateDebtorsListRequest;
+use App\Models\BECECandidate;
+use App\Models\Program;
+use App\Models\Student;
+use Illuminate\Support\Facades\Auth;
 
 class DebtorsListController extends Controller
 {
@@ -13,7 +17,39 @@ class DebtorsListController extends Controller
      */
     public function index()
     {
-        //
+        //get options
+        $options = $this->index_options();
+
+        return view("bece.index", $options);
+    }
+
+    /**
+     * The options for the index page
+     */
+    private function index_options() :array{
+        $user = Auth::user();
+        $jhs3_id = Program::whereRaw("LOWER(name) = ?", ["jhs 3"])
+                          ->orWhereRaw("LOWER(name) = ?", ["jhs3"])->first();
+        $response = ["role_id" => $user->role_id, "jhs3_id" => $jhs3_id?->id];
+
+        switch($user->role_id){
+            case 3:
+                $response += [
+                    "students" => Student::where("program_id", $response["jhs3_id"])->get()
+                ];
+                break;
+            case 5:
+                $me = Student::find($user->id);
+                $response += [
+                    "jhs_valid" => $me->program_id == $response["jhs3_id"],
+                    "student" => BECECandidate::where("student_id", $me->user_id)->first()
+                ];
+                break;
+            default:
+                abort(403);
+        }
+
+        return $response;
     }
 
     /**
