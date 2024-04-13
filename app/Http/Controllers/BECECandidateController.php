@@ -66,8 +66,8 @@ class BECECandidateController extends Controller
                               ->orWhereRaw("LOWER(name) = ?", ["jhs3"])->first();
 
         if($program_id){
-            return Student::leftJoin("b_e_c_e_candidates", "students.user_id", "=", "b_e_c_e_candiates.student_id")
-                          ->whereNull("b_e_c_e_candidates.student_id")
+            return Student::leftJoin("bece_candidates", "students.user_id", "=", "b_e_c_e_candiates.student_id")
+                          ->whereNull("bece_candidates.student_id")
                           ->where("students.program_id", $program_id)
                           ->select("students.*")
                           ->get();

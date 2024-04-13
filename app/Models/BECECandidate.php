@@ -12,6 +12,7 @@ class BECECandidate extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $table = "bece_candidates";
 
     // Override the default newQuery method to add constraints
     public function newQuery($excludeDeleted = true)
