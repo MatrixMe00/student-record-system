@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\DebtorsList;
 use App\Models\Payment;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -84,6 +85,10 @@ class AuthenticatedSessionController extends Controller
                                  ->where('expiry_date', ">", date("Y-m-d"))
                                  ->where('payment_type', 'results')
                                  ->orderBy('expiry_date', 'desc')->limit(1)->exists();
+                break;
+            case "debt":
+                $status = DebtorsList::where('student_id', $this->user->id)
+                                     ->where('status', true)->exists();
                 break;
             default:
                 $status = Payment::where('student_id', $this->user->id)

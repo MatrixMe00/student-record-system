@@ -24,7 +24,7 @@ class PaymentController extends Controller
      */
     public function create($type = "")
     {
-        if(!in_array($type, ["debt","results"])){
+        if(!in_array($type, ["debt","results", "bece"], true)){
             abort(404, "Invalid form type");
         }
 
