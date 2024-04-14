@@ -9,7 +9,13 @@
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                         @if ($btn_text)
-                            <button class="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" {{ $btnaction }}>{{ __($btn_text) }}</button>
+                            @if (is_array($btn_text))
+                                @foreach ($btn_text as $pos => $btn)
+                                    <x-primary-button  type="button" onclick="{{ is_array($btnaction) ? $btnaction[$pos] : $btnaction }}" >{{ __($btn) }}</x-primary-button>
+                                @endforeach
+                            @else
+                                <x-primary-button  type="button" onclick="{{ $btnaction }}" >{{ __($btn_text) }}</x-primary-button>
+                            @endif
                         @else
                             @yield('button')
                         @endif
@@ -24,7 +30,11 @@
                     <thead>
                         <tr>
                             @foreach ($thead as $data)
-                                <x-thead-data message="{{ $data }}" />
+                                @if (is_array($data))
+                                    <x-thead-data :class="$data['class'] :message="$data['value']" /">
+                                @else
+                                    <x-thead-data message="{{ $data }}" />
+                                @endif
                             @endforeach
                         </tr>
                     </thead>
