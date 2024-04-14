@@ -1,5 +1,5 @@
-@props(["maintitle" => "", "subtitle" => ""])
-<div {{ $attributes->merge(["class"=>"flex items-center w-full p-8 mx-auto lg:px-12"]) }} x-data="{ selected_role:'{{ old('role_id') }}', email_val:'{{ old('email') }}' }" x-init="email_val='{{ old('email') }}'">
+@props(["maintitle" => "", "subtitle" => "", "padding" => "p-8 lg:px-12", "showErrors" => true])
+<div {{ $attributes->merge(["class"=>"flex items-center w-full $padding mx-auto"]) }}>
     <div class="w-full">
         <h1 class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
             @yield("main-title", $maintitle)
@@ -9,7 +9,7 @@
             @yield("sub-title", $subtitle)
         </p>
 
-        @if ($errors->any())
+        @if ($errors->any() && $showErrors)
             <x-input-error :messages="$errors->all()" />
         @endif
 

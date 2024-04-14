@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string("secondary_phone")->nullable();
             $table->foreignId("school_id")->nullable()->constrained()->nullOnDelete();
             $table->foreignId("program_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->boolean("completed")->default(false);
             $table->timestamps();
         });
     }

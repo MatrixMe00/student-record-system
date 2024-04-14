@@ -138,6 +138,9 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
     Route::get("/teacher/subject-assign/{teacher}", [TeacherClassController::class, "create"]);
     Route::get("/teacher/assign-delete/{subject}", [TeacherClassController::class, "destroy"]);
     Route::post("/teacher/subject-assign", [TeacherClassController::class, "store"])->name("teacher.assign-subject");
+
+    // debtors list
+    Route::post("/debt-list/store", [DebtorsListController::class, "store"])->name("debtlist.store");
 });
 
 require __DIR__.'/auth.php';

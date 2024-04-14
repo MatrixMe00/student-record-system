@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string("student_token")->unique();
             $table->mediumText("placement")->nullable()->comment("Hashed value of the placement details");
             $table->string("academic_year");
+            $table->boolean("status")->default(true);
             $table->timestamps();
         });
     }

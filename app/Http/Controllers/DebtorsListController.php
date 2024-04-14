@@ -6,9 +6,11 @@ use App\Models\DebtorsList;
 use App\Http\Requests\StoreDebtorsListRequest;
 use App\Http\Requests\UpdateDebtorsListRequest;
 use App\Models\BECECandidate;
+use App\Models\BECEResults;
 use App\Models\Program;
 use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class DebtorsListController extends Controller
 {
@@ -35,14 +37,37 @@ class DebtorsListController extends Controller
         switch($user->role_id){
             case 3:
                 $response += [
-                    "students" => Student::where("program_id", $response["jhs3_id"])->get()
+                    "candidates" => BECECandidate::where("status", true)
+                                               ->orderBy("created_at", "desc")
+                                               ->get()
+                                               ->groupBy("academic_year")->map(function($items, $key){
+                                                    return [
+                                                        "title" => $key,
+                                                        "id" => format_academic_year($key, false),
+                                                        "data" => $items
+                                                    ];
+                                               }),
+                    "students" => Student::where("program_id", $response["jhs3_id"])
+                                         ->where("completed", false)->get(),
+                    "debtors" => DebtorsList::where("status", true)->get(),
+                    "tags" => [
+                        ["id" => "jhs3", "name" => "JHS3 Students"],
+                        ["id" => "debt", "name" => "Debtors List"],
+                        ["id" => "bece", "name" => "BECE Candidates"]
+                    ],
+                    "icons" => [
+                        "jhs3" => "fas fa-user-graduate", "debt" => "fas fa-file-invoice-dollar", "bece" => "fas fa-graduation-cap"
+                    ]
                 ];
+
+                $response["current_candidates"] = isset($response["candidates"][0]) ? $response["candidates"][0]["data"]->count() : 0;
                 break;
             case 5:
                 $me = Student::find($user->id);
                 $response += [
                     "jhs_valid" => $me->program_id == $response["jhs3_id"],
-                    "student" => BECECandidate::where("student_id", $me->user_id)->first()
+                    "student" => BECECandidate::where("student_id", $me->user_id)->first(),
+                    "results" => BECEResults::where("student_id", $me->user_id)->get()
                 ];
                 break;
             default:
@@ -66,7 +91,31 @@ class DebtorsListController extends Controller
     public function store(StoreDebtorsListRequest $request)
     {
         $validated = $request->validated();
-        $data = array_slice($validated, 1);
+
+        $array = array_slice($validated, 1);
+        $pos = -1;
+        $total_students = count($validated["id"]);
+        $n_stud_count = 0;
+
+        while(++$pos < $total_students){
+            if($array["id"][$pos] > 0){
+                $data = ["amount" => $array["amount"][$pos]];
+
+                $debtor = DebtorsList::find($array["id"][$pos]);
+
+                if($debtor){
+                    $debtor->amount = $array["amount"][$pos];
+                    $debtor->update();
+                }
+            }else{
+                DebtorsList::create([
+                    "school_id" => $validated["school_id"], "student_id" => $array["student_id"][$n_stud_count++],
+                    "amount" => $array["amount"][$pos]
+                ]);
+            }
+        }
+
+        return redirect()->back()->with(["success" => true, "message" => "Debtors list updated"]);
     }
 
     /**

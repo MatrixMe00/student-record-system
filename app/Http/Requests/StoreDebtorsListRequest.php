@@ -27,8 +27,8 @@ class StoreDebtorsListRequest extends FormRequest
         return [
             "school_id" => ["required", "integer", Rule::exists("schools", "id")],
             "id.*" => ["sometimes", "integer"],
-            "student_id.*" => ["required", "integer", Rule::exists("students", "user_id")],
-            "amount.*" => ["required", "decimal:0,9999"],
+            "student_id.*" => ["required", "integer", Rule::exists("students", "user_id"), Rule::unique("debtors_lists","student_id")],
+            "amount.*" => ["required", "numeric", "min:1", "decimal:0,2"],
             "status.*" => ["sometimes", "boolean"]
         ];
     }

@@ -28,7 +28,7 @@ class StoreBECECandidateRequest extends FormRequest
             "student_id" => ["required", "integer", "min:1", Rule::exists("students", "user_id")],
             "school_id" => ["required", "integer", "min:1", Rule::exists("schools", "id")],
             "index_number" => ["sometimes", "required", "numeric"],
-            "student_token" => ["required", "string", Rule::unique("b_e_c_e_candidates", "student_token")],
+            "student_token" => ["required", "string", Rule::unique("bece_candidates", "student_token")],
             "placement" => ["sometimes", "string"],
             "academic_year" => ["required", "string"]
         ];
