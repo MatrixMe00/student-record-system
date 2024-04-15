@@ -1,4 +1,4 @@
-@props(["message", "success" => true])
+@props(["message", "success" => true, "time" => 3500])
 
 @php
     $success = $success ? "bg-green-200 border-green-500" : "bg-red-200 border-red-500"
@@ -7,5 +7,5 @@
     x-data="{ show: true }"
     x-show="show"
     x-transition
-    x-init="setTimeout(() => show = false, 3500)"
+    x-init="setTimeout(() => show = false, {{ $time }})"
 >{{ $message ?? $slot }}</p>

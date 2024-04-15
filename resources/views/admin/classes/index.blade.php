@@ -7,11 +7,7 @@
 
     <x-app-main class="mt-4">
         {{-- show the success message after creation --}}
-        @session('success')
-            <x-session-message class="mb-2">
-                {{ __(session('message')) }}
-            </x-session-message>
-        @endsession
+        <x-session-component />
 
         {{-- add a class --}}
         <x-primary-button

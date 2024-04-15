@@ -205,7 +205,7 @@ class TeacherRemarksController extends Controller
                     ->where("transferred", false)->where("status", "accepted")
                     ->get();
 
-        if($remarks){
+        if($remarks->count() > 0){
             foreach($remarks as $program){
                 $students = TeacherRemarks::where("remark_token", $program->remark_token)->get();
                 $new_class = $program->promotion_class;
