@@ -14,12 +14,16 @@
                     type="button">
                     {{ __("Add New User") }}
                 </x-primary-button>
-                <x-primary-button
-                    x-data=""
-                    x-on:click.prevent="$dispatch('open-modal', 'add-multiple')"
-                    type="button">
-                    {{ __("Add Multiple Users") }}
-                </x-primary-button>
+
+                @if (auth()->user()->role_id == 3)
+                    <x-primary-button
+                        x-data=""
+                        x-on:click.prevent="$dispatch('open-modal', 'add-multiple')"
+                        type="button">
+                        {{ __("Add Multiple Users") }}
+                    </x-primary-button>
+                @endif
+
 
                 @if (auth()->user()->role_id == 3)
                     <a href="{{ route('subject.assign') }}">
