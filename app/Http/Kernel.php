@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'student.payment-result' => \App\Http\Middleware\CheckStudentResultPayment::class,
         'student.payment-debt' => \App\Http\Middleware\CheckStudentDebtPayment::class,
         'system.admin' => \App\Http\Middleware\SuperAdminLevel::class,
+        "admin" => \App\Http\Middleware\AdminLevel::class,
     ];
 }

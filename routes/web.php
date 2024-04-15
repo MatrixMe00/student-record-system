@@ -113,14 +113,17 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get("/bece-menu", [DebtorsListController::class, "index"])->name("bece.all")->middleware("student.payment-debt");
 });
 
-// routes for just school admins
-Route::middleware(['auth','school.check','school.admin'])->group(function(){
+// routes for any admin
+Route::middleware(["auth", "school.check", "admin"])->group(function(){
     // users
     Route::get("/users", [UserController::class, 'index'])->name("users.all");
     Route::post('users/add', [UserController::class,  'multi_add'])->name("users.add");
     Route::get("/user/{username}/edit", [UserController::class, "edit"]);
     Route::put("/user/{username}/edit", [UserController::class, "update"]);
+});
 
+// routes for just school admins
+Route::middleware(['auth','school.check','school.admin'])->group(function(){
     // programs
     Route::get("/classes", [ProgramController::class, 'index'])->name("program.all");
     Route::post("/class/add", [ProgramController::class, 'store'])->name("add-program");
@@ -153,7 +156,8 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
 // routes for only system admins
 Route::middleware(['auth', 'system.admin'])->group(function(){
     // superadmin school assess pages
-    Route::get("/schools", [SchoolController::class, "show"])->name("admin.schools");
+    Route::get("/schools", [SchoolController::class, "index"])->name("admin.schools");
+    Route::get("/schools/{school}", [SchoolController::class, "show"])->name("admin.school.show");
 });
 
 require __DIR__.'/auth.php';

@@ -100,7 +100,12 @@ function create_id() :string{
  * @param int $school_id This is the school id of the user logged in
  * @return string returns a formated index number
  */
-function generateIndexNumber(int $school_id):string{
+function generateIndexNumber(?int $school_id):string{
+    // stop execution if so school
+    if(is_null($school_id)){
+        return "";
+    }
+
     $student_count = Student::all()->count();
 
     do{

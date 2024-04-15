@@ -65,7 +65,7 @@ class UserController extends Controller
             "options" => $options,
             "roles" => $roles, "school_id" => $school_id,
             "programs" => $user->role_id == 3 ?
-                Program::all(["id", "name"])->toArray() : null,
+                Program::all(["id", "name"])->toArray() : [],
             "index_number" => generateIndexNumber(session('school_id'))
         ]);
     }

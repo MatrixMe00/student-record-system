@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckSchoolAdmin
+class AdminLevel
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,8 @@ class CheckSchoolAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth()->user()->role_id == 3){
+        // allow only admins
+        if(auth()->user()->role_id <= 3){
             return $next($request);
         }
         else{

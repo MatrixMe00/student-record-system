@@ -7,6 +7,7 @@ use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
 use App\Models\Admin;
 use App\Models\SchoolAdmin;
+use Illuminate\Support\Facades\Auth;
 
 class SchoolController extends Controller
 {
@@ -15,9 +16,14 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        return view('home.schools', [
-            "schools" => School::all()
-        ]);
+        $schools = School::all();
+
+        if(Auth::user()){
+            return view('superadmin.schools', ["schools" => $schools]);
+        }else{
+            return view('home.schools', ["schools" => $schools]);
+        }
+
     }
 
     /**
