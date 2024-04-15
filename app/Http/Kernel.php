@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'school.check' => \App\Http\Middleware\CheckForSchool::class,
         'school.admin' => \App\Http\Middleware\CheckSchoolAdmin::class,
         'student.payment-result' => \App\Http\Middleware\CheckStudentResultPayment::class,
-        'student.payment-debt' => \App\Http\Middleware\CheckStudentDebtPayment::class
+        'student.payment-debt' => \App\Http\Middleware\CheckStudentDebtPayment::class,
+        'system.admin' => \App\Http\Middleware\SuperAdminLevel::class,
     ];
 }

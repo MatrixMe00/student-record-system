@@ -150,4 +150,10 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
     Route::post("/students/promote", [TeacherRemarksController::class, "promote"])->name("students.promote");
 });
 
+// routes for only system admins
+Route::middleware(['auth', 'system.admin'])->group(function(){
+    // superadmin school assess pages
+    Route::get("/schools", [SchoolController::class, "show"])->name("admin.schools");
+});
+
 require __DIR__.'/auth.php';
