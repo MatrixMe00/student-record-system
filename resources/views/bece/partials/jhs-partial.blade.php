@@ -1,3 +1,5 @@
+<x-session-component />
+
 @if ($students->count() > 0)
     @php
         $thead = ["School ID No.", "Lastname", "Othernames", "Overall Average Score"];

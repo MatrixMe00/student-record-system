@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApproveresultsController;
+use App\Http\Controllers\BECECandidateController;
 use App\Http\Controllers\DebtorsListController;
 use App\Http\Controllers\GradesController;
 use App\Http\Controllers\PaymentController;
@@ -141,6 +142,9 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
 
     // debtors list
     Route::post("/debt-list/store", [DebtorsListController::class, "store"])->name("debtlist.store");
+
+    // bece candidates
+    Route::post("/prepare-candidates", [BECECandidateController::class, "create_candidates"])->name("candidates.create");
 });
 
 require __DIR__.'/auth.php';

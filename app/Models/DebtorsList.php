@@ -29,8 +29,4 @@ class DebtorsList extends Model
     public function student() :BelongsTo{
         return $this->belongsTo(Student::class, "student_id");
     }
-
-    protected $casts = [
-        "id" => "string"
-    ];
 }

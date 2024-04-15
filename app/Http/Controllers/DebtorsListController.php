@@ -115,7 +115,7 @@ class DebtorsListController extends Controller
             }
         }
 
-        return redirect()->back()->with(["success" => true, "message" => "Debtors list updated"]);
+        return redirect()->back()->with(["success" => true, "message" => "Debtors list updated", "type" => "debt"]);
     }
 
     /**

@@ -36,12 +36,12 @@ class BECECandidateController extends Controller
         if($request->is_new){
             $request->merge([
                 "student_token" => create_id(),
-                "academic_year" => format_academic_year(date("d-m-Y"))
+                "academic_year" => format_academic_year(get_academic_year(date("d-m-Y")))
             ]);
         }
 
         // validate the request
-        $validated = $request->validated();
+        $validated = $request->validate($request->rules());
 
         // create a new candidate instance
         $candidate = new BECECandidate($validated);
@@ -66,19 +66,19 @@ class BECECandidateController extends Controller
                               ->orWhereRaw("LOWER(name) = ?", ["jhs3"])->first();
 
         if($program_id){
-            return Student::leftJoin("bece_candidates", "students.user_id", "=", "b_e_c_e_candiates.student_id")
-                          ->whereNull("bece_candidates.student_id")
+            $program_id = $program_id->id;
+            return Student::leftJoin("bece_candidates", "students.user_id", "=", "bece_candidates.student_id")
                           ->where("students.program_id", $program_id)
                           ->select("students.*")
                           ->get();
-        }else{
-            return redirect()->back()->with(["success" => false, "message" => "JHS 3 Class not found"]);
         }
+
+        return null;
     }
 
     public function update_candidates(Request $request){
         foreach($request->id as $key => $id){
-            $n_request = new UpdateBECECandidateRequest(attributes:[
+            $n_request = new UpdateBECECandidateRequest(request:[
                 "id" => $id,
                 "student_id" => $request->student_id[$key],
                 "index_number" => $request->index_number[$key] ?? null,
@@ -97,9 +97,10 @@ class BECECandidateController extends Controller
     public function create_candidates(){
         $candidates = $this->get_candidates();
 
-        if($candidates->count() > 0){
+        if($candidates?->count() > 0){
             foreach($candidates as $candidate){
-                $request = new StoreBECECandidateRequest(attributes: [
+                $request = new StoreBECECandidateRequest();
+                $request->merge([
                     "student_id" => $candidate->user_id,
                     "school_id" => session('school_id'),
                     "is_new" => true
@@ -108,8 +109,11 @@ class BECECandidateController extends Controller
                 // store user data
                 $this->store($request);
             }
+
+            return redirect()->back()->with(["success" => true, "message" => "{$candidates->count()} candidates created", "type" => "bece"]);
         }else{
-            return redirect()->back()->with(["success" => false, "message" => "No JHS3 students were found"]);
+            $message = is_null($candidates) ? "JHS 3 Class not found" : "No new JHS3 students were found";
+            return redirect()->back()->with(["success" => false, "message" => $message, "type" => "bece"]);
         }
     }
 
