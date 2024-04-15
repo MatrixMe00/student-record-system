@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string("academic_year");
             $table->boolean("is_promotion")->default(false);
             $table->integer("promotion_class")->default(-1);
+            $table->boolean("transferred")->default(false);
             $table->timestamps();
         });
     }

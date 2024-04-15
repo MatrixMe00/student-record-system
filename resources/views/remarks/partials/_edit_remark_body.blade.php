@@ -1,5 +1,5 @@
 <h1 class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
-    {{ __($program->name.' result summary list') }}
+    {{ __($program->name.' result summary list [Term '.$remark_head->semester.']') }}
 </h1>
 
 <x-form-element mdcols="" action="{{ route('remarks.store') }}" method="POST">

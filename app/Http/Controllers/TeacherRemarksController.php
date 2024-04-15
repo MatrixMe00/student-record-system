@@ -10,6 +10,7 @@ use App\Models\RemarkOptions;
 use App\Models\Teacher;
 use App\Models\TeachersRemark;
 use App\Traits\UserModelTrait;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -195,5 +196,40 @@ class TeacherRemarksController extends Controller
     public function destroy(TeacherRemarks $teacherRemarks)
     {
         //
+    }
+
+    // promote students
+    public function promote(Request $request){
+        $remarks = TeachersRemark::where("academic_year", $request->academic_year)
+                    ->where("semester", 3)->where("is_promotion", true)
+                    ->where("transferred", false)->where("status", "accepted")
+                    ->get();
+
+        if($remarks){
+            foreach($remarks as $program){
+                $students = TeacherRemarks::where("remark_token", $program->remark_token)->get();
+                $new_class = $program->promotion_class;
+
+                if($students){
+                    foreach($students as $student){
+                        $student = $student->student;
+                        $student->program_id = $new_class;
+
+                        if($new_class == 0){
+                            $student->completed = true;
+                        }
+
+                        $student->update();
+                    }
+                }
+
+                // mark this program as been transferred
+                $program->transferred = true;
+                $program->update();
+            }
+            return redirect()->back()->with(["success" => true, "message" => "Promotion occured for ".$remarks->count()." classes"]);
+        }else{
+            return redirect()->back()->with(["success" => false, "message" => "No promotion class record is available for this academic year"]);
+        }
     }
 }

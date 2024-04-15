@@ -35,7 +35,7 @@ class TeacherRemarks extends Model
 
     // belongs to a student
     public function student() :BelongsTo{
-        return $this->belongsTo(Student::class, "student_id", "user_id");
+        return $this->belongsTo(Student::class, "student_id");
     }
 
     // belongs to a program

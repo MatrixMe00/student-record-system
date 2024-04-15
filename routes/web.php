@@ -145,6 +145,9 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
 
     // bece candidates
     Route::post("/prepare-candidates", [BECECandidateController::class, "create_candidates"])->name("candidates.create");
+
+    // promote students
+    Route::post("/students/promote", [TeacherRemarksController::class, "promote"])->name("students.promote");
 });
 
 require __DIR__.'/auth.php';
