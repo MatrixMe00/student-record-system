@@ -1,8 +1,13 @@
-@props(["title", "item_id", "path_head", "sub_title" => "", "content" => null, "avatar_url" => "", "extras" => [], "editable" => true, "card_link" => "javascript:void(0)", "removable" => true])
+@props([
+        "title", "item_id", "path_head", "sub_title" => "", "content" => null,
+        "avatar_url" => "", "extras" => [], "editable" => true, "card_link" => "javascript:void(0)",
+        "image_size" => "", "removable" => true, "view_text" => "View", "edit_text" => "Edit",
+        "delete_text" => "Delete"
+    ])
 
 <a
   href="{{ $card_link }}"
-  {!! $attributes->merge(["class"=>"relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8"]) !!}
+  {{ $attributes->merge(["class"=>"relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8"]) }}
 >
 
   <span
@@ -38,26 +43,37 @@
   </div>
 
   @if (!empty($extras))
-    <dl class="mt-6 flex gap-4 sm:gap-6">
-        @foreach ($extras as $extra)
-            <div class="flex flex-col-reverse">
-                <dt class="text-sm font-medium text-gray-600">{{ __($extra["title"]) }}</dt>
-                <dd class="text-xs text-gray-500">{{ __($extra["content"]) }}</dd>
-            </div>
-        @endforeach
+    <dl class="mt-6 flex flex-wrap gap-4 sm:gap-6">
+        @if (isset($extras[0]["title"]))
+            @foreach ($extras as $extra)
+                <div class="flex flex-col-reverse">
+                    <dt class="text-sm font-medium text-gray-600">{{ __($extra["title"]) }}</dt>
+                    <dd class="text-xs text-gray-500">{{ __($extra["content"]) }}</dd>
+                </div>
+            @endforeach
+
+        @else
+            @foreach ($extras as $extra)
+                <div class="flex flex-col-reverse">
+                    <dt class="text-sm font-medium text-gray-600">{{ __($extra[0]) }}</dt>
+                    <dd class="text-xs text-gray-500">{{ __($extra[1]) }}</dd>
+                </div>
+            @endforeach
+        @endif
+
     </dl>
   @endif
   <div class="flex gap-2 text-sm mt-6">
     @if ($editable)
-        <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/edit'">Edit</span>
+        <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/edit'">{{ __($edit_text) }}</span>
     @elseif ($card_link != "javascript:void(0)")
-        <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='{{ $card_link }}'">View</span>
+        <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='{{ $card_link }}'">{{ __($view_text) }}</span>
     @else
-        <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/show'">View</span>
+        <span class="cursor-pointer text-blue-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/show'">{{ __($view_text) }}</span>
     @endif
 
     @if ($removable)
-        <span class="cursor-pointer text-red-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/delete'">Delete</span>
+        <span class="cursor-pointer text-red-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/delete'">{{ __($delete_text) }}</span>
     @endif
   </div>
 </a>

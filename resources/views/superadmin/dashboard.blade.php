@@ -6,10 +6,10 @@
         @if (Auth::user()->role_id == 1)
             <x-dashboard-card icon="fas fa-user-secret" context="{{ $superadmin_count }}" title="Developers" />
         @endif
-        <x-dashboard-card icon="fas fa-user-lock" context="{{ $superadmin_count }}" title="Superadmins" />
-        <x-dashboard-card icon="fas fa-user-tie" context="{{ $admin_count }}" title="Admins" />
-        <x-dashboard-card icon="fas fa-chalkboard-user" context="{{ $teacher_count }}" title="Teachers" />
-        <x-dashboard-card icon="fas fa-user-graduate" context="{{ $student_count }}" title="Students" />
-        <x-dashboard-card icon="fas fa-user-minus" context="{{ $delete_count }}" title="Deleted Users" />
+        <x-dashboard-card icon="fas fa-user-lock" context="{{ __(round_number($superadmin_count)) }}" title="Superadmins" />
+        <x-dashboard-card icon="fas fa-user-tie" context="{{ __(round_number($admin_count)) }}" title="Admins" />
+        <x-dashboard-card icon="fas fa-chalkboard-user" context="{{ __(round_number($teacher_count)) }}" title="Teachers" />
+        <x-dashboard-card icon="fas fa-user-graduate" context="{{ __(round_number($student_count)) }}" title="Students" />
+        <x-dashboard-card icon="fas fa-user-minus" context="{{ __(round_number($delete_count)) }}" title="Deleted Users" />
     </div>
 </x-app-main>

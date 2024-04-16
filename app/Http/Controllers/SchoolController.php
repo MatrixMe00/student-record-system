@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateSchoolRequest;
 use App\Models\Admin;
 use App\Models\SchoolAdmin;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class SchoolController extends Controller
 {
@@ -78,6 +79,19 @@ class SchoolController extends Controller
     public function show(School $school)
     {
         //
+    }
+
+    /**
+     * Made for superadmin to see a menu of a school
+     */
+    public function school_menu($school_id){
+        $school = School::findOrFail(Crypt::decryptString($school_id));
+
+        if(!$school){
+            abort(404);
+        }
+
+        return view('superadmin.school', ["school"=>$school]);
     }
 
     /**

@@ -157,7 +157,7 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
 Route::middleware(['auth', 'system.admin'])->group(function(){
     // superadmin school assess pages
     Route::get("/schools", [SchoolController::class, "index"])->name("admin.schools");
-    Route::get("/schools/{school}", [SchoolController::class, "show"])->name("admin.school.show");
+    Route::get("/school-menu/{school_id}", [SchoolController::class, "school_menu"])->name("school.menu");
 });
 
 require __DIR__.'/auth.php';

@@ -6,12 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Crypt;
 
 class School extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
+
+    /**
+     * creates an encrypted version of the id
+     * @return string|null
+     */
+    public function getProtectedIdAttribute(){
+        if($this->id == null){
+            return null;
+        }
+
+        return Crypt::encryptString($this->id);
+    }
 
     // students
     public function students() :HasMany{
@@ -46,5 +59,10 @@ class School extends Model
     // school has a list of subjects
     public function subjects() :HasMany{
         return $this->hasMany(Subject::class);
+    }
+
+    // school admin
+    public function admin() :HasOne{
+        return $this->hasOne(SchoolAdmin::class, "user_id", "admin_id");
     }
 }

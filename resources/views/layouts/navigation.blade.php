@@ -10,6 +10,7 @@
         ["name" => "Results", "route" => "result.all", "users" => [3,4,5]],
         ["name" => "Remarks", "route" => "remarks.all", "users" => [3,4]],
         ["name" => "BECE Menu", "route" => "bece.all", "users" => [3,5], 'class' => 'text-nowrap'],
+        ["name" => "School Management", "route" => "admin.schools", "users" => [1,2]]
     ];
     $menu_links = [
         // ["name" => "", "route" => ""]
