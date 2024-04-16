@@ -6,32 +6,42 @@
     <div class="mt-6 border-t border-gray-100">
       <dl class="divide-y divide-gray-100">
         {{-- school overview --}}
-        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            <x-dl-data title="School Name" content="{{ $school->school_name }}" />
-            <x-dl-data title="School Alias" content="{{ $school->school_slug ?? 'N/A' }}" />
-            <x-dl-data title="Circuit" content="{{ $school->circuit }}" />
-            <x-dl-data title="District" content="{{ $school->district ?? 'N/A' }}" />
-            <x-dl-data title="School Type" content="{{ ucfirst($school->school_type) }}" />
-            <x-dl-data title="School Email" content="{{ $school->school_email }}" />
-            <x-dl-data title="GPS Address" content="{{ $school->gps_address }}" />
-            <x-dl-data title="Box Number" content="{{ $school->box_number }}" />
+        <div>
+            <h2 class="uppercase border-b w-fit pb-2 mt-2">Overview</h2>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <x-dl-data title="School Name" content="{{ $school->school_name }}" />
+                <x-dl-data title="School Alias" content="{{ $school->school_slug ?? 'N/A' }}" />
+                <x-dl-data title="Circuit" content="{{ $school->circuit }}" />
+                <x-dl-data title="District" content="{{ $school->district ?? 'N/A' }}" />
+                <x-dl-data title="School Type" content="{{ ucfirst($school->school_type) }}" />
+                <x-dl-data title="School Email" content="{{ $school->school_email }}" />
+                <x-dl-data title="GPS Address" content="{{ $school->gps_address }}" />
+                <x-dl-data title="Box Number" content="{{ $school->box_number }}" />
+            </div>
         </div>
 
         {{-- admin and headmaster --}}
-        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            @php
-                $admin = $school->admin;
-            @endphp
-            <x-dl-data title="School Head" content="{{ $school->school_head }}" />
-            <x-dl-data title="School Admin" content="{{ $admin->lname.' '.$admin->oname }}" />
+        <div>
+            <h2 class="uppercase border-b w-fit pb-2">Authorities</h2>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                @php
+                    $admin = $school->admin;
+                @endphp
+                <x-dl-data title="School Head" content="{{ $school->school_head }}" />
+                <x-dl-data title="School Admin" content="{{ $admin->lname.' '.$admin->oname }}" />
+            </div>
         </div>
 
+
         {{-- metrics --}}
-        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            <x-dl-data title="Total Students" content="{{ $school->students->count() }}" />
-            <x-dl-data title="Total Teachers" content="{{ $school->teachers->count() }}" />
-            <x-dl-data title="Registered Classes" content="{{ $school->programs->count() }}" />
-            <x-dl-data title="Registered Subjects" content="{{ $school->subjects->count() }}" />
+        <div>
+            <h2 class="uppercase border-b w-fit pb-2">Metrics</h2>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <x-dl-data title="Total Students" content="{{ $school->students->count() }}" />
+                <x-dl-data title="Total Teachers" content="{{ $school->teachers->count() }}" />
+                <x-dl-data title="Registered Classes" content="{{ $school->programs->count() }}" />
+                <x-dl-data title="Registered Subjects" content="{{ $school->subjects->count() }}" />
+            </div>
         </div>
 
         {{-- school description --}}
