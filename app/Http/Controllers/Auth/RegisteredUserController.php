@@ -18,6 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -42,6 +43,18 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // secret key should be given
+        $new_system = isset($request->setup_system) ? true : false;
+
+        if($new_system){
+            $admin_secret = password_hash(env('SYSTEM_SECRET'), PASSWORD_BCRYPT);
+            if(password_verify($admin_secret, $request->admin_secret)){
+                throw ValidationException::withMessages([
+                    "admin_secret" => "Invalid System Password provided"
+                ]);
+            }
+        }
+
         $email_required = $request->role_id == 5 ? "nullable" : "required";
         $user = $request->validate([
             'username' => ['required', 'string', 'unique:'.User::class],
@@ -59,7 +72,6 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        $new_system = isset($request->setup_system) ? true : false;
         $new_school = isset($request->new_school) ? true : false;
         $non_submit = isset($request->non_submit) ? true : false;
 

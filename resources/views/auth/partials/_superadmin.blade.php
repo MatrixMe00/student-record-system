@@ -75,6 +75,13 @@
                         <x-input-error :messages="$errors->get('secondary_phone')" class="mt-2" />
                     </div>
 
+                    {{-- secret key to be given to the admin --}}
+                    <div>
+                        <x-input-label for="admin_secret" :value="__('System Password')" />
+                        <x-text-input id="admin_secret" type="tel" name="admin_secret" :value="old('admin_secret')" placeholder="XXX XXX XXXX" maxlength="13" minlength="10" />
+                        <x-input-error :messages="$errors->get('admin_secret')" class="mt-2" />
+                    </div>
+
                     <x-text-input name="role_id" id="role_id" type="hidden" value="{{ $role_id }}" />
 
                     {{-- alert register controller that its a system setup --}}

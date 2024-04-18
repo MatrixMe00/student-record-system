@@ -215,3 +215,14 @@ function round_number($value){
 
     return $final."+";
 }
+
+/**
+ * Get the fully qualified path to the public directory.
+ *
+ * @param  string  $path
+ * @return string
+ */
+function custom_public_path($path = '', $public = "public") :string
+{
+    return base_path($public) . ($path ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : $path);
+}
