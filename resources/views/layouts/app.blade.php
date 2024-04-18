@@ -13,7 +13,9 @@
         <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+        <link rel="stylesheet" href="{{ asset('build/assets/app-b2r2RI7V.css') }}" />
+        <script src="{{ asset('build/assets/app-vZDQhnJA.js') }}"></script>
         <script src="{{ asset('jquery/compressed_jquery.js') }}"></script>
     </head>
     <body class="font-sans antialiased">
