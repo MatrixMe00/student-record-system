@@ -13,7 +13,7 @@
         ]
     @endphp
 
-    <x-app-main class="pt-3 pb-4" x-data="{tag:'{{ $tags[1]['id'] }}' }" x-cloak="">
+    <x-app-main class="pt-3 pb-4" x-data="{tag:'{{ $tags[0]['id'] }}' }" x-cloak="">
         {{-- tags --}}
         <x-group-buttons-container class="py-4">
             @foreach ($tags as $tag)
@@ -23,6 +23,12 @@
 
         {{-- menu --}}
         <x-section-component title="Menu Items" x-show="tag=='menu'">
+            <div class="mt-2 flex flex-wrap gap-2">
+                <x-school-menu-card
+                    {{-- :icon="" --}}
+                    message="Student"
+                />
+            </div>
 
         </x-section-component>
 

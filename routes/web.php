@@ -156,7 +156,7 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
 // routes for only system admins
 Route::middleware(['auth', 'system.admin'])->group(function(){
     // superadmin school assess pages
-    Route::get("/schools", [SchoolController::class, "index"])->name("admin.schools");
+    Route::get("/admin-schools", [SchoolController::class, "index"])->name("admin.schools");
     Route::get("/school-menu/{school_id}", [SchoolController::class, "school_menu"])->name("school.menu");
 });
 
