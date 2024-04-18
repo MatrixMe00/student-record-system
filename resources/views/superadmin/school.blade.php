@@ -23,10 +23,9 @@
 
         {{-- menu --}}
         <x-section-component title="Menu Items" x-show="tag=='menu'">
-            <div class="mt-2 flex flex-wrap gap-2">
+            <div class="mt-2 text-6 flex flex-wrap gap-2">
                 <x-school-menu-card
-                    {{-- :icon="" --}}
-                    message="Student"
+                    message="BECE Candidates"
                 />
             </div>
 

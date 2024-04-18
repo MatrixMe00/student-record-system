@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }} {{ " | " }} @yield('title', ucwords(request()->route()->getName()))</title>
+        <title>{{ config('app.name', 'EduRecordsGH') }} {{ " | " }} @yield('title', ucwords(request()->route()->getName()))</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -13,9 +13,14 @@
         <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-        {{-- <link rel="stylesheet" href="{{ asset('build/assets/app-b2r2RI7V.css') }}" />
-        <script src="{{ asset('build/assets/app-vZDQhnJA.js') }}"></script> --}}
+        @if (env('APP_URL') == "http://localhost")
+            @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @else
+            <link rel="stylesheet" href="{{ asset('assets/app.css') }}" />
+            <script src="{{ asset('assets/app.js') }}"></script>
+            <script src="{{ asset('assets/alpine.js') }}"></script>
+        @endif
+
         <script src="{{ asset('jquery/compressed_jquery.js') }}"></script>
     </head>
     <body class="font-sans antialiased">

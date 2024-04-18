@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ config('app.name', 'Laravel') }} | HomePage</title>
+        <title>{{ config('app.name', 'EduRecordsGH') }} | HomePage</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -14,7 +14,12 @@
         <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @if (env('APP_URL') == "http://localhost")
+            @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @else
+            <link rel="stylesheet" href="{{ asset('assets/app.css') }}" />
+            <script src="{{ asset('assets/app.js') }}"></script>
+        @endif
     </head>
 
     <body class="antialiased">
