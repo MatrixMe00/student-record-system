@@ -42,7 +42,11 @@
                             ["title" => "Class Teacher", "content" => $teacher_name]
                         ];
                     @endphp
-                    <x-content-card class="bg-white hover:bg-neutral-50" title="{{ $program->name }}" item_id="{{ $program->id }}" :sub_title="$program->slug ?? 'No Slug name'" path_head="class" :extras="$extras" />
+                    <x-content-card
+                        class="bg-white hover:bg-neutral-50"
+                        title="{{ $program->name }}" item_id="{{ $program->id }}"
+                        :sub_title="$program->slug ?? 'No Slug name'"
+                        path_head="class" :extras="$extras" />
                 @endforeach
             </x-content-grid>
         @else

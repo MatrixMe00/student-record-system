@@ -46,9 +46,9 @@ class Teacher extends Model
     }
 
     // a teacher can be a class teacher
-    public function teacher_class(): HasOne|false{
+    public function teacher_class(): HasOne|null{
         return $this->class_teacher && !is_null($this->program_id) ?
-            $this->hasOne(Program::class, "class_teacher") : false;
+            $this->hasOne(Program::class, "class_teacher") : null;
     }
 
     // has logs through the parent user

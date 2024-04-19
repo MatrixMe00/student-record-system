@@ -85,7 +85,7 @@
 
                                     @if (old("program_id"))
                                         @foreach (old("program_id") as $key => $program_id)
-                                            <tr>
+                                            <tr class="bg-red-100">
                                                 <x-table-data>
                                                     <x-input-select :options="$classes" name="program_id[]" :value="$program_id" />
                                                 </x-table-data>
@@ -101,9 +101,9 @@
                                     @endif
 
                                     <template>
-                                        <tr>
+                                        <tr class="bg-red-100">
                                             <x-table-data>
-                                                <x-input-select :options="$classes" name="program_id[]" />
+                                                <x-input-select :options="$classes" :value="$teacher->teacher_class?->id ?? ''" name="program_id[]" />
                                             </x-table-data>
                                             <x-table-data>
                                                 <x-input-select :options="$subjects" name="subject_id[]" />
@@ -121,7 +121,7 @@
                         @push("scripts")
                             <script>
                                 function addBlock(){
-                                    $("tbody").append($("template").html());
+                                    $("tbody").prepend($("template").html());
                                 }
                                 function remPar(){
                                     element = event.target;

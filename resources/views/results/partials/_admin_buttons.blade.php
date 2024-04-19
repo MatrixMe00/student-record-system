@@ -1,9 +1,11 @@
 @php
+    $hide_strict = false;
+
     // use this to measure if the document cannot be touched any longer
-    if($remark_head?->status == "accepted" && $remark_head?->transferred == true){
-        $hide_strict = true;
-    }else{
-        $hide_strict = false;
+    if(isset($remark_head)){
+        if($remark_head?->status == "accepted" && $remark_head?->transferred == true){
+            $hide_strict = true;
+        }
     }
 @endphp
 <div class="flex flex-col items-center justify-center md:flex-row gap-4">

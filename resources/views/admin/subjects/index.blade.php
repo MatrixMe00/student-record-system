@@ -29,7 +29,11 @@
                             ["title" => "Teachers Teaching", "content" => $subject->teachers->count()]
                         ];
                     @endphp
-                    <x-content-card class="bg-white hover:bg-neutral-50" title="{{ $subject->name }}" item_id="{{ $subject->id }}" :sub_title="$subject->slug ?? 'No Slug name'" path_head="subject" :extras="$extras" />
+                    <x-content-card
+                        class="bg-white hover:bg-neutral-50"
+                        title="{{ $subject->name }}" item_id="{{ $subject->id }}"
+                        :sub_title="$subject->slug ?? 'No Slug name'"
+                        path_head="subject" :extras="$extras" />
                 @endforeach
             </x-content-grid>
         @else

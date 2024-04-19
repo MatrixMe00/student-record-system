@@ -299,7 +299,7 @@ class UserController extends Controller
                 break;
             default:
                 $options = [
-                    "admin_count" => User::where('role_id', 3)->orWhere('role_id', '>', 5)->get()->count(),
+                    "admin_count" => SchoolAdmin::all()->count(),
                     "student_count" => Student::all()->count(),
                     "teacher_count" => Teacher::all()->count(),
                     "subject_count" => Subject::all()->count(),

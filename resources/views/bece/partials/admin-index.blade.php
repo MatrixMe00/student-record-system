@@ -39,28 +39,4 @@
     <x-section-component title="BECE Candidates" x-show="tag=='bece'">
         @include('bece.partials.bece-partial')
     </x-section-component>
-
-    {{-- @foreach ($result_slips as $result_slip)
-        <x-section-component :title="$result_slip['title']" x-show="tag=='{{ $result_slip['id'] }}'">
-            @if ($result_slip["data"]->count() > 0)
-                <x-content-grid class="mt-6">
-                    @foreach ($result_slip["data"] as $result)
-                        @php
-                            $extras = [
-                                ["title" => "Recorded", "content" => "{$result->grades->count()} Students"],
-                                ["title" => "Subject", "content" => $result->subject->name ?? "Not Set"],
-                                ["title" => "Academic Year", "content" => get_academic_year($result->created_at)]
-                            ];
-                        @endphp
-                        <x-content-card class="border-neutral-200 hover:bg-neutral-50 hover:border-neutral-100" title="{{ $result->program->name }}" item_id="{{ $result->result_token }}"
-                                sub_title="{{ __(ucfirst($result->status).' | Term '.$result->semester) }}" path_head="result" :extras="$extras"
-                                :editable="false" :removable="in_array($result->status, ['pending', 'rejected'])"
-                                card_link="/result/{{ $result->result_token }}/show" />
-                    @endforeach
-                </x-content-grid>
-            @else
-                <x-empty-div>{{ __("No Results for this section") }}</x-empty-div>
-            @endif
-        </x-section-component>
-    @endforeach --}}
 </section>
