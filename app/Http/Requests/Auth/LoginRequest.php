@@ -75,6 +75,14 @@ class LoginRequest extends FormRequest
                     'role_id' => "Requested user is not bound to this login type",
                 ]);
             }
+        }elseif(Auth::user()->is_active === false){
+            RateLimiter::hit($this->throttleKey());
+
+            Auth::guard('web')->logout();
+
+            throw ValidationException::withMessages([
+                'role_id' => "Account has been deleted. Contact admin for help"
+            ]);
         }
 
         RateLimiter::clear($this->throttleKey());

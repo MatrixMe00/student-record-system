@@ -63,12 +63,14 @@ class ProfileController extends Controller
         Auth::logout();
 
         // get the user data to be saved
-        $deleted_user = $this->deletedUser($user);
+        // $deleted_user = $this->deletedUser($user);
 
         // add deleted user to deleted user table
-        deletedusers::create($deleted_user);
+        // deletedusers::create($deleted_user);
 
-        $user->delete();
+        $user->update([
+            "is_active" => false
+        ]);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
