@@ -26,7 +26,7 @@
 
     {{-- total score --}}
     <td>
-        <x-text-input class="total" class="min-w-24 md:min-w-20 {{ $painttd }}" readonly :value="$result->total_marks ? $result->total_marks : ''" name="total_marks[]" />
+        <x-text-input class="total" class="min-w-24 md:min-w-20 {{ $painttd }}" readonly :value="$result->total_marks" name="total_marks[]" />
         <x-input-error :messages="$errors->get('total_marks.'.$key)" class="mt-2" />
     </td>
 
