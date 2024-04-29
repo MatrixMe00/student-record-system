@@ -2,7 +2,7 @@
     {{ __($program->name.' result summary list [Term '.$remark_head->semester.']') }}
 </h1>
 
-@if($remarks)
+@if($remarks->count() > 0)
     <x-form-element mdcols="" action="{{ route('remarks.store') }}" method="POST">
         @csrf
 
@@ -38,4 +38,8 @@
             @include("results.partials._admin_buttons")
         @endif
     </x-form-element>
+@else
+    <x-empty-div>
+        No Remarks Identified
+    </x-empty-div>
 @endif
