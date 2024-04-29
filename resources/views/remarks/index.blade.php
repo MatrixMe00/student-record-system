@@ -7,14 +7,17 @@
 
     <x-app-main class="py-4">
         <section class="">
-            <x-primary-button
-                x-data=""
-                x-on:click.prevent="$dispatch('open-modal', 'add_remark')"
-                type="button">
-                {{ __("Make New Entry") }}
-            </x-primary-button>
+            @if (!$is_admin)
+                <x-primary-button
+                    x-data=""
+                    x-on:click.prevent="$dispatch('open-modal', 'add_remark')"
+                    type="button">
+                    {{ __("Make New Entry") }}
+                </x-primary-button>
+            @endif
 
-            @if (auth()->user()->role_id == 3)
+
+            @if ($is_admin)
                 <x-primary-button onclick="location.href='{{ route('remark-options') }}'">
                     Add Remark Options
                 </x-primary-button>
