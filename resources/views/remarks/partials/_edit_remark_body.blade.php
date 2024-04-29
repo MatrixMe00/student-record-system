@@ -2,7 +2,7 @@
     {{ __($program->name.' result summary list [Term '.$remark_head->semester.']') }}
 </h1>
 
-@if($remarks->count() > 0)
+@if($remarks->count() > 0 && auth()->user()->role_id === 3)
     <x-form-element mdcols="" action="{{ route('remarks.store') }}" method="POST">
         @csrf
 
