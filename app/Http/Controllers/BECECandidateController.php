@@ -69,6 +69,7 @@ class BECECandidateController extends Controller
             $program_id = $program_id->id;
             return Student::leftJoin("bece_candidates", "students.user_id", "=", "bece_candidates.student_id")
                           ->where("students.program_id", $program_id)
+                          ->whereNull("bece_candidates.student_id")
                           ->select("students.*")
                           ->get();
         }
