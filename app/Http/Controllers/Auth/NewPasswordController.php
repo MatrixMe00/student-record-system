@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -54,8 +55,48 @@ class NewPasswordController extends Controller
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
         return $status == Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('status', __($status))
+                    ? redirect()->route($this->login_page($request))->with('status', __($status))
                     : back()->withInput($request->only('email'))
                             ->withErrors(['email' => __($status)]);
+    }
+
+    /**
+     * This gets the required login page
+     * @param Request $request The current request
+     * @return string
+     */
+    private function login_page(Request $request) :string{
+        $page = $request->cookie("login_page") ?? "";
+
+        if(is_null($page) || empty($page)){
+            $user = User::where("email", $request->email)->first();
+            $page = $this->page_route($user->role_id);
+        }
+
+        return $page;
+    }
+
+    /**
+     * provides the page route
+     * @param int $role_id The role id of the user
+     * @return string
+     */
+    private function page_route(int $role_id) :string{
+        switch ($role_id) {
+            case 1:
+            case 2:
+            case 3:
+                $route = "admin.login";
+                break;
+            case 4:
+                $route = "teacher.login";
+            case 5:
+                $route = "login";
+
+            default:
+                $route = "index";
+        }
+
+        return $route;
     }
 }
