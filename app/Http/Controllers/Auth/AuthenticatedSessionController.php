@@ -96,7 +96,7 @@ class AuthenticatedSessionController extends Controller
                                  ->orderBy('created_at', 'desc')->limit(1)->exists();
         }
 
-        session(["payment_$payment_type" => $status]);
+        return session(["payment_$payment_type" => $status]);
     }
 
     /**
