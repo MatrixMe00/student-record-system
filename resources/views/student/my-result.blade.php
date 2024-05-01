@@ -17,7 +17,7 @@
         </x-group-buttons-container>
 
         <x-section-component title="Term {{ $semester }}" class="mt-4">
-            @if ($results->count() > 0)
+            @if ($results->count() > 0 && $remark && $remark->status == "accepted")
                 <x-primary-button type="button" class="mt-4" onclick="location.href='/my-result/{{ $program->id.'/'.$semester }}/print'">Print Results</x-primary-button>
 
                 <section class="mt-3">
@@ -110,7 +110,8 @@
                         </tfoot>
                     </x-table-component>
                 </section>
-
+            @elseif ($results->count() > 0 && is_null($remark) || $remark?->status != "accepted")
+                <x-empty-div>{{ __("Results are not ready for viewing. Please try again later") }}</x-empty-div>
             @else
                 <x-empty-div>{{ __("No results for this period") }}</x-empty-div>
             @endif
