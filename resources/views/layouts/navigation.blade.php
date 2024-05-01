@@ -22,7 +22,7 @@
         $menu_links[] = ["name" => "School Detail", "route" => "my-school"];
 
         if(session('class_teacher')){
-            $menu_links[] = ["name" => "Remarks & Reports", "route" => "remarks.all", "users" => [4]]
+            $menu_links[] = ["name" => "Remarks & Reports", "route" => "remarks.all", "users" => [4]];
         }
     }
 @endphp
