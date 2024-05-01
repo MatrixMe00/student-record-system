@@ -64,10 +64,10 @@ class GradesController extends Controller
 
                 break;
             case 4:
-                $app_results = new ApproveResults(["teacher_id" => auth()->user()->id]);
+                $app_results = new ApproveResults(["teacher_id" => $user->id]);
 
                 $options = [
-                    "result_slips" => $app_results::orderBy("updated_at", "desc")->get(),
+                    "result_slips" => $app_results->orderBy("updated_at", "desc")->get(),
                     "result_id" => create_id(),
                     "teacher_id" => auth()->user()->id,
                     "subjects" => $model->subjects->unique('name')->toArray(),
