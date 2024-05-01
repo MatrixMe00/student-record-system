@@ -110,7 +110,7 @@
                         </tfoot>
                     </x-table-component>
                 </section>
-            @elseif ($results->count() > 0 && is_null($remark) || $remark?->status != "accepted")
+            @elseif (($results->count() > 0 && is_null($remark)) || ($remark && $remark->status != "accepted"))
                 <x-empty-div>{{ __("Results are not ready for viewing. Please try again later") }}</x-empty-div>
             @else
                 <x-empty-div>{{ __("No results for this period") }}</x-empty-div>
