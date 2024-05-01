@@ -42,11 +42,16 @@
                     {{ __($message) }}
                 </p>
 
-                <div class="grid grid-cols-1 items-start lg:mt-4">
-                    <section class="bg-slate-50 p-2 mt-8 lg:mt-0 lg:col-span-3">
-                        @include("remarks.partials._edit_remark_body")
-                    </section>
-                </div>
+                @if (!$is_admin || ($is_admin && $remark_head->status != "pending"))
+                    <div class="grid grid-cols-1 items-start lg:mt-4">
+                        <section class="bg-slate-50 p-2 mt-8 lg:mt-0 lg:col-span-3">
+                            @include("remarks.partials._edit_remark_body")
+                        </section>
+                    </div>
+                @else
+                    <x-empty-div>{{ __("Remark slip is still in edit mode by the teacher. Please wait for submission") }}</x-empty-div>
+                @endif
+
 
             </div>
         </div>
