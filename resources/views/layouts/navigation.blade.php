@@ -20,9 +20,11 @@
 
     if($user->role_id == 3){
         $menu_links[] = ["name" => "School Detail", "route" => "my-school"];
+    }
 
+    if($user->role_id == 4){
         if(session('class_teacher')){
-            $menu_links[] = ["name" => "Remarks & Reports", "route" => "remarks.all", "users" => [4]];
+            $nav_links[] = ["name" => "Remarks & Reports", "route" => "remarks.all", "users" => [4]];
         }
     }
 @endphp
