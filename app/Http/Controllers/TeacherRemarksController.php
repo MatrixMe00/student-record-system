@@ -35,15 +35,6 @@ class TeacherRemarksController extends Controller
             ];
         });
 
-        dd([
-            "remarks" => $remarks,
-            "is_admin" => $user->role_id == 3,
-            "remark_options" => RemarkOptions::all(),
-            "teacher" => $teacher,
-            "program" => $program,
-            "remark_id" => create_id()
-        ]);
-
         return view("remarks.index", [
             "remarks" => $remarks,
             "is_admin" => $user->role_id == 3,
