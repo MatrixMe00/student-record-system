@@ -70,6 +70,7 @@ class TeacherRemarksController extends Controller
 
         if(!$is_admin){
             $is_new = in_array("position", array_keys($validated));
+            $academic_year = get_academic_year(now());
             while(++$count < count($validated["student_id"])){
                 $merge_data = [
                     "student_id" => $array["student_id"][$count],
@@ -83,6 +84,7 @@ class TeacherRemarksController extends Controller
                 if($is_new){
                     $merge_data["position"] = $array["position"][$count];
                     $merge_data["remark"] = $array["remark"][$count];
+                    $merge_data["academic_year"] = $academic_year;
                 }
                 $data = array_merge($default, $merge_data);
 
