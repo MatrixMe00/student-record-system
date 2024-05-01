@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Traits\UserModelTrait;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -25,6 +26,11 @@ class AuthenticatedSessionController extends Controller
      * @var User $user This holds the authenticated user
      */
     private ?User $user = null;
+
+    /**
+     * @var Model $model This holds the user model
+     */
+    private ?Model $model = null;
 
     /**
      * Display the login view.
@@ -50,6 +56,9 @@ class AuthenticatedSessionController extends Controller
         // set user as this user
         $this->user = Auth::user();
 
+        // create the user model
+        $this->model = $this->user_model($this->user);
+
         // create a cookie to hold the login name
         $response = $this->create_cookie();
         $cookie = $response->headers->getCookies()[0];
@@ -58,9 +67,11 @@ class AuthenticatedSessionController extends Controller
         $this->add_school_id();
 
         // students should have payment details checked out
-        if(Auth::user()->role_id == 5){
+        if($this->user->role_id == 5){
             $this->add_payment_status("result");
             $this->add_payment_status("debt");
+        }elseif($this->user->role_id == 4){
+            $this->teacher_session();
         }
 
         return redirect()->intended(RouteServiceProvider::HOME)->withCookie($cookie);
@@ -70,8 +81,19 @@ class AuthenticatedSessionController extends Controller
      * Creates a school id session
      */
     private function add_school_id(){
-        $model = $this->user_model(auth()->user());
+        $model = $this->model;
         session(["school_id" => $model->school_id]);
+    }
+
+    /**
+     * Creates sessions for teacher
+     */
+    private function teacher_session(){
+        $model = $this->model;
+
+        return session([
+            "class_teacher" => $model->class_teacher
+        ]);
     }
 
     /**

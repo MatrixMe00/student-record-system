@@ -26,15 +26,7 @@
             <x-text-input id="school_id" type="hidden" name="school_id" value="{{ session('school_id') }}" />
 
             {{-- teacher id --}}
-            @if (is_integer($teachers))
-                <x-text-input id="teacher_id" type="hidden" name="teacher_id" value="{{ $teachers }}" />
-            @else
-                <div>
-                    <x-input-label for="teacher_id" :value="__('Select Teacher')" />
-                    <x-input-select id="teacher_id" name="teacher_id" :value="old('teacher_id')" :options="$teachers->toArray()" :text_key="['lname','oname']" value_key="user_id" required />
-                    <x-input-error :messages="$errors->get('teacher_id')" class="mt-2" />
-                </div>
-            @endif
+            <x-text-input id="teacher_id" type="hidden" name="teacher_id" value="{{ $teacher->id }}" />
 
             {{-- program id --}}
             @if ($program)

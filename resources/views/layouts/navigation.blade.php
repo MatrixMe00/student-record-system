@@ -8,7 +8,7 @@
         ["name" => "Classes", "route" => "program.all", "users" => [3]],
         ["name" => "Subjects", "route" => "subject.all", "users" => [3]],
         ["name" => "Results", "route" => "result.all", "users" => [3,4,5]],
-        ["name" => "Remarks", "route" => "remarks.all", "users" => [3,4]],
+        ["name" => "Remarks & Reports", "route" => "remarks.all", "users" => [3]],
         ["name" => "BECE Menu", "route" => "bece.all", "users" => [3,5], 'class' => 'text-nowrap'],
         ["name" => "School Management", "route" => "admin.schools", "users" => [1,2]]
     ];
@@ -20,6 +20,10 @@
 
     if($user->role_id == 3){
         $menu_links[] = ["name" => "School Detail", "route" => "my-school"];
+
+        if(session('class_teacher')){
+            $menu_links[] = ["name" => "Remarks & Reports", "route" => "remarks.all", "users" => [4]]
+        }
     }
 @endphp
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">

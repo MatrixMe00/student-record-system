@@ -77,9 +77,11 @@
         </section>
 
         {{-- create remark form --}}
-        <x-modal name="add_remark" :show="$errors->any()">
-            @include("remarks._createform")
-        </x-modal>
+        @if ($teacher)
+            <x-modal name="add_remark" :show="$errors->any()">
+                @include("remarks._createform")
+            </x-modal>
+        @endif
 
     </x-app-main>
 </x-app-layout>
