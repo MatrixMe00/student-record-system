@@ -25,9 +25,8 @@ class TeacherRemarksController extends Controller
     {
         $user = auth()->user();
         $remarks = $user->role_id == 4 ? TeachersRemark::where("teacher_id", $user->id)->orderBy('updated_at', "desc")->get() : TeachersRemark::orderBy('updated_at', "desc")->get();
-        $teacher = $user->role_id == 4 ? $user->id : null;
-        $model = $this->user_model($user);
-        $program = $user->role_id == 4 ? $model->teacher_class : 0;
+        $teacher = $user->role_id == 4 ? $this->user_model($user) : null;
+        $program = $user->role_id == 4 ? $teacher->teacher_class : 0;
 
         $remarks = $remarks->groupBy('status')->map(function ($items, $key) {
             return [
@@ -35,6 +34,15 @@ class TeacherRemarksController extends Controller
                 'id' => $key, 'data' => $items
             ];
         });
+
+        dd([
+            "remarks" => $remarks,
+            "is_admin" => $user->role_id == 3,
+            "remark_options" => RemarkOptions::all(),
+            "teacher" => $teacher,
+            "program" => $program,
+            "remark_id" => create_id()
+        ]);
 
         return view("remarks.index", [
             "remarks" => $remarks,

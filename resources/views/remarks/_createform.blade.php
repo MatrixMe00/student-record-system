@@ -26,7 +26,7 @@
             <x-text-input id="school_id" type="hidden" name="school_id" value="{{ session('school_id') }}" />
 
             {{-- teacher id --}}
-            <x-text-input id="teacher_id" type="hidden" name="teacher_id" value="{{ $teacher->id }}" />
+            <x-text-input id="teacher_id" type="hidden" name="teacher_id" value="{{ $teacher->user_id }}" />
 
             {{-- program id --}}
             @if ($program)
