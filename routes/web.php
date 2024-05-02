@@ -158,6 +158,13 @@ Route::middleware(['auth', 'system.admin'])->group(function(){
     // superadmin school assess pages
     Route::get("/admin-schools", [SchoolController::class, "index"])->name("admin.schools");
     Route::get("/school-menu/{school_id}", [SchoolController::class, "school_menu"])->name("school.menu");
+
+    // BECE candidates
+    Route::get("/bece-candidates/{school_id}", [BECECandidateController::class, "index"])->name("school.candidates");
+    Route::post("/bece-candidates/{school_id}", [BECECandidateController::class, "candidates_update"])->name("school.candidates.update");
+    Route::get("/bece-candidate/{beceCandidate}", [BECECandidateController::class, "show"])->name("school.candidate.show");
+    Route::put("/bece-candidate/{beceCandidate}", [BECECandidateController::class, "update"])->name("school.candidate.update");
+    // Route::get("/school-results/{school_id}", [])
 });
 
 require __DIR__.'/auth.php';

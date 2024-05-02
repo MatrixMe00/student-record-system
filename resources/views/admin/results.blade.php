@@ -26,7 +26,7 @@
         </x-group-buttons-container>
 
         @foreach ($result_slips as $result_slip)
-            <x-section-component :title="$result_slip['title']" x-show="tag=='{{ $result_slip['id'] }}'">
+            <x-section-component :title="ucwords($result_slip['title'])" x-show="tag=='{{ $result_slip['id'] }}'">
                 @if ($result_slip["data"]->count() > 0)
                     <x-content-grid class="mt-6">
                         @foreach ($result_slip["data"] as $result)

@@ -37,16 +37,9 @@ class DebtorsListController extends Controller
         switch($user->role_id){
             case 3:
                 $response += [
-                    "candidates" => BECECandidate::where("status", true)
+                    "candidates" => collection_group(BECECandidate::where("status", true)
                                                ->orderBy("created_at", "desc")
-                                               ->get()
-                                               ->groupBy("academic_year")->map(function($items, $key){
-                                                    return [
-                                                        "title" => $key,
-                                                        "id" => format_academic_year($key, false),
-                                                        "data" => $items
-                                                    ];
-                                               }),
+                                               ->get(), "academic_year", ["title", "id"]),
                     "students" => Student::where("program_id", $response["jhs3_id"])
                                          ->where("completed", false)->get(),
                     "debtors" => DebtorsList::where("status", true)->get(),

@@ -6,17 +6,35 @@ use App\Models\BECECandidate;
 use App\Http\Requests\StoreBECECandidateRequest;
 use App\Http\Requests\UpdateBECECandidateRequest;
 use App\Models\Program;
+use App\Models\School;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class BECECandidateController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($school_id)
     {
-        //
+        $school = School::findOrFail(Crypt::decryptString($school_id));
+
+        if(!$school){
+            abort(404);
+        }
+
+        // operations
+        $candidates = collection_group(BECECandidate::students($school->id), "academic_year");
+        $tags = array_keys($candidates->toArray());
+
+        return view("superadmin.candidates.index", [
+            "school" => $school,
+            "protected_id" => $school_id,
+            "tags" => $tags,
+            "candidate_data" => $candidates
+        ]);
     }
 
     /**
@@ -53,9 +71,17 @@ class BECECandidateController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(BECECandidate $bECECandidate)
+    public function show(BECECandidate $beceCandidate)
     {
-        //
+        if(!$beceCandidate){
+            abort(404, "Candidate was not found");
+        }
+
+        return view("superadmin.candidates.show", [
+            "candidate" => $beceCandidate,
+            "student" => $beceCandidate->student,
+            "editable" => Auth::user()->role_id < 3
+        ]);
     }
 
     /**
@@ -129,11 +155,27 @@ class BECECandidateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBECECandidateRequest $request, BECECandidate $bECECandidate)
+    public function update(UpdateBECECandidateRequest $request, BECECandidate $beceCandidate)
     {
         $validated = $request->validated();
+        $validated["bece_result"] = $this->save_result_file();
+        $beceCandidate->update([
+            "index_number" => $validated["index_number"],
+            "placement" => [
+                 "bece_result" => $validated["bece_result"],
+                 "placement_school" => $validated["placement_school"]
+             ]
+        ]);
 
-        return $bECECandidate->update($validated);
+        return redirect()->back()->with(["status" => true, "message" => "Candidate data has been updated successfully"]);
+    }
+
+    private function save_result_file(){
+        if(request()->file("bece_result")){
+            return request()->file("bece_result")->store("results", "public");
+        }
+
+        return null;
     }
 
     /**

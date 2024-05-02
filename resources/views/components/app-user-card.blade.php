@@ -14,7 +14,7 @@
 
 @endphp
 
-<div class="sm:w-56 w-full bg-white shadow rounded border border-transparent hover:border-blue-500 cursor-pointer">
+<div class="w-full bg-white shadow rounded border border-transparent hover:border-blue-500 cursor-pointer">
     <div class="h-32 w-full checker-bg flex items-center justify-center p-4 text-blue-500">
       <x-application-logo />
     </div>

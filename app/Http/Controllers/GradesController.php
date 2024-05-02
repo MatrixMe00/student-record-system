@@ -48,18 +48,13 @@ class GradesController extends Controller
 
         switch($role_id){
             case 3:
+                $result_slips = ApproveResults::orderBy('status', 'desc')->orderBy('updated_at','desc')->get();
                 $options = [
                     "teachers" => Teacher::all(["user_id", "lname", "oname"])->toArray(),
                     "classes" => Program::all(["id", "name"])->toArray(),
                     "subjects" => Subject::all(["id", "name"])->toArray(),
                     "result_id" => create_id(),
-                    "result_slips" => ApproveResults::orderBy('status', 'desc')->orderBy('updated_at','desc')->get()
-                                        ->groupBy('status')->map(function ($items, $key) {
-                                            return [
-                                                'title' => ucfirst($key) . ' Results',
-                                                'id' => $key, 'data' => $items
-                                            ];
-                                        })
+                    "result_slips" => collection_group($result_slips, "status", [["title" => " Results"], "id"])
                 ];
 
                 break;

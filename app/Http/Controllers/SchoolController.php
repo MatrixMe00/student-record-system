@@ -19,12 +19,11 @@ class SchoolController extends Controller
     {
         $schools = School::all();
 
-        if(Auth::user()){
+        if(request()->routeIs("admin.schools")){
             return view('superadmin.schools', ["schools" => $schools]);
         }else{
             return view('home.schools', ["schools" => $schools]);
         }
-
     }
 
     /**
@@ -57,7 +56,7 @@ class SchoolController extends Controller
         // get the logo path
         $logo_path = $this->store_logo();
 
-        $validated = $request->validate($request->rules());
+        $validated = $request->validated();
         $validated["logo_path"] = $logo_path;
         $school = School::create($validated);
 
@@ -91,7 +90,7 @@ class SchoolController extends Controller
             abort(404);
         }
 
-        return view('superadmin.school', ["school"=>$school]);
+        return view('superadmin.school', ["school"=>$school, "protected_id" => $school_id]);
     }
 
     /**

@@ -7,8 +7,8 @@
 
     @php
         $tags = [
-            ["text" => "Menu", "id" => "menu", "icon" => ""],
-            ["text" => "About", "id" => "about", "icon" => ""],
+            ["text" => "Menu", "id" => "menu", "icon" => "fas fa-compass"],
+            ["text" => "About", "id" => "about", "icon" => "fas fa-address-card"],
             // ["text" => "", "id" => "", "icon" => ""],
         ]
     @endphp
@@ -25,7 +25,14 @@
         <x-section-component title="Menu Items" x-show="tag=='menu'">
             <div class="mt-2 text-6 flex flex-wrap gap-2">
                 <x-school-menu-card
+                    icon="fas fa-user-graduate"
                     message="BECE Candidates"
+                    item_url="{{ route('school.candidates', ['school_id' => $protected_id]) }}"
+                />
+                <x-school-menu-card
+                    icon="fas fa-poll"
+                    message="Results"
+                    item_url=""
                 />
             </div>
 

@@ -48,4 +48,20 @@ class BECECandidate extends Model
 
         return $results->get();
     }
+
+    /**
+     * Return the array form of the placement data
+     */
+    public function getPlacementAttribute(){
+        $placement = decode_array($this->attributes["placement"]);
+
+        return $placement;
+    }
+
+    /**
+     * Make the placement attribute string
+     */
+    public function setPlacementAttribute($value){
+        $this->attributes["placement"] = encode_array($value);
+    }
 }

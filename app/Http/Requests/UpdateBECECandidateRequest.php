@@ -13,7 +13,7 @@ class UpdateBECECandidateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $authorized = Auth::user()->role_id == 3;
+        $authorized = Auth::user()->role_id <= 3;
         return $authorized;
     }
 
@@ -25,10 +25,9 @@ class UpdateBECECandidateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "id" => ["required", "integer"],
-            "student_id" => ["required", "integer", "min:1", Rule::exists("students", "user_id")],
             "index_number" => ["sometimes", "nullable", "required", "numeric"],
-            "placement" => ["sometimes", "nullable", "string"]
+            "bece_result" => ["sometimes", "nullable", "required", "file"],
+            "placement_school" => ["sometimes", "nullable", "required", "string"]
         ];
     }
 }

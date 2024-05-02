@@ -85,6 +85,13 @@ class Student extends Model
         }
     }
 
+    /**
+     * Create a fullname attribute
+     */
+    public function getFullnameAttribute(){
+        return $this->lname." ".$this->oname;
+    }
+
     // grade description
     public function grade_description(?int $grade_value = null) :string{
         $grade_value = is_null($grade_value) ? $this->grade_value() : $grade_value;

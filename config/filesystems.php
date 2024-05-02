@@ -44,6 +44,22 @@ return [
             'throw' => false,
         ],
 
+        "public_html" => [
+            'driver' => 'local',
+            'root' => custom_public_path(public: 'public_html'),
+            'url' => env("APP_URL"),
+            'visibility' => 'public',
+            'throw' => false
+        ],
+
+        "test-site" => [
+            'driver' => 'local',
+            'root' => custom_public_path(public: 'test-site'),
+            'url' => env("APP_URL"),
+            'visibility' => 'public',
+            'throw' => false
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -71,7 +87,7 @@ return [
 
     'links' => [
         // public_path('storage') => storage_path('app/public'),
-        custom_public_path("storage", env("PARENT_PUBLIC") ?? "public")
+        custom_public_path("storage", env("PARENT_PUBLIC") ?? "public") => storage_path("app/public")
     ],
 
 ];

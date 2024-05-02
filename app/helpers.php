@@ -2,6 +2,7 @@
 
 use App\Models\Student;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * This function is used to generate the academic year for a selected period
@@ -154,18 +155,18 @@ function format_academic_year(string $academic_year, bool $db_spacing = true) :s
 
 /**
  * This formats an array into an encoded data
- * @return string
+ * @return string|null
  */
-function encode_array(array $data) :string{
-    return base64_encode(serialize($data));
+function encode_array(?array $data) :?string{
+    return is_null($data) ? null : base64_encode(serialize($data));
 }
 
 /**
  * This formats an encoded array from string to array
- * @return array
+ * @return array|null
  */
-function decode_array(string $data) :array{
-    return unserialize(base64_decode($data));
+function decode_array(?string $data) :?array{
+    return is_null($data) ? null : unserialize(base64_decode($data));
 }
 
 /**
@@ -224,5 +225,55 @@ function round_number($value){
  */
 function custom_public_path($path = '', $public = "public") :string
 {
-    return base_path($public) . ($path ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : $path);
+    $base_path = $public == "public" ? base_path($public) : dirname(base_path())."\\$public";
+    return $base_path . ($path ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : $path);
+}
+
+/**
+ * This function is used to group collections into certain keys with data
+ * @param mixed $collection The collection to be formated
+ * @param string $group_by The column to group by
+ * @param string|array $keys This specifies the key(s) which would make use of the key variable. Defaults at title
+ */
+function collection_group($collection, string $group_by, string|array $keys = "title"){
+    // custom function
+    if(!function_exists("collection_group_keys")){
+        /**
+         * Formats a collection group key into acceptable format
+         * @param string|array $keys The keys to be parsed
+         * @param string $value The value to be paired to the key(s)
+         * @return array
+         */
+        function collection_group_keys($keys, $value) :array{
+            if(is_array($keys)){
+                foreach($keys as $key){
+                    if(is_array($key)){
+                        foreach($key as $ke => $k){
+                            $keys_n[$ke] = $value.$k;
+                        }
+                    }else{
+                        $keys_n[$key] = $value;
+                    }
+                }
+            }else{
+                $keys_n = [$keys => $value];
+            }
+
+            return $keys_n;
+        }
+    }
+
+    $collection_n = $collection->groupBy($group_by)->map(function($items, $key) use ($keys){
+        return array_merge(collection_group_keys($keys, $key), ["data" => $items]);
+    });
+
+    return $collection_n;
+}
+
+/**
+ * Get file size
+ * @param string $filepath The path to the file
+ */
+function get_file_size(string $filepath){
+    return Storage::size($filepath);
 }

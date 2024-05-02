@@ -45,7 +45,7 @@
                 </x-group-buttons-container>
 
                 @foreach ($remarks as $remark)
-                    <x-section-component :title="$remark['title']" x-show="tag=='{{ $remark['id'] }}'">
+                    <x-section-component :title="ucwords($remark['title'])" x-show="tag=='{{ $remark['id'] }}'">
                         @if ($remark["data"]->count() > 0)
                             <x-content-grid class="mt-6">
                                 @foreach ($remark["data"] as $result)

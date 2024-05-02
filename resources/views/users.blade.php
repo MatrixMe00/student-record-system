@@ -40,7 +40,8 @@
             @foreach ($options as $content_id => $option)
             @if ($option->count() > 0)
                 <div id="{{ $content_id }}"
-                    class="bg-gray-50 grid gap-4 md:gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 shadow border border-gray-100 p-8 text-gray-700 rounded-lg -mt-2"
+                    class="bg-gray-50 grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
+                    shadow border border-gray-100 p-8 text-gray-700 rounded-lg -mt-2"
                     x-show="contentBox=='{{ $content_id }}'">
                     @foreach ($option as $user)
                         <x-app-user-card :user="$user" />
@@ -48,7 +49,8 @@
                 </div>
             @else
                 <div id="{{ $content_id }}"
-                    class="bg-gray-50 shadow border border-gray-100 p-8 text-gray-700 rounded-lg -mt-2"
+                    class="bg-gray-50 grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
+                        shadow border border-gray-100 p-8 text-gray-700 rounded-lg -mt-2"
                     x-show="contentBox=='{{ $content_id }}'">
                     <p class="text-center">No user found</p>
                 </div>

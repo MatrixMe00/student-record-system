@@ -25,15 +25,9 @@ class TeacherRemarksController extends Controller
     {
         $user = auth()->user();
         $remarks = $user->role_id == 4 ? TeachersRemark::where("teacher_id", $user->id)->orderBy('updated_at', "desc")->get() : TeachersRemark::orderBy('updated_at', "desc")->get();
+        $remarks = collection_group($remarks, "status", [["title" => " remarks"], "id"]);
         $teacher = $user->role_id == 4 ? $this->user_model($user) : null;
         $program = $user->role_id == 4 ? $teacher->teacher_class : 0;
-
-        $remarks = $remarks->groupBy('status')->map(function ($items, $key) {
-            return [
-                'title' => ucfirst($key) . ' Remarks',
-                'id' => $key, 'data' => $items
-            ];
-        });
 
         return view("remarks.index", [
             "remarks" => $remarks,
