@@ -69,8 +69,10 @@ class PaystackController extends Controller
 
         switch(strtolower($custom_fields[4]->value)){
             case "results":
+                session(['payment_result' => true]);
                 return redirect()->route("result.all")->with(["success" => true, "message" => "Payment completed"]);
             case "debt":
+                session(['payment_debt' => true]);
                 return redirect()->route("bece")->with(["success" => true, "message" => "Payment completed"]);
         }
     }
