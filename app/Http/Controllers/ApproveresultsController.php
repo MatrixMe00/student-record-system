@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ApproveResults;
 use App\Models\Program;
 use App\Models\Teacher;
+use App\Models\TeacherClass;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
@@ -29,9 +30,29 @@ class ApproveresultsController extends Controller
             "subject_id" => ["required", "integer", Rule::exists("subjects", "id")]
         ]);
 
+        // prevent teacher from creating a result slip if he does not teach the desired class
+        if(!$this->teacher_program_validation($validated["teacher_id"], $validated["program_id"])){
+            throw ValidationException::withMessages([
+                "program_id" => "Invalid subject class was chosen"
+            ]);
+            return redirect()->back();
+        }
+
         ApproveResults::create($validated);
 
         return redirect()->back()->with(["success" => true, "message" => "Result data has been added"]);
+    }
+
+    /**
+     * This validates if the teacher teaches the desired class
+     * @param int $teacher_id The id of the teacher
+     * @param int $program_id The id of the program
+     * @return bool
+     */
+    private function teacher_program_validation($teacher_id, $program_id) :bool{
+        return TeacherClass::where("teacher_id", $teacher_id)
+                           ->where("program_id", $program_id)
+                           ->exists();
     }
 
     public function update(Request $request, ApproveResults $result)

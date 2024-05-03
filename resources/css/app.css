@@ -6,3 +6,9 @@
     transition: all 0.35s ease-in-out;
     scroll-behavior: smooth;
 }
+
+/* scrollbar effects */
+.scroll-custom > *::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}

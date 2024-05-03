@@ -8,7 +8,7 @@
         ["name" => "Classes", "route" => "program.all", "users" => [3]],
         ["name" => "Subjects", "route" => "subject.all", "users" => [3]],
         ["name" => "Results", "route" => "result.all", "users" => [3,4,5]],
-        ["name" => "Remarks & Reports", "route" => "remarks.all", "users" => [3]],
+        ["name" => "Remarks & Reports", "route" => "remarks.all", "users" => [3], "class" => "text-nowrap"],
         ["name" => "BECE Menu", "route" => "bece.all", "users" => [3,5], 'class' => 'text-nowrap'],
         ["name" => "School Management", "route" => "admin.schools", "users" => [1,2]]
     ];
@@ -32,7 +32,7 @@
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
+            <div class="flex overflow-x-auto overflow-y-hidden scroll-custom">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
