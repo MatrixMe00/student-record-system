@@ -73,7 +73,7 @@ class PaystackController extends Controller
                 return redirect()->route("result.all")->with(["success" => true, "message" => "Payment completed"]);
             case "debt":
                 session(['payment_debt' => true]);
-                return redirect()->route("bece")->with(["success" => true, "message" => "Payment completed"]);
+                return redirect()->route("bece.all")->with(["success" => true, "message" => "Payment completed"]);
         }
     }
 }

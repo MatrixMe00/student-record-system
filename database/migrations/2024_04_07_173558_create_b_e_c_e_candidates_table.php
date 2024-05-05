@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("index_number")->nullable();
             $table->string("student_token")->unique();
             $table->mediumText("placement")->nullable()->comment("Hashed value of the placement details");
+            $table->string("result_checker", 60)->nullable();
             $table->string("academic_year");
             $table->boolean("status")->default(true);
             $table->timestamps();

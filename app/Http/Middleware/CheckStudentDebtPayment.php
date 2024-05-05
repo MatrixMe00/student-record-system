@@ -18,7 +18,7 @@ class CheckStudentDebtPayment
     {
         if(Auth::user()?->role_id == 5){
             // check result payment status
-            if(session('payment_debt')){
+            if(!session('payment_debt')){
                 return redirect()->route('payment.create', ["type" => "debt"]);
             }
         }

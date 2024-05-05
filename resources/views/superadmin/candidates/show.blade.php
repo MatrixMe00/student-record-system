@@ -34,10 +34,18 @@
                         <x-input-error :messages="$errors->get('bece_result')" class="mt-2" />
                     </div>
 
+                    {{-- placement school --}}
                     <div>
                         <x-input-label for="placement_school">{{ _(("Placement School")) }}</x-input-label>
                         <x-text-input name="placement_school" id="placement_school" placeholder="Placement School" :readonly="$super_edit && $candidate->status == false" :value="old('placement_school', $candidate->placement['placement_school'] ?? '')" />
                         <x-input-error :messages="$errors->get('placement_school')" class="mt-2" />
+                    </div>
+
+                    {{-- result checker --}}
+                    <div>
+                        <x-input-label for="result_checker">{{ __("Result Checker Code") }}</x-input-label>
+                        <x-text-input name="result_checker" id="result_checker" placeholder="Result Checker Code" :value="old('result_checker', $candidate->result_checker)" :readonly="$super_edit && $candidate->status == false" />
+                        <x-input-error :messages="$errors->get('result_checker')" class="mt-2 />
                     </div>
                 @endif
 
