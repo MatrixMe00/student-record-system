@@ -120,6 +120,10 @@ Route::middleware(["auth", "school.check", "admin"])->group(function(){
     Route::post('users/add', [UserController::class,  'multi_add'])->name("users.add");
     Route::get("/user/{username}/edit", [UserController::class, "edit"]);
     Route::put("/user/{username}/edit", [UserController::class, "update"]);
+
+    // bece candidates
+    Route::get("/bece-candidate/{beceCandidate}", [BECECandidateController::class, "show"])->name("school.candidate.show");
+    Route::put("/bece-candidate/{beceCandidate}", [BECECandidateController::class, "update"])->name("school.candidate.update");
 });
 
 // routes for just school admins
@@ -148,8 +152,6 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
 
     // bece candidates
     Route::post("/prepare-candidates", [BECECandidateController::class, "create_candidates"])->name("candidates.create");
-    Route::get("/bece-candidate/{beceCandidate}", [BECECandidateController::class, "show"])->name("school.candidate.show");
-    Route::put("/bece-candidate/{beceCandidate}", [BECECandidateController::class, "update"])->name("school.candidate.update");
 
     // promote students
     Route::post("/students/promote", [TeacherRemarksController::class, "promote"])->name("students.promote");

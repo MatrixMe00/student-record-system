@@ -45,7 +45,7 @@
                     <div>
                         <x-input-label for="result_checker">{{ __("Result Checker Code") }}</x-input-label>
                         <x-text-input name="result_checker" id="result_checker" placeholder="Result Checker Code" :value="old('result_checker', $candidate->result_checker)" :readonly="$super_edit && $candidate->status == false" />
-                        <x-input-error :messages="$errors->get('result_checker')" class="mt-2 />
+                        <x-input-error :messages="$errors->get('result_checker')" class="mt-2" />
                     </div>
                 @endif
 
