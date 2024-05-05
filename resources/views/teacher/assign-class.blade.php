@@ -66,7 +66,7 @@
 
                                 {{-- table body --}}
                                 <tbody>
-                                    @if (!$abled && $teacher->classes->count() > 0)
+                                    @if (!$abled && $teacher->classes->count() > 0 && !old("program_id"))
                                         @foreach ($teacher->classes as $class)
                                             <tr>
                                                 <x-table-data>
@@ -85,7 +85,18 @@
 
                                     @if (old("program_id"))
                                         @foreach (old("program_id") as $key => $program_id)
-                                            <tr class="bg-red-100">
+                                            @php
+                                                $color = "";
+                                                $del = "text-red-500";
+
+                                                if($key == $errors->get('row')[0]){
+                                                    $color = "bg-red-400";
+                                                    $del = "text-white";
+                                                }elseif(old('id.'.$key) < 1){
+                                                    $color = "bg-red-100";
+                                                }
+                                            @endphp
+                                            <tr class="{{ $color }}">
                                                 <x-table-data>
                                                     <x-input-select :options="$classes" name="program_id[]" :value="$program_id" />
                                                 </x-table-data>
@@ -94,7 +105,7 @@
                                                 </x-table-data>
                                                 <x-text-input type="hidden" name="id[]" :value="old('id.'.$key)" />
                                                 <x-table-data>
-                                                    <i title="Remove Field" class="fas fa-trash-alt text-lg text-red-500 cursor-pointer hover:text-red-600" onclick="$(this).parents('tr').remove()"></i>
+                                                    <i title="Remove Field" class="fas fa-trash-alt text-lg {{ $del }} cursor-pointer hover:text-red-600" onclick="$(this).parents('tr').remove()"></i>
                                                 </x-table-data>
                                             </tr>
                                         @endforeach

@@ -9,6 +9,7 @@ use App\Models\Program;
 use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class TeacherClassController extends Controller
 {
@@ -71,6 +72,7 @@ class TeacherClassController extends Controller
             $default = array_slice($validated, 0, 2);
             $dynamic = array_slice($validated, 2);
             $count = -1;
+            $s_count = 0;   // checks for the current item number
 
             // update or store values
             while(++$count < count($validated["program_id"])){
@@ -80,16 +82,44 @@ class TeacherClassController extends Controller
                 ]);
 
                 if($dynamic["id"][$count] > 0){
-                    $data["id"] = $dynamic["id"][$count];
-                    $tc = TeacherClass::find($dynamic["id"][$count]);
-                    $tc->update($data);
+                    $tc = $this->check_teacher_class($data["subject_id"], $data["program_id"]);
+                    if($tc && $dynamic["id"][$count] != $tc->id){
+                        throw ValidationException::withMessages([
+                            "subject_id.$s_count" => $tc->subject->name." has already been assigned a teacher in ".$tc->program->name,
+                            "row" => $s_count
+                        ]);
+                    }else{
+                        $tc->update($data);
+                    }
                 }else{
-                    TeacherClass::create($data);
+                    $tc = $this->check_teacher_class($data["subject_id"], $data["program_id"]);
+                    if($tc){
+                        throw ValidationException::withMessages([
+                            "subject_id.$s_count" => $tc->subject->name." has already been assigned a teacher in ".$tc->program->name,
+                            "row" => $s_count
+                        ]);
+                    }else{
+                        TeacherClass::create($data);
+                    }
                 }
+
+                ++$s_count;
             }
         }
 
         return redirect()->back()->with(["success" => true, "message" => "Teacher data has been updated"]);
+    }
+
+    /**
+     * Check if a teacher class exist
+     * @param int $subject_id The subject
+     * @param int $program_id The class in question
+     * @return TeacherClass|bool
+     */
+    private function check_teacher_class(int $subject_id, int $program_id) :TeacherClass|bool{
+        return TeacherClass::where("subject_id", $subject_id)
+                           ->where("program_id", $program_id)
+                           ->first();
     }
 
     /**
