@@ -148,6 +148,8 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
 
     // bece candidates
     Route::post("/prepare-candidates", [BECECandidateController::class, "create_candidates"])->name("candidates.create");
+    Route::get("/bece-candidate/{beceCandidate}", [BECECandidateController::class, "show"])->name("school.candidate.show");
+    Route::put("/bece-candidate/{beceCandidate}", [BECECandidateController::class, "update"])->name("school.candidate.update");
 
     // promote students
     Route::post("/students/promote", [TeacherRemarksController::class, "promote"])->name("students.promote");
@@ -162,8 +164,6 @@ Route::middleware(['auth', 'system.admin'])->group(function(){
     // BECE candidates
     Route::get("/bece-candidates/{school_id}", [BECECandidateController::class, "index"])->name("school.candidates");
     Route::post("/bece-candidates/{school_id}", [BECECandidateController::class, "candidates_update"])->name("school.candidates.update");
-    Route::get("/bece-candidate/{beceCandidate}", [BECECandidateController::class, "show"])->name("school.candidate.show");
-    Route::put("/bece-candidate/{beceCandidate}", [BECECandidateController::class, "update"])->name("school.candidate.update");
     // Route::get("/school-results/{school_id}", [])
 });
 

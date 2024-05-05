@@ -29,7 +29,7 @@ class StoreBECECandidateRequest extends FormRequest
             "school_id" => ["required", "integer", "min:1", Rule::exists("schools", "id")],
             "index_number" => ["sometimes", "required", "numeric"],
             "student_token" => ["required", "string", Rule::unique("bece_candidates", "student_token")],
-            "placement" => ["sometimes", "string"],
+            "placement" => ["sometimes", "nullable", "string"],
             "academic_year" => ["required", "string"]
         ];
     }

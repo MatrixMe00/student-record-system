@@ -80,7 +80,8 @@ class BECECandidateController extends Controller
         return view("superadmin.candidates.show", [
             "candidate" => $beceCandidate,
             "student" => $beceCandidate->student,
-            "editable" => Auth::user()->role_id < 3
+            "super_edit" => Auth::user()->role_id < 3,
+            "admin_edit" => Auth::user()->role_id == 3
         ]);
     }
 
@@ -157,15 +158,23 @@ class BECECandidateController extends Controller
      */
     public function update(UpdateBECECandidateRequest $request, BECECandidate $beceCandidate)
     {
+        $role_id = Auth::user()->role_id;
         $validated = $request->validated();
-        $validated["bece_result"] = $this->save_result_file();
-        $beceCandidate->update([
-            "index_number" => $validated["index_number"],
-            "placement" => [
-                 "bece_result" => $validated["bece_result"],
-                 "placement_school" => $validated["placement_school"]
-             ]
-        ]);
+
+        if($role_id < 3){
+            $validated["bece_result"] = $this->save_result_file();
+            $beceCandidate->update([
+                "index_number" => $validated["index_number"],
+                "placement" => [
+                    "bece_result" => $validated["bece_result"],
+                    "placement_school" => $validated["placement_school"]
+                ]
+            ]);
+        }else{
+            $beceCandidate->update([
+                "index_number" => $validated["index_number"]
+            ]);
+        }
 
         return redirect()->back()->with(["status" => true, "message" => "Candidate data has been updated successfully"]);
     }

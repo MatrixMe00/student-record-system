@@ -22,7 +22,7 @@
             <x-table-component class="mt-3" :thead="$thead">
                 <tbody>
                     @foreach ($academic_year["data"] as $data)
-                        <tr>
+                        <tr class="hover:bg-neutral-300 cursor-pointer" onclick="location.href='{{ route('school.candidate.show', ['beceCandidate'=>$data->id]) }}'">
                             <x-table-data>{{ __($data->index_number ?? "Not Set") }}</x-table-data>
                             <x-table-data>{{ __(strtoupper($data->student->lname)) }}</x-table-data>
                             <x-table-data>{{ __(strtoupper($data->student->oname)) }}</x-table-data>
