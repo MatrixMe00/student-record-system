@@ -5,23 +5,31 @@
         </x-section-component>
 
         <x-section-component title="Placement Details">
-            @if ($student->placement)
-                <p class="mt-3 text-lg">Your school of placement is {{ $student->placement["placement_school"] }}</p>
+            <p class="mt-3 mx-4">
+                @if ($student->placement_checker)
+                    Your placement checker key is <b>{{ $student->placement_checker }}</b>. Use this to make a follow  up check on your placements.
+                @else
+                    Placement checker key has not been set.
+                @endif
+            </p>
+            @if ($student->placement && $student->placement['placement_school'])
+                @component('components.school.attachment-container')
+                    @slot('download_link', url('storage/'.$student->placement["placement_school"]))
+                    <p class="mt-3 text-lg">Your placement data is ready to be downloaded</p>
+                @endcomponent
             @else
                 <x-empty-div>{{ __("Placement details not uploaded") }}</x-empty-div>
             @endif
         </x-section-component>
 
-        {{-- show the result checker --}}
-        <x-section-component title="Result Checker">
-            @if ($student->result_checker)
-                <p class="mt-3 text-lg">Your result checker key is <b>{{ $student->result_checker }}</b>. Use this to make a follow  up check on your results.</p>
-            @else
-                <x-empty-div>{{ __("Result checker not provided or not used yet") }}</x-empty-div>
-            @endif
-        </x-section-component>
-
         <x-section-component title="BECE Results">
+            <p class="mt-3 mx-4">
+                @if ($student->result_checker)
+                    Your result checker key is <b>{{ $student->result_checker }}</b>. Use this to make a follow  up check on your results.
+                @else
+                    Result checker key has not been set
+                @endif
+            </p>
             @if ($results->count() > 0)
                 @php
                     $result_slips = array_encode($results->results);
@@ -52,7 +60,7 @@
                 </x-table-component>
             @elseif ($student->placement)
                 @component('components.school.attachment-container')
-                    @slot('download_link', url('storage/'.$candidate->placement["bece_result"]))
+                    @slot('download_link', url('storage/'.$student->placement["bece_result"]))
                     <p class="mt-3 text-lg">Your BECE results is ready to be downloaded</p>
                 @endcomponent
             @else

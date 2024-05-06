@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DebtorsList;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -72,7 +73,13 @@ class PaystackController extends Controller
                 session(['payment_result' => true]);
                 return redirect()->route("result.all")->with(["success" => true, "message" => "Payment completed"]);
             case "debt":
-                session(['payment_debt' => true]);
+                // update the debtors list so that student is marked as not owing
+                $student = DebtorsList::where("student_id", $student_id)->first();
+                $student->status = false;
+                $student->update();
+
+                session(['payment_debt' => false]);
+
                 return redirect()->route("bece.all")->with(["success" => true, "message" => "Payment completed"]);
         }
     }
