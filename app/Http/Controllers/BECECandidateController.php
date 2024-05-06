@@ -176,7 +176,8 @@ class BECECandidateController extends Controller
                     "bece_result" => $validated["bece_result"],
                     "placement_school" => $validated["placement_school"]
                 ],
-                "result_checker" => $validated["result_checker"]
+                "result_checker" => $validated["result_checker"],
+                "placement_checker" => $validated["placement_checker"]
             ]);
         }else{
             $beceCandidate->update([

@@ -13,9 +13,8 @@
                 @method("PUT")
                 {{-- display full name --}}
                 <div>
-                    <x-input-label for="vale">{{ _(("Full Name")) }}</x-input-label>
-                    <x-text-input name="vale" id="vale" placeholder="" readonly :value="$student->fullname" />
-                    <x-input-error :messages="$errors->get('vale')" class="mt-2" />
+                    <x-input-label for="">{{ _(("Full Name")) }}</x-input-label>
+                    <x-text-input name="" id="" placeholder="" readonly :value="$student->fullname" />
                 </div>
 
                 {{-- index number --}}
@@ -27,25 +26,34 @@
 
                 {{-- show if its the superadmin or if the placement has been provided --}}
                 @if ($super_edit || $candidate->placement)
-                    {{-- results file --}}
-                    <div>
-                        <x-input-label for="bece_result">{{ _(("BECE Result")) }}</x-input-label>
-                        <x-text-input type="file" accept="application/pdf" name="bece_result" id="bece_result" :value="old('bece_result', $candidate->placement['bece_result'] ?? '')" :readonly="$super_edit && $candidate->status == false" />
-                        <x-input-error :messages="$errors->get('bece_result')" class="mt-2" />
-                    </div>
+                    @if ($super_edit)
+                        {{-- results file --}}
+                        <div>
+                            <x-input-label for="bece_result">{{ _(("BECE Result")) }}</x-input-label>
+                            <x-text-input type="file" accept="application/pdf" name="bece_result" id="bece_result" :value="old('bece_result', $candidate->placement['bece_result'] ?? '')" :disabled="$candidate->status == false" />
+                            <x-input-error :messages="$errors->get('bece_result')" class="mt-2" />
+                        </div>
 
-                    {{-- placement school --}}
-                    <div>
-                        <x-input-label for="placement_school">{{ _(("Placement School")) }}</x-input-label>
-                        <x-text-input name="placement_school" type="file" accept="application/pdf" id="placement_school" placeholder="Placement School" :readonly="$super_edit && $candidate->status == false" :value="old('placement_school', $candidate->placement['placement_school'] ?? '')" />
-                        <x-input-error :messages="$errors->get('placement_school')" class="mt-2" />
-                    </div>
+                        {{-- placement school --}}
+                        <div>
+                            <x-input-label for="placement_school">{{ _(("Placement School")) }}</x-input-label>
+                            <x-text-input name="placement_school" type="file" accept="application/pdf" id="placement_school" placeholder="Placement School" :disabled="$candidate->status == false" :value="old('placement_school', $candidate->placement['placement_school'] ?? '')" />
+                            <x-input-error :messages="$errors->get('placement_school')" class="mt-2" />
+                        </div>
+                    @endif
 
                     {{-- result checker --}}
                     <div>
                         <x-input-label for="result_checker">{{ __("Result Checker Code") }}</x-input-label>
-                        <x-text-input name="result_checker" id="result_checker" placeholder="Result Checker Code" :value="old('result_checker', $candidate->result_checker)" :readonly="$super_edit && $candidate->status == false" />
+                        <x-text-input name="result_checker" id="result_checker" placeholder="Result Checker Code" :value="old('result_checker', $candidate->result_checker)" :readonly="$admin_edit || ($super_edit && $candidate->status == false)" />
                         <x-input-error :messages="$errors->get('result_checker')" class="mt-2" />
+                    </div>
+
+                    {{-- placement checker --}}
+                    <div>
+                        <x-input-label for="placement_checker">{{ __("Placement Checker Code") }}</x-input-label>
+                        <x-text-input name="placement_checker" id="placement_checker" placeholder="Placement Checker Code" :value="old('placement_checker', $candidate->placement_checker)" :readonly="$admin_edit || ($super_edit && $candidate->status == false)" />
+                        <x-input-error :messages="$errors->get('placement_checker')" class="mt-2" />
                     </div>
                 @endif
 
