@@ -27,7 +27,8 @@ class UpdateBECECandidateRequest extends FormRequest
         return [
             "index_number" => ["sometimes", "nullable", "required", "numeric"],
             "bece_result" => ["sometimes", "nullable", "required", "file"],
-            "placement_school" => ["sometimes", "nullable", "required", "string"]
+            "placement_school" => ["sometimes", "nullable", "required", "file"],
+            "result_checker" => ["sometimes", "nullable", "string"]
         ];
     }
 }

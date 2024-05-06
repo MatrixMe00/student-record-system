@@ -163,12 +163,20 @@ class BECECandidateController extends Controller
 
         if($role_id < 3){
             $validated["bece_result"] = $this->save_result_file();
+            $validated["placement_school"] = $this->save_placement_file();
+
+            if($beceCandidate->placement){
+                $validated["bece_result"] = $validated["bece_result"] ?? $beceCandidate->placement["bece_result"];
+                $validated["placement_school"] = $validated["placement_school"] ?? $beceCandidate->placement["placement_school"];
+            }
+
             $beceCandidate->update([
                 "index_number" => $validated["index_number"],
                 "placement" => [
                     "bece_result" => $validated["bece_result"],
                     "placement_school" => $validated["placement_school"]
-                ]
+                ],
+                "result_checker" => $validated["result_checker"]
             ]);
         }else{
             $beceCandidate->update([
@@ -176,12 +184,20 @@ class BECECandidateController extends Controller
             ]);
         }
 
-        return redirect()->back()->with(["status" => true, "message" => "Candidate data has been updated successfully"]);
+        return redirect()->back()->with(["success" => true, "message" => "Candidate data has been updated successfully"]);
     }
 
     private function save_result_file(){
         if(request()->file("bece_result")){
             return request()->file("bece_result")->store("results", "public");
+        }
+
+        return null;
+    }
+
+    private function save_placement_file(){
+        if(request()->file("placement_school")){
+            return request()->file("placement_school")->store("placement", "public");
         }
 
         return null;

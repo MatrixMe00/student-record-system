@@ -5,7 +5,7 @@
 
     @section("title", "Candidate Data")
 
-    <x-app-main>
+    <x-app-main class="pb-6">
         <x-session-component />
 
         <x-form-container maintitle="Data For {{ $student->fullname }}">
@@ -21,7 +21,7 @@
                 {{-- index number --}}
                 <div>
                     <x-input-label for="index_number">{{ _(("Index Number")) }}</x-input-label>
-                    <x-text-input name="index_number" id="index_number" placeholder="Index Number" :readonly="$admin_edit && $candidate->status == false" :value="old('index_number', $candidate->index_number)" />
+                    <x-text-input name="index_number" id="index_number" placeholder="Index Number" :readonly="$super_edit || ($candidate->status == false && $admin_edit)" :value="old('index_number', $candidate->index_number)" />
                     <x-input-error :messages="$errors->get('index_number')" class="mt-2" />
                 </div>
 
@@ -30,14 +30,14 @@
                     {{-- results file --}}
                     <div>
                         <x-input-label for="bece_result">{{ _(("BECE Result")) }}</x-input-label>
-                        <x-text-input type="file" accept="application/pdf" name="bece_result" id="bece_result" :value="old('bece_result', $candidate->placement['bece_result'] ?? '')" />
+                        <x-text-input type="file" accept="application/pdf" name="bece_result" id="bece_result" :value="old('bece_result', $candidate->placement['bece_result'] ?? '')" :readonly="$super_edit && $candidate->status == false" />
                         <x-input-error :messages="$errors->get('bece_result')" class="mt-2" />
                     </div>
 
                     {{-- placement school --}}
                     <div>
                         <x-input-label for="placement_school">{{ _(("Placement School")) }}</x-input-label>
-                        <x-text-input name="placement_school" id="placement_school" placeholder="Placement School" :readonly="$super_edit && $candidate->status == false" :value="old('placement_school', $candidate->placement['placement_school'] ?? '')" />
+                        <x-text-input name="placement_school" type="file" accept="application/pdf" id="placement_school" placeholder="Placement School" :readonly="$super_edit && $candidate->status == false" :value="old('placement_school', $candidate->placement['placement_school'] ?? '')" />
                         <x-input-error :messages="$errors->get('placement_school')" class="mt-2" />
                     </div>
 
@@ -60,13 +60,26 @@
         @if ($candidate->placement)
             <section class="bg-white mt-2">
                 @component('components.school.attachment-container')
-                    @slot('download_link', url('storage/'.$candidate->placement["bece_result"]))
-                    <p>Result File for {{ $candidate->index_number }}</p>
+                    @if ($candidate->placement["bece_result"])
+                        @slot('download_link', url('storage/'.$candidate->placement["bece_result"]))
+                        <p>Result File for {{ $candidate->index_number }}</p>
+                    @else
+                        <p>No result file uploaded</p>
+                    @endif
+                @endcomponent
+
+                @component('components.school.attachment-container')
+                    @if ($candidate->placement["placement_school"])
+                        @slot('download_link', url('storage/'.$candidate->placement["placement_school"]))
+                        <p>Placement File for {{ $candidate->index_number }}</p>
+                    @else
+                        <p>No placement file uploaded</p>
+                    @endif
                 @endcomponent
             </section>
         @else
             @if ($super_edit || $candidate->index_number)
-                <x-empty-div>No files attached to this account</x-empty-div>
+                <x-empty-div>No file updates attached to this account</x-empty-div>
             @endif
         @endif
 
