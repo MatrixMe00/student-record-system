@@ -48,11 +48,11 @@ class CheckForSuperAdmin
                     }
                 }
             }else{
-                Storage::disk('local')->put('super.txt', 'system-ready:false');
+                Storage::disk(env('FILESYSTEM_DISK'))->put('super.txt', 'system-ready:false');
                 http_response_code(404);
             }
         }else{
-            Storage::disk('local')->put('super.txt', 'system-ready:false');
+            Storage::disk(env('FILESYSTEM_DISK'))->put('super.txt', 'system-ready:false');
         }
 
         // If no user with role_id less than or equal to 2 exists
