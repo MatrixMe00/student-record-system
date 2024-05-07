@@ -19,7 +19,7 @@ class CheckForSuperAdmin
     public function handle(Request $request, Closure $next): Response
     {
         // check if local file exists
-        $file = Storage::exists('super.txt');
+        $file = Storage::disk(env("FILESYSTEM_DISK"))->exists('super.txt');
         $setup_route = url()->current() == url()->route('setup');
 
         if($file){
@@ -28,7 +28,7 @@ class CheckForSuperAdmin
                 return $next($request);
             }
 
-            if(str_contains($file = Storage::disk('local')->get('super.txt'), 'system-ready')){
+            if(str_contains($file = Storage::disk(env("FILESYSTEM_DISK"))->get('super.txt'), 'system-ready')){
                 $super = explode(":", $file);
                 $super = trim($super[1]);
 
@@ -41,7 +41,7 @@ class CheckForSuperAdmin
                     $has_super = User::where("role_id", "<=", 2)->exists();
                     if ($has_super) {
                         // write that the system is setup
-                        Storage::disk('local')->put('super.txt', 'system-ready:true');
+                        Storage::disk(env("FILESYSTEM_DISK"))->put('super.txt', 'system-ready:true');
 
                         // Allow access to the requested route
                         return $next($request);
