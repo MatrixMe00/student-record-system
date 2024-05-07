@@ -225,7 +225,7 @@ function round_number($value){
  */
 function custom_public_path($path = '', $public = "public") :string
 {
-    $base_path = $public == "public" ? base_path($public) : dirname(base_path())."\\$public";
+    $base_path = $public == "public" ? base_path($public) : dirname(base_path())."/$public";
     return $base_path . ($path ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : $path);
 }
 
