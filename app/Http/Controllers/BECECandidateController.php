@@ -190,7 +190,7 @@ class BECECandidateController extends Controller
 
     private function save_result_file(){
         if(request()->file("bece_result")){
-            return request()->file("bece_result")->store("results", "public");
+            return request()->file("bece_result")->store("results");
         }
 
         return null;
@@ -198,7 +198,7 @@ class BECECandidateController extends Controller
 
     private function save_placement_file(){
         if(request()->file("placement_school")){
-            return request()->file("placement_school")->store("placement", "public");
+            return request()->file("placement_school")->store("placement");
         }
 
         return null;

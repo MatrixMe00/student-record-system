@@ -143,7 +143,7 @@ class SchoolController extends Controller
 
         }
         if(!empty(request()->logo_path)){
-            $path = request()->file('logo_path')->store('images/school-logo', 'public');
+            $path = request()->file('logo_path')->store('images/school-logo');
 
             return $path;
         }
