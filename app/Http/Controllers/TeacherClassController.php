@@ -83,7 +83,7 @@ class TeacherClassController extends Controller
 
                 if($dynamic["id"][$count] > 0){
                     $tc = $this->check_teacher_class($data["subject_id"], $data["program_id"]);
-                    if($tc && $dynamic["id"][$count] != $tc->id){
+                    if($tc && $dynamic["id"][$count] != $tc?->id){
                         throw ValidationException::withMessages([
                             "subject_id.$s_count" => $tc->subject->name." has already been assigned a teacher in ".$tc->program->name,
                             "row" => $s_count
@@ -116,7 +116,7 @@ class TeacherClassController extends Controller
      * @param int $program_id The class in question
      * @return TeacherClass|bool
      */
-    private function check_teacher_class(int $subject_id, int $program_id) :TeacherClass|bool{
+    private function check_teacher_class(int $subject_id, int $program_id) :TeacherClass|bool|null{
         return TeacherClass::where("subject_id", $subject_id)
                            ->where("program_id", $program_id)
                            ->first();
