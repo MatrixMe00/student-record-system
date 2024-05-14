@@ -1,5 +1,5 @@
 @props([
-        "title", "item_id", "path_head", "sub_title" => "", "content" => null,
+        "title", "item_id", "path_head" => null, "sub_title" => "", "content" => null,
         "avatar_url" => "", "extras" => [], "editable" => true, "card_link" => "javascript:void(0)",
         "image_size" => "", "removable" => true, "view_text" => "View", "edit_text" => "Edit",
         "delete_text" => "Delete"

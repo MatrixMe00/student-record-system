@@ -7,6 +7,7 @@ use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
 use App\Models\DebtorsList;
 use App\Models\Student;
+use App\Models\StudentBill;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
@@ -24,7 +25,7 @@ class PaymentController extends Controller
      */
     public function create($type = "")
     {
-        if(!in_array($type, ["debt","results", "bece"], true)){
+        if(!in_array($type, ["debt","results", "bece", "bill"], true)){
             abort(404, "Invalid form type");
         }
 
@@ -53,6 +54,15 @@ class PaymentController extends Controller
                 break;
             case "results":
                 $amount = 10;
+                break;
+            case "bill":
+                $bill = StudentBill::where("student_id", $student_id)
+                                     ->where("status", true);
+                if($bill->exists()){
+                    $amount = $bill->sum("amount");
+                }else{
+                    $amount = 0;
+                }
                 break;
             default:
                 $amount = 0;

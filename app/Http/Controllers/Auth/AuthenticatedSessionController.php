@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\DebtorsList;
 use App\Models\Payment;
+use App\Models\StudentBill;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Traits\UserModelTrait;
@@ -68,8 +69,7 @@ class AuthenticatedSessionController extends Controller
 
         // students should have payment details checked out
         if($this->user->role_id == 5){
-            $this->add_payment_status("result");
-            $this->add_payment_status("debt");
+            $this->check_payments();
         }elseif($this->user->role_id == 4){
             $this->teacher_session();
         }
@@ -97,6 +97,15 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
+     * Makes checks and creates sessions for all necessary payments
+     */
+    private function check_payments(){
+        $this->add_payment_status("result");
+        $this->add_payment_status("debt");
+        $this->add_payment_status("bill");
+    }
+
+    /**
      * Creates a payment status session for students
      * @param string $payment_type The type of payment
      */
@@ -111,6 +120,10 @@ class AuthenticatedSessionController extends Controller
             case "debt":
                 $status = DebtorsList::where('student_id', $this->user->id)
                                      ->where('status', true)->exists();
+                break;
+            case "bill":
+                $status = StudentBill::where("student_id", $this->user->id)
+                                     ->where("status", true)->exists();
                 break;
             default:
                 $status = Payment::where('student_id', $this->user->id)

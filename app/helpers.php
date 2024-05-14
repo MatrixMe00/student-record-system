@@ -277,3 +277,16 @@ function collection_group($collection, string $group_by, string|array $keys = "t
 function get_file_size(string $filepath){
     return Storage::size($filepath);
 }
+
+/**
+ * Formats the academic year into a link format
+ * @param string $academic_year The academic year
+ * @param bool $encode Encode or decode link format
+ * @return string
+ */
+function year_link(string $academic_year, bool $encode = true) :string{
+    $search = $encode ? "/" : "-";
+    $replace = $encode ? "-" : "/";
+
+    return str_replace($search, $replace, $academic_year);
+}

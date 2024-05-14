@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\RemarkOptionsController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\StudentBillController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherClassController;
 use App\Http\Controllers\TeacherRemarksController;
@@ -83,10 +84,13 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get("/result/{result_token}/show", [ApproveresultsController::class, "show"]);
     Route::get("/result/{result_token}/edit", [ApproveresultsController::class, "edit"]);
     Route::put("/result/{result}/edit", [ApproveresultsController::class, "update"]);
+
     // student results
-    Route::get("/my-result/{program}", [ProgramController::class, "results"])->middleware("student.payment-result");
-    Route::get("/my-result/{program}/{semester}", [ProgramController::class, "results"])->middleware("student.payment-result");
-    Route::get("/my-result/{program}/{semester}/print", [ProgramController::class, "print"])->middleware("student.payment-result");
+    Route::middleware(["student.payment-bill", "student.payment-result"])->group(function(){
+        Route::get("/my-result/{program}", [ProgramController::class, "results"]);
+        Route::get("/my-result/{program}/{semester}", [ProgramController::class, "results"]);
+        Route::get("/my-result/{program}/{semester}/print", [ProgramController::class, "print"]);
+    });
 
     // storing grades
     Route::post("/grades/store", [GradesController::class, 'store'])->name("grades.create");
@@ -149,6 +153,14 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
 
     // debtors list
     Route::post("/debt-list/store", [DebtorsListController::class, "store"])->name("debtlist.store");
+
+    // student debt bills
+    Route::get("student-debt/", [StudentBillController::class, "index"])->name("bills.none");
+    Route::get("student-debt/{academic_year}", [StudentBillController::class, "index"])->name("bills.index");
+    Route::get("student-debt/{academic_year}/{program}", [StudentBillController::class, "show"])->name("bills.show");
+    Route::get("student-debt/{academic_year}/{program}/debtors", [StudentBillController::class, "edit"])->name("bills.edit");
+    Route::post("student-debt/{academic_year}/{program}/debtors", [StudentBillController::class, "store"])->name("bills.store");
+    Route::delete("student-debt/{studentBill}/remove", [StudentBillController::class, "destroy"])->name("bills.remove");
 
     // bece candidates
     Route::post("/prepare-candidates", [BECECandidateController::class, "create_candidates"])->name("candidates.create");

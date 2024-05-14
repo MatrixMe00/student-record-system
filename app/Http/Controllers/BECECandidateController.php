@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\BECECandidate;
 use App\Http\Requests\StoreBECECandidateRequest;
 use App\Http\Requests\UpdateBECECandidateRequest;
-use App\Models\Program;
 use App\Models\School;
 use App\Models\Student;
+use App\Traits\ProgramModelTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
 class BECECandidateController extends Controller
 {
+    use ProgramModelTrait;
+
     /**
      * Display a listing of the resource.
      */
@@ -89,8 +91,7 @@ class BECECandidateController extends Controller
      * Gets all JHS 3 candidates
      */
     private function get_candidates(){
-        $program_id = Program::whereRaw("LOWER(name) = ?", ["jhs 3"])
-                              ->orWhereRaw("LOWER(name) = ?", ["jhs3"])->first();
+        $program_id = $this->jhs3();
 
         if($program_id){
             $program_id = $program_id->id;

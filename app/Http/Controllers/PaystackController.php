@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DebtorsList;
 use App\Models\Payment;
+use App\Models\StudentBill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -81,6 +82,16 @@ class PaystackController extends Controller
                 session(['payment_debt' => false]);
 
                 return redirect()->route("bece.all")->with(["success" => true, "message" => "Payment completed"]);
+            case "bill":
+                // all outstanding bills should be marked as false
+                $bills = StudentBill::where("student_id", $student_id)->where("status", true)->get();
+                $bills->each(function($bill){
+                    $bill->status = false;
+                    $bill->save();
+                });
+
+                session(["payment_bill" => false]);
+                return redirect()->route("result.all")->with(["success" => true, "message" => "All outstanding bills has been paid successfully"]);
         }
     }
 }
