@@ -89,6 +89,7 @@ class TeacherClassController extends Controller
                             "row" => $s_count
                         ]);
                     }else{
+                        dd($data);
                         $tc->update($data);
                     }
                 }else{
