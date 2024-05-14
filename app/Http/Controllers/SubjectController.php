@@ -100,11 +100,10 @@ class SubjectController extends Controller
      */
     private function name_exists(bool $is_update, ?int $subject_id){
         $name = request()->name;
-        // dd(Subject::where('name', $name)->where("id", ">", $subject_id)->get(), $subject_id);
 
         $exists = $is_update ?
             Subject::where('name', $name)->where("id", "!=", $subject_id)->exists() :
-            Subject::where('name', $name)->where("school_id", session('school_id'))->exists();
+            Subject::where('name', $name)->exists();
 
         return $exists;
     }
