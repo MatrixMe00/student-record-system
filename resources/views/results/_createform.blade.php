@@ -14,7 +14,7 @@
 
             {{-- Result id --}}
             <div>
-                <x-input-label for="result_token" :value="__('Result ID')" />
+                <x-input-label for="result_token" :value="__('Result Token ID')" />
                 <x-text-input id="result_token" type="text" name="result_token" :value="old('result_token', $result_id)" required readonly />
                 <x-input-error :messages="$errors->get('result_token')" class="mt-2" />
             </div>

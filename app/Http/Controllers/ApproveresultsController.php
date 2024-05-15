@@ -21,7 +21,6 @@ class ApproveresultsController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
         $validated = $request->validate([
             "result_token" => ["required", "string", Rule::unique("approveresults", "result_token")],
             "school_id" => ["required", "integer", Rule::exists('schools', 'id')],
