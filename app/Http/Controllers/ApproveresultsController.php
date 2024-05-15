@@ -30,6 +30,8 @@ class ApproveresultsController extends Controller
             "subject_id" => ["required", "integer", Rule::exists("subjects", "id")]
         ]);
 
+        dd($validated);
+
         // prevent teacher from creating a result slip if he does not teach the desired class
         if(!$this->teacher_program_validation($validated["teacher_id"], $validated["program_id"])){
             throw ValidationException::withMessages([
