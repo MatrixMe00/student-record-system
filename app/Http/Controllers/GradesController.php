@@ -68,7 +68,6 @@ class GradesController extends Controller
                     "subjects" => $model->subjects->unique('name')->toArray(),
                     "classes" => $model->classes->unique("program_id")
                 ];
-                dd($options);
                 break;
             case 5:
                 $options = [
