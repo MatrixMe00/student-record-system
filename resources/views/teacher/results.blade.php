@@ -17,7 +17,7 @@
                     $extras = [
                         ["title" => "Recorded", "content" => "{$result->grades->count()} Students"],
                         ["title" => "Subject", "content" => $result->subject->name ?? "Not Set"],
-                        ["title" => "Academic Year", "content" => get_academic_year($result->created_at)]
+                        ["title" => "Academic Year", "content" => $result->academic_year]
                     ];
                 @endphp
                 <x-content-card class="bg-white hover:bg-neutral-50" title="{{ $result->program->name }}" item_id="{{ $result->result_token }}"

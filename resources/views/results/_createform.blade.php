@@ -8,13 +8,10 @@
             Use the form below to set a new result slip / card
         </p>
 
-        <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 border p-4"
-            method="POST" action="{{ route('result.store') }}">
-            @csrf
-
+        <x-form-element method="post" action="{{ route('result.store') }}">
             {{-- Result id --}}
             <div>
-                <x-input-label for="result_token" :value="__('Result Token ID')" />
+                <x-input-label for="result_token" :value="__('Result ID')" />
                 <x-text-input id="result_token" type="text" name="result_token" :value="old('result_token', $result_id)" required readonly />
                 <x-input-error :messages="$errors->get('result_token')" class="mt-2" />
             </div>
@@ -23,15 +20,7 @@
             <x-text-input id="school_id" type="hidden" name="school_id" value="{{ session('school_id') }}" />
 
             {{-- teacher id --}}
-            @if (isset($teacher_id))
-                <x-text-input id="teacher_id" type="hidden" name="teacher_id" value="{{ $teacher_id }}" />
-            @else
-                <div>
-                    <x-input-label for="teacher_id" :value="__('Select Teacher')" />
-                    <x-input-select id="teacher_id" name="teacher_id" :value="old('teacher_id')" :options="$teachers" :text_key="['lname','oname']" value_key="user_id" required />
-                    <x-input-error :messages="$errors->get('teacher_id')" class="mt-2" />
-                </div>
-            @endif
+            <x-text-input id="teacher_id" type="hidden" name="teacher_id" value="{{ $teacher_id }}" />
 
             {{-- program id --}}
             <div>
@@ -64,6 +53,6 @@
                     <i class="fas fa-angle-right group-hover:mr-2 transition-all duration-500"></i>
                 </button>
             </div>
-        </form>
+        </x-form-element>
     </div>
 </div>

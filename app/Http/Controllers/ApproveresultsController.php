@@ -35,12 +35,32 @@ class ApproveresultsController extends Controller
             throw ValidationException::withMessages([
                 "program_id" => "Invalid subject class was chosen"
             ]);
-            return redirect()->back();
         }
 
-        ApproveResults::create($validated);
+        // same slip cannot be created for the same academic year
+        if($this->check_slip_exist($validated)){
+            throw ValidationException::withMessages([
+                "semester" => "Similar result slip for this year has already been created"
+            ]);
+        }else{
+            $validated["academic_year"] = get_academic_year(now());
+            ApproveResults::create($validated);
+        }
 
         return redirect()->back()->with(["success" => true, "message" => "Result data has been added"]);
+    }
+
+    /**
+     * This makes sure the same result slip is not created for the same year
+     * @param array $validated The validated data
+     * @return bool
+     */
+    private function check_slip_exist($validated){
+        $cur_year = get_academic_year(now());
+        return ApproveResults::where("program_id", $validated["program_id"])
+                             ->where("semester", $validated["semester"])
+                             ->where("academic_year", $cur_year)
+                             ->exists();
     }
 
     /**

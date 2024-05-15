@@ -34,7 +34,7 @@
                                 $extras = [
                                     ["title" => "Recorded", "content" => "{$result->grades->count()} Students"],
                                     ["title" => "Subject", "content" => $result->subject->name ?? "Not Set"],
-                                    ["title" => "Academic Year", "content" => get_academic_year($result->created_at)]
+                                    ["title" => "Academic Year", "content" => $result->academic_year]
                                 ];
                             @endphp
                             <x-content-card class="border-neutral-200 hover:bg-neutral-50 hover:border-neutral-100" title="{{ $result->program->name }}" item_id="{{ $result->result_token }}"
@@ -51,7 +51,3 @@
         <x-empty-div>{{ __("No Results found on your account") }}</x-empty-div>
     @endif
 </section>
-
-<x-modal name="add_result" :show="$errors->any()">
-    @include("results._createform")
-</x-modal>
