@@ -21,6 +21,7 @@ class ApproveresultsController extends Controller
 
     public function store(Request $request)
     {
+        dd($request);
         $validated = $request->validate([
             "result_token" => ["required", "string", Rule::unique("approveresults", "result_token")],
             "school_id" => ["required", "integer", Rule::exists('schools', 'id')],
@@ -29,8 +30,6 @@ class ApproveresultsController extends Controller
             "semester" => ["required", "integer", "min:1", "max:3"],
             "subject_id" => ["required", "integer", Rule::exists("subjects", "id")]
         ]);
-
-        dd($validated);
 
         // prevent teacher from creating a result slip if he does not teach the desired class
         if(!$this->teacher_program_validation($validated["teacher_id"], $validated["program_id"])){
