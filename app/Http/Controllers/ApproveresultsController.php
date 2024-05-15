@@ -16,7 +16,7 @@ class ApproveresultsController extends Controller
 {
     public function index()
     {
-        return ApproveResults::where("school_id", session('school_id'))->get();
+        return ApproveResults::all();
     }
 
     public function store(Request $request)
@@ -146,30 +146,5 @@ class ApproveresultsController extends Controller
 
     public function show($result_token){
         return $this->edit($result_token);
-    }
-
-    /**
-     * Generate a random token for a result
-     */
-    private function createToken($teacher_id, $school_id) : string
-    {
-        $token = "";
-
-        //generate three random values
-        for($i = 1; $i <= 3; $i++){
-            $token .= chr(rand(65,90));
-        }
-
-        //add teacher id
-        $token .= str_pad(strval($teacher_id), 3, "0", STR_PAD_LEFT);
-
-        $token = str_shuffle($token);
-
-        //random characters
-        $token .= chr(rand(65,90)). str_pad($school_id,2,"0",STR_PAD_LEFT);
-        $token = substr(str_shuffle($token.uniqid()), 0, 8);
-        $token .= date("y");
-
-        return strtolower($token);
     }
 }
