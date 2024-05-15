@@ -89,7 +89,7 @@ class TeacherClassController extends Controller
                             "row" => $s_count
                         ]);
                     }else{
-                        dd($data, $tc);
+                        $tc = is_null($tc) ? TeacherClass::find($dynamic["id"][$count]) : $tc;
                         $tc->update($data);
                     }
                 }else{
