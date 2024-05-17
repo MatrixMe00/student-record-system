@@ -117,7 +117,7 @@ class SchoolController extends Controller
             "term" => $term,
             "academic_year" => $academic_year,
             "remark" => $remark,
-            "remark_head" => TeachersRemark::where("remark_token", $remark->remark_token)->first()
+            "remark_head" => TeachersRemark::where("remark_token", $remark->remark_token)?->first()
         ]);
     }
 

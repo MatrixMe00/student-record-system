@@ -80,12 +80,16 @@
                             <x-thead-data>{{ __("Head Teacher's Remark") }}</x-thead-data>
                             <x-table-data colspan="5" class="text-wrap">{{ __($remark?->h_remark ?  $remark->h_remark : "No Remark provided") }}</x-table-data>
                         </tr>
-                        @if ($term == 3)
+                        @if ($term == 3 && $remark_head)
                             <tr class="border-t">
                                 <x-thead-data>{{ __("Current Class") }}</x-thead-data>
                                 <x-table-data class="text-wrap">{{ __($program->name) }}</x-table-data>
                                 <x-thead-data>{{ __("Promoted To") }}</x-thead-data>
                                 <x-table-data class="text-wrap">{{ __($remark->promoted == true ? $remark_head->promoted_class->name : "Repeated") }}</x-table-data>
+                            </tr>
+                        @elseif (is_null($remark_head))
+                            <tr class="border-t">
+                                <x-table-data>Report not readied by class teacher. Report is not visible to student yet</x-table-data>
                             </tr>
                         @endif
                     </tfoot>
