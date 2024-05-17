@@ -69,6 +69,14 @@ Route::get("/schools", [SchoolController::class, 'index'])->name("school.index")
 // dashboards
 Route::get('/dashboard', [UserController::class, 'dashboard'])->middleware(['auth', 'verified', 'school.check'])->name('dashboard');
 
+// results
+Route::get("/results", [GradesController::class, "index"])->name("result.all");
+Route::post("/results", [ApproveresultsController::class, "store"])->name("result.store");
+Route::get("/result/{result_token}/delete", [ApproveresultsController::class, "destroy"]);
+Route::get("/result/{result_token}/show", [ApproveresultsController::class, "show"]);
+Route::get("/result/{result_token}/edit", [ApproveresultsController::class, "edit"]);
+Route::put("/result/{result}/edit", [ApproveresultsController::class, "update"]);
+
 Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -76,14 +84,6 @@ Route::middleware(['auth', 'school.check'])->group(function () {
 
     // school settings
     Route::get("/my-school", [SchoolController::class, 'show'])->name('my-school');
-
-    // results
-    Route::get("/results", [GradesController::class, "index"])->name("result.all");
-    Route::post("/results", [ApproveresultsController::class, "store"])->name("result.store");
-    Route::get("/result/{result_token}/delete", [ApproveresultsController::class, "destroy"]);
-    Route::get("/result/{result_token}/show", [ApproveresultsController::class, "show"]);
-    Route::get("/result/{result_token}/edit", [ApproveresultsController::class, "edit"]);
-    Route::put("/result/{result}/edit", [ApproveresultsController::class, "update"]);
 
     // student results
     Route::middleware(["student.payment-bill", "student.payment-result"])->group(function(){

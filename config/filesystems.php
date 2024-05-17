@@ -47,7 +47,7 @@ return [
         "public_html" => [
             'driver' => 'local',
             'root' => custom_public_path(public: 'public_html'),
-            'url' => env("APP_URL")."/storage",
+            'url' => env("APP_URL"),
             'visibility' => 'public',
             'throw' => false
         ],
@@ -55,7 +55,7 @@ return [
         "test-site" => [
             'driver' => 'local',
             'root' => custom_public_path(public: 'test-site'),
-            'url' => env("APP_URL")."/storage",
+            'url' => env("APP_URL"),
             'visibility' => 'public',
             'throw' => false
         ],
