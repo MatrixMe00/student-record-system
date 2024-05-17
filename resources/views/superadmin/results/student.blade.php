@@ -12,9 +12,9 @@
                     <tbody>
                         <tr class="border-t">
                             <x-thead-data>Position</x-thead-data>
-                            <x-table-data>{{ positionFormat($remark?->position) }}</x-table-data>
+                            <x-table-data>{{ positionFormat($remark?->position) ?? "No remark" }}</x-table-data>
                             <x-thead-data>Attendance</x-thead-data>
-                            <x-table-data>{{ $remark?->attendance." of ".$remark?->head_remark->total_attendance }}</x-table-data>
+                            <x-table-data>{{ ($remark?->attendance ?? "N/A")." of ".($remark?->head_remark->total_attendance ?? "N/A") }}</x-table-data>
                         </tr>
                     </tbody>
                 </x-table-component>
