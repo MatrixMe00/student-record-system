@@ -65,4 +65,19 @@ class School extends Model
     public function admin() :HasOne{
         return $this->hasOne(SchoolAdmin::class, "user_id", "admin_id");
     }
+
+    // for superadmin usage
+    /**
+     * Finds the various grades for the school
+     */
+    public function grades() :HasMany{
+        return $this->hasMany(Grades::class);
+    }
+
+    /**
+     * Find various remark details for the school
+     */
+    public function remarks() :HasMany{
+        return $this->hasMany(TeacherRemarks::class);
+    }
 }

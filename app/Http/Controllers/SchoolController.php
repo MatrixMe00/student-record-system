@@ -6,7 +6,12 @@ use App\Models\School;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
 use App\Models\Admin;
+use App\Models\Grades;
+use App\Models\Program;
 use App\Models\SchoolAdmin;
+use App\Models\Student;
+use App\Models\TeacherRemarks;
+use App\Models\TeachersRemark;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
@@ -46,6 +51,87 @@ class SchoolController extends Controller
             "school_register" => true,
             "page_title" => "Add Your School"
         ]);
+    }
+
+    /**
+     * Get the results menu. This shows the various academic year results available
+     */
+    public function results($school_id){
+        $school = $this->decrypt_school_id($school_id);
+
+        return view("superadmin.results.index", [
+            "academic_years" => $school->remarks
+                                       ->unique("academic_year")->pluck("academic_year"),
+            "school" => $school,
+            "school_id" => $school_id
+        ]);
+    }
+
+    /**
+     * This shows the programs uploaded for a specified academic year
+     */
+    public function year_results($school_id, $academic_year){
+        $school = $this->decrypt_school_id($school_id);
+        $academic_year = year_link($academic_year, false);
+
+        return view("superadmin.results.classes", [
+            "academic_year" => $academic_year,
+            "classes" => $school->remarks->where("academic_year", $academic_year)->unique("program_id"),
+            "school_id" => $school_id
+        ]);
+    }
+
+    /**
+     * This shows the data of information for a class
+     */
+    public function class_results($school_id, $academic_year, Program $program, $term = 1){
+        $school = $this->decrypt_school_id($school_id);
+        $academic_year = year_link($academic_year, false);
+
+        return view("superadmin.results.class", [
+            "school_id" => $school_id,
+            "academic_year" => $academic_year,
+            "term" => $term,
+            "program" => $program,
+            "results" => $school->remarks->where("academic_year", $academic_year)->where("semester", $term)
+        ]);
+    }
+
+    /**
+     * This shows the results for a student
+     */
+    public function student_result(Program $program, Student $student, $academic_year, $term){
+        $academic_year = year_link($academic_year, false);
+        $remark = TeacherRemarks::where("student_id", $student->user_id)
+                                ->where("academic_year", $academic_year)
+                                ->where("program_id", $program->id)
+                                ->where("semester", $term)->first();
+
+        return view("superadmin.results.student", [
+            "results" => Grades::where("student_id", $student->user_id)
+                               ->where("academic_year", $academic_year)
+                               ->where("program_id", $program->id)
+                               ->where("semester", $term)->get(),
+            "student" => $student,
+            "program" => $program,
+            "term" => $term,
+            "academic_year" => $academic_year,
+            "remark" => $remark,
+            "remark_head" => TeachersRemark::where("remark_token", $remark->remark_token)->first()
+        ]);
+    }
+
+    /**
+     * Decrypts school id
+     */
+    private function decrypt_school_id($school_id) :School|null{
+        $school = School::findOrFail(Crypt::decryptString($school_id));
+
+        if(!$school){
+            abort(404);
+        }
+
+        return $school;
     }
 
     /**

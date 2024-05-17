@@ -32,7 +32,7 @@
                 <x-school-menu-card
                     icon="fas fa-poll"
                     message="Results"
-                    item_url=""
+                    item_url="{{ route('school-result.all', ['school_id' => $protected_id]) }}"
                 />
             </div>
 

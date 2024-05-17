@@ -178,7 +178,12 @@ Route::middleware(['auth', 'system.admin'])->group(function(){
     // BECE candidates
     Route::get("/bece-candidates/{school_id}", [BECECandidateController::class, "index"])->name("school.candidates");
     Route::post("/bece-candidates/{school_id}", [BECECandidateController::class, "candidates_update"])->name("school.candidates.update");
-    // Route::get("/school-results/{school_id}", [])
+
+    // check school results
+    Route::get("/school-results/{school_id}", [SchoolController::class, "results"])->name("school-result.all");
+    Route::get("/school-results/{school_id}/{academic_year}", [SchoolController::class, "year_results"])->name("school-result.programs");
+    Route::get("/school-results/{school_id}/{academic_year}/{program}/{term}", [SchoolController::class, "class_results"])->name("school-result.class");
+    Route::get("/student-result/{program}/{student}/{academic_year}/{term}", [SchoolController::class, "student_result"])->name("school-result.student");
 });
 
 require __DIR__.'/auth.php';

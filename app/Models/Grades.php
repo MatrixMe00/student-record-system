@@ -94,6 +94,5 @@ class Grades extends Model
         });
 
         return $totals->sortByDesc("total");
-
     }
 }
