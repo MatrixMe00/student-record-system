@@ -25,7 +25,7 @@
 
     if($user->role_id == 4){
         if(session('class_teacher')){
-            $nav_links[] = ["name" => "Remarks & Reports", "route" => "remarks.all", "users" => [4]];
+            $nav_links[] = ["name" => "Remarks & Reports", "route" => "remarks.all", "users" => [4], "class" => "text-nowrap"];
         }
     }
 @endphp
