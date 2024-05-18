@@ -27,11 +27,13 @@
                 $key = 0;
                 $total_studs = $remarks->count();
                 $remark_options = $remark_options->toArray();
+                $edit_mode = $remark_head->status == "pending";
             @endphp
             @foreach($remarks as $remark)
                 <x-remark-entry-row
                     :result="$remark" :key="$key"
                     :readonly="$is_admin || !$edit_once"
+                    :totalmark="$edit_mode ? $student_marks[$remark->student_id]['total'] : $remark->total_marks"
                     :total_studs="$total_studs"
                     :remarks="$remark_options"
                     :remarkhead="$remark_head"
