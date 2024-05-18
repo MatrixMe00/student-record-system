@@ -93,7 +93,7 @@ class SchoolController extends Controller
             "academic_year" => $academic_year,
             "term" => $term,
             "program" => $program,
-            "results" => $school->remarks->where("academic_year", $academic_year)->where("semester", $term)
+            "results" => $school->remarks->where("academic_year", $academic_year)->where("semester", $term)->where("program_id", $program->id)
         ]);
     }
 
