@@ -77,7 +77,6 @@ class Grades extends Model
     public function class_results(){
         $results = Grades::where("semester", $this->semester)
                          ->where("program_id", $this->program_id)
-                         ->where("teacher_id", $this->teacher_id)
                          ->where("academic_year", $this->academic_year)
                          ->get();
         $results = $results->groupBy("student_id");
