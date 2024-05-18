@@ -44,6 +44,11 @@ class Grades extends Model
         return $this->hasOne(ApproveResults::class, "result_token", "result_token");
     }
 
+    // sums the class mark and exam mark
+    public function getTotalAttribute() :int{
+        return $this->class_mark + $this->exam_mark;
+    }
+
     /**
      * Gets the total number of students for a specified program
      */

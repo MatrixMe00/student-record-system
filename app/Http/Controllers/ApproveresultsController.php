@@ -109,7 +109,7 @@ class ApproveresultsController extends Controller
             "result" => $approveResults,
             "program" => $program,
             "students" => $students,
-            "grades" => $approveResults->grades,
+            "grades" => $approveResults->grades?->sortByDesc("total"),
             "subject" => $approveResults->subject,
             "academic_year" => get_academic_year($approveResults->created_at),
             "edit_all" => in_array($approveResults->status, ["pending", "rejected", "reject"]) && !$is_admin,

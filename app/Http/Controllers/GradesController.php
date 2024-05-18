@@ -147,33 +147,25 @@ class GradesController extends Controller
      */
     private function arrange_grades(string $result_token){
         $results = Grades::where("result_token", $result_token)->get();
-        $totals = new Collection();
-
-        foreach($results as $result){
-            $totals->push([
-                "grade_id" => $result->id,
-                "student_id" => $result->student_id,
-                "total" => ($result->class_mark + $result->exam_mark)
-            ]);
-        }
-
-        $this->enter_positions($totals->sortByDesc("total")->toArray(), $result_token);
+        $this->enter_positions($results->sortByDesc("total"));
     }
 
     /**
      * This enters the positions into the database
      */
-    private function enter_positions($students, $result_token){
+    private function enter_positions($students){
         $cur_pos = 0;
         $last_total = 0;
+        $count = 0;
 
-        foreach($students as $count => $student){
-            $grade = Grades::find($student["grade_id"]);
-            $cur_pos = $last_total == $student["total"] ? $cur_pos : ($count + 1);
+        foreach($students as $student){
+            $cur_pos = $last_total == $student->total ? $cur_pos : ($count + 1);
             $last_total = $student["total"];
 
-            $grade->position = $cur_pos;
-            $grade->update();
+            $student->position = $cur_pos;
+            $student->update();
+
+            $count++;
         }
     }
 
