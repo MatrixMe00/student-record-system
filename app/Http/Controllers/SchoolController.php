@@ -60,7 +60,7 @@ class SchoolController extends Controller
     public function results($school_id){
         $school = $this->decrypt_school_id($school_id);
 
-        return view("superadmin.results.index", [
+        return view("history.results.index", [
             "academic_years" => $school->remarks
                                        ->unique("academic_year")->pluck("academic_year"),
             "school" => $school,
@@ -75,7 +75,7 @@ class SchoolController extends Controller
         $school = $this->decrypt_school_id($school_id);
         $academic_year = year_link($academic_year, false);
 
-        return view("superadmin.results.classes", [
+        return view("history.results.classes", [
             "academic_year" => $academic_year,
             "classes" => $school->remarks->where("academic_year", $academic_year)->unique("program_id"),
             "school_id" => $school_id
@@ -89,7 +89,7 @@ class SchoolController extends Controller
         $school = $this->decrypt_school_id($school_id);
         $academic_year = year_link($academic_year, false);
 
-        return view("superadmin.results.class", [
+        return view("history.results.class", [
             "school_id" => $school_id,
             "academic_year" => $academic_year,
             "term" => $term,
@@ -108,7 +108,7 @@ class SchoolController extends Controller
                                 ->where("program_id", $program->id)
                                 ->where("semester", $term)->first();
 
-        return view("superadmin.results.student", [
+        return view("history.results.student", [
             "results" => Grades::where("student_id", $student->user_id)
                                ->where("academic_year", $academic_year)
                                ->where("program_id", $program->id)
@@ -123,13 +123,13 @@ class SchoolController extends Controller
     }
 
     /**
-     *
+     * Shows the various academic years available
      */
     public function subjects($school_id = null){
         $school_id = $school_id ?? session('school_id');
         $school = $this->decrypt_school_id($school_id);
 
-        return view("results.admin.index", [
+        return view("history.subjects.index", [
             "academic_years" => $school->results
                                        ->unique("academic_year")->pluck("academic_year"),
             "school" => $school,
@@ -138,14 +138,14 @@ class SchoolController extends Controller
     }
 
     /**
-     *
+     * The classes for that specified year
      */
     public function year_subject_classes($school_id, $academic_year){
         $school_id = $school_id ?? session('school_id');
         $school = $this->decrypt_school_id($school_id);
         $academic_year = year_link($academic_year, false);
 
-        return view("results.admin.classes", [
+        return view("history.subjects.classes", [
             "academic_year" => $academic_year,
             "classes" => $school->results->where("academic_year", $academic_year)->unique("program_id"),
             "school_id" => $school_id
@@ -153,14 +153,14 @@ class SchoolController extends Controller
     }
 
     /**
-     *
+     * The subjects of the specified class for that year which were uploaded
      */
     public function class_subjects($school_id, $academic_year, Program $program){
         $school_id = $school_id ?? session('school_id');
         $school = $this->decrypt_school_id($school_id);
         $academic_year = year_link($academic_year, false);
 
-        return view("results.admin.subjects", [
+        return view("history.subjects.subjects", [
             "school_id" => $school_id,
             "academic_year" => $academic_year,
             "program" => $program,
@@ -170,7 +170,7 @@ class SchoolController extends Controller
     }
 
     /**
-     *
+     * Results of the subject for the specified period
      */
     public function subject_results($school_id, $academic_year, Program $program, Subject $subject, $term = 1){
         $school_id = $school_id ?? session('school_id');
@@ -184,7 +184,7 @@ class SchoolController extends Controller
                                        ->where("subject_id", $subject->id)
                                        ->where("semester", $term);
 
-        return view("results.admin.subject", [
+        return view("history.subjects.subject", [
             "subject" => $subject,
             "term" => $term,
             "academic_year" => $academic_year,
