@@ -69,4 +69,9 @@ class Teacher extends Model
     public function user() :BelongsTo{
         return $this->belongsTo(User::class);
     }
+
+    // fullname for teacher
+    public function getFullnameAttribute(){
+        return $this->lname." ".$this->oname;
+    }
 }

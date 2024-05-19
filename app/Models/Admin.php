@@ -34,4 +34,9 @@ class Admin extends Model
 
         return $query;
     }
+
+    // fullname of user
+    public function getFullnameAttribute(){
+        return $this->lname." ".$this->oname;
+    }
 }

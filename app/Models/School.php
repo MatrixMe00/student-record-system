@@ -70,8 +70,8 @@ class School extends Model
     /**
      * Finds the various grades for the school
      */
-    public function grades() :HasMany{
-        return $this->hasMany(Grades::class);
+    public function results() :HasMany{
+        return $this->hasMany(ApproveResults::class);
     }
 
     /**

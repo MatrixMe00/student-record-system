@@ -47,4 +47,9 @@ class SchoolAdmin extends Model
     public function activity_logs(): HasManyThrough{
         return $this->hasManyThrough(ActivityLog::class, User::class, localKey: "user_id");
     }
+
+    // fullname of user
+    public function getFullnameAttribute(){
+        return $this->lname." ".$this->oname;
+    }
 }

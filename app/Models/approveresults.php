@@ -49,7 +49,7 @@ class ApproveResults extends Model
 
     // every result has a teacher
     public function teacher(): HasOne{
-        return $this->hasOne(Teacher::class);
+        return $this->hasOne(Teacher::class, "user_id", "teacher_id");
     }
 
     // every result belongs to a program
@@ -60,5 +60,10 @@ class ApproveResults extends Model
     // every result belongs to a school
     public function school(): BelongsTo{
         return $this->belongsTo(School::class);
+    }
+
+    // admin for result approval
+    public function admin() :HasOne{
+        return $this->hasOne(SchoolAdmin::class, "user_id", "admin_id");
     }
 }

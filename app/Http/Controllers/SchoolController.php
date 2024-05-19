@@ -10,6 +10,7 @@ use App\Models\Grades;
 use App\Models\Program;
 use App\Models\SchoolAdmin;
 use App\Models\Student;
+use App\Models\Subject;
 use App\Models\TeacherRemarks;
 use App\Models\TeachersRemark;
 use Illuminate\Support\Facades\Auth;
@@ -70,7 +71,7 @@ class SchoolController extends Controller
     /**
      * This shows the programs uploaded for a specified academic year
      */
-    public function year_results($school_id, $academic_year){
+    public function year_result_classes($school_id, $academic_year){
         $school = $this->decrypt_school_id($school_id);
         $academic_year = year_link($academic_year, false);
 
@@ -122,10 +123,84 @@ class SchoolController extends Controller
     }
 
     /**
+     *
+     */
+    public function subjects($school_id = null){
+        $school_id = $school_id ?? session('school_id');
+        $school = $this->decrypt_school_id($school_id);
+
+        return view("results.admin.index", [
+            "academic_years" => $school->results
+                                       ->unique("academic_year")->pluck("academic_year"),
+            "school" => $school,
+            "school_id" => $school_id
+        ]);
+    }
+
+    /**
+     *
+     */
+    public function year_subject_classes($school_id, $academic_year){
+        $school_id = $school_id ?? session('school_id');
+        $school = $this->decrypt_school_id($school_id);
+        $academic_year = year_link($academic_year, false);
+
+        return view("results.admin.classes", [
+            "academic_year" => $academic_year,
+            "classes" => $school->results->where("academic_year", $academic_year)->unique("program_id"),
+            "school_id" => $school_id
+        ]);
+    }
+
+    /**
+     *
+     */
+    public function class_subjects($school_id, $academic_year, Program $program){
+        $school_id = $school_id ?? session('school_id');
+        $school = $this->decrypt_school_id($school_id);
+        $academic_year = year_link($academic_year, false);
+
+        return view("results.admin.subjects", [
+            "school_id" => $school_id,
+            "academic_year" => $academic_year,
+            "program" => $program,
+            "records" => $school->results->where("academic_year", $academic_year)
+                                         ->where("program_id", $program->id)->unique("subject_id")
+        ]);
+    }
+
+    /**
+     *
+     */
+    public function subject_results($school_id, $academic_year, Program $program, Subject $subject, $term = 1){
+        $school_id = $school_id ?? session('school_id');
+        $school = $this->decrypt_school_id($school_id);
+        $academic_year = year_link($academic_year, false);
+        $results = Grades::where("program_id", $program->id)
+                         ->where("subject_id", $subject->id)
+                         ->where("semester", $term)->where("school_id", $school->id)
+                         ->get();
+        $result_head = $school->results->where("program_id", $program->id)
+                                       ->where("subject_id", $subject->id)
+                                       ->where("semester", $term);
+
+        return view("results.admin.subject", [
+            "subject" => $subject,
+            "term" => $term,
+            "academic_year" => $academic_year,
+            "school_id" => $school_id,
+            "program" => $program,
+            "results" => $results,
+            "result_head" => $result_head->first()
+        ]);
+    }
+
+    /**
      * Decrypts school id
      */
     private function decrypt_school_id($school_id) :School|null{
-        $school = School::findOrFail(Crypt::decryptString($school_id));
+        $school_id = is_integer($school_id) ? $school_id : Crypt::decryptString($school_id);
+        $school = School::findOrFail($school_id);
 
         if(!$school){
             abort(404);

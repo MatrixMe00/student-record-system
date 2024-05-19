@@ -167,6 +167,13 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
 
     // promote students
     Route::post("/students/promote", [TeacherRemarksController::class, "promote"])->name("students.promote");
+
+    // school history
+    Route::group(['middleware' => 'school.id', 'prefix' => 'history'], function () {
+        Route::get("/", [SchoolController::class, "menu"])->name("history.menu");
+        Route::get("remarks", [SchoolController::class, "results"])->name("history.results");
+        Route::get("subjects", [SchoolController::class, "subjects"])->name("history.subjects");
+    });
 });
 
 // routes for only system admins
@@ -180,10 +187,23 @@ Route::middleware(['auth', 'system.admin'])->group(function(){
     Route::post("/bece-candidates/{school_id}", [BECECandidateController::class, "candidates_update"])->name("school.candidates.update");
 
     // check school results
-    Route::get("/school-results/{school_id}", [SchoolController::class, "results"])->name("school-result.all");
-    Route::get("/school-results/{school_id}/{academic_year}", [SchoolController::class, "year_results"])->name("school-result.programs");
-    Route::get("/school-results/{school_id}/{academic_year}/{program}/{term}", [SchoolController::class, "class_results"])->name("school-result.class");
+    Route::group(["prefix" => "school-results"], function(){
+        Route::get("{school_id}", [SchoolController::class, "results"])->name("school-result.all");
+        Route::get("{school_id}/{academic_year}", [SchoolController::class, "year_result_classes"])->name("school-result.programs");
+        Route::get("{school_id}/{academic_year}/{program}/{term}", [SchoolController::class, "class_results"])->name("school-result.class");
+    });
     Route::get("/student-result/{program}/{student}/{academic_year}/{term}", [SchoolController::class, "student_result"])->name("school-result.student");
+
+    // check school subject results
+    Route::group(["prefix" => "subject-results"], function(){
+        Route::get("{school_id}", [SchoolController::class, "subjects"])->name("school-subject.all");
+        Route::get("{school_id}/{academic_year}", [SchoolController::class, "year_subject_classes"])->name("school-subject.programs");
+        Route::get("{school_id}/{academic_year}/{program}", [SchoolController::class, "class_subjects"])->name("school-subject.class");
+        Route::get("{school_id}/{academic_year}/{program}/{subject}", [SchoolController::class, "subject_results"])->name("school-subject.fresult");
+        Route::get("{school_id}/{academic_year}/{program}/{subject}/{term}", [SchoolController::class, "subject_results"])->name("school-subject.results");
+    });
+
+    // Route::get("/student-result/{program}/{student}/{academic_year}/{term}", [SchoolController::class, "student_result"])->name("school-subject.student");
 });
 
 require __DIR__.'/auth.php';
