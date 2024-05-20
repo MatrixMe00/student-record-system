@@ -13,7 +13,13 @@
         <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @if (env('APP_URL') == "http://localhost")
+            @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @else
+            <link rel="stylesheet" href="{{ asset('assets/app.css') }}" />
+            <script src="{{ asset('assets/app.js') }}"></script>
+        @endif
+
         <script src="{{ asset('jquery/compressed_jquery.js') }}"></script>
         <style>
             @page{
