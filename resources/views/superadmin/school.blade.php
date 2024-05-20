@@ -31,7 +31,7 @@
                 />
                 <x-school-menu-card
                     icon="fas fa-poll"
-                    message="Exam Results"
+                    message="Terminal Reports"
                     item_url="{{ route('school-result.all', ['school_id' => $protected_id]) }}"
                 />
                 <x-school-menu-card

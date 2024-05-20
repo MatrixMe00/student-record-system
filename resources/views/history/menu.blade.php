@@ -14,7 +14,7 @@
             <div class="mt-2 text-6 flex flex-wrap gap-2">
                 <x-school-menu-card
                     icon="fas fa-poll"
-                    message="Exam Results"
+                    message="Terminal Reports"
                     item_url="{{ route('history.results') }}"
                 />
                 <x-school-menu-card
