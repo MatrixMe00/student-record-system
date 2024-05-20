@@ -140,6 +140,7 @@ class SchoolController extends Controller
             "term" => $term,
             "academic_year" => $academic_year,
             "remark" => $remark,
+            "school_id" => $program->school->protected_id,
             "remark_head" => $remark ? TeachersRemark::where("remark_token", $remark->remark_token)?->first() : null,
             "route_head" => $this->exam_route,
             "tag_type" => "exam",
