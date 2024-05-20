@@ -19,6 +19,16 @@ use Illuminate\Support\Facades\Crypt;
 class SchoolController extends Controller
 {
     /**
+     * @var $exam_route The route for exam results menu
+     */
+    private ?string $exam_route = null;
+
+    /**
+     * @var $subject_route The route for subject results menu
+     */
+    private ?string $subject_route = null;
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -57,14 +67,18 @@ class SchoolController extends Controller
     /**
      * Get the results menu. This shows the various academic year results available
      */
-    public function results($school_id){
+    public function results($school_id = null){
+        $school_id = $school_id ?? session('school_id');
         $school = $this->decrypt_school_id($school_id);
 
         return view("history.results.index", [
             "academic_years" => $school->remarks
                                        ->unique("academic_year")->pluck("academic_year"),
             "school" => $school,
-            "school_id" => $school_id
+            "school_id" => $school_id,
+            "route_head" => $this->exam_route,
+            "tag_type" => "exam",
+            "page" => 1
         ]);
     }
 
@@ -78,14 +92,17 @@ class SchoolController extends Controller
         return view("history.results.classes", [
             "academic_year" => $academic_year,
             "classes" => $school->remarks->where("academic_year", $academic_year)->unique("program_id"),
-            "school_id" => $school_id
+            "school_id" => $school_id,
+            "route_head" => $this->exam_route,
+            "tag_type" => "exam",
+            "page" => 2
         ]);
     }
 
     /**
      * This shows the data of information for a class
      */
-    public function class_results($school_id, $academic_year, Program $program, $term = 1){
+    public function class_results($school_id, $academic_year, ?Program $program, $term = 1){
         $school = $this->decrypt_school_id($school_id);
         $academic_year = year_link($academic_year, false);
 
@@ -94,7 +111,12 @@ class SchoolController extends Controller
             "academic_year" => $academic_year,
             "term" => $term,
             "program" => $program,
-            "results" => $school->remarks->where("academic_year", $academic_year)->where("semester", $term)->where("program_id", $program->id)
+            "results" => $school->remarks->where("academic_year", $academic_year)
+                                         ->where("semester", $term)
+                                         ->where("program_id", $program->id),
+            "route_head" => $this->exam_route,
+            "tag_type" => "exam",
+            "page" => 3
         ]);
     }
 
@@ -118,7 +140,10 @@ class SchoolController extends Controller
             "term" => $term,
             "academic_year" => $academic_year,
             "remark" => $remark,
-            "remark_head" => $remark ? TeachersRemark::where("remark_token", $remark->remark_token)?->first() : null
+            "remark_head" => $remark ? TeachersRemark::where("remark_token", $remark->remark_token)?->first() : null,
+            "route_head" => $this->exam_route,
+            "tag_type" => "exam",
+            "page" => 4
         ]);
     }
 
@@ -133,7 +158,10 @@ class SchoolController extends Controller
             "academic_years" => $school->results
                                        ->unique("academic_year")->pluck("academic_year"),
             "school" => $school,
-            "school_id" => $school_id
+            "school_id" => $school_id,
+            "route_head" => $this->subject_route,
+            "tag_type" => "subject",
+            "page" => 1
         ]);
     }
 
@@ -148,7 +176,10 @@ class SchoolController extends Controller
         return view("history.subjects.classes", [
             "academic_year" => $academic_year,
             "classes" => $school->results->where("academic_year", $academic_year)->unique("program_id"),
-            "school_id" => $school_id
+            "school_id" => $school_id,
+            "route_head" => $this->subject_route,
+            "tag_type" => "subject",
+            "page" => 2
         ]);
     }
 
@@ -165,7 +196,10 @@ class SchoolController extends Controller
             "academic_year" => $academic_year,
             "program" => $program,
             "records" => $school->results->where("academic_year", $academic_year)
-                                         ->where("program_id", $program->id)->unique("subject_id")
+                                         ->where("program_id", $program->id)->unique("subject_id"),
+            "route_head" => $this->subject_route,
+            "tag_type" => "subject",
+            "page" => 3
         ]);
     }
 
@@ -191,22 +225,55 @@ class SchoolController extends Controller
             "school_id" => $school_id,
             "program" => $program,
             "results" => $results,
-            "result_head" => $result_head->first()
+            "result_head" => $result_head->first(),
+            "route_head" => $this->subject_route,
+            "tag_type" => "subject",
+            "page" => 4
         ]);
     }
 
     /**
-     * Decrypts school id
+     * Menu for admins to select history option type
+     */
+    public function menu(){
+        return view("history.menu", [
+            "page" => 0
+        ]);
+    }
+
+    /**
+     * Decrypts school id and sets the route heads
      */
     private function decrypt_school_id($school_id) :School|null{
-        $school_id = is_integer($school_id) ? $school_id : Crypt::decryptString($school_id);
+        if(is_numeric($school_id)){
+            if(session('school_id') && session('school_id') != $school_id){
+                abort(401);
+            }
+        }else{
+            $school_id = Crypt::decryptString($school_id);
+        }
+
         $school = School::findOrFail($school_id);
 
         if(!$school){
             abort(404);
         }
 
+        // set routes and route type
+        $this->set_routes();
+
         return $school;
+    }
+
+    /**
+     * Used to set the necessary route head for the pages
+     * This is to help switch admin routes with superadmin routes for
+     * pages that are served for both parties
+     */
+    private function set_routes(){
+        $user = Auth::user();
+        $this->exam_route = $user->role_id < 3 ? "school-result" : "history.results";
+        $this->subject_route = $user->role_id < 3 ? "subject-school" : "history.subjects";
     }
 
     /**
@@ -245,12 +312,7 @@ class SchoolController extends Controller
      * Made for superadmin to see a menu of a school
      */
     public function school_menu($school_id){
-        $school = School::findOrFail(Crypt::decryptString($school_id));
-
-        if(!$school){
-            abort(404);
-        }
-
+        $school = $this->decrypt_school_id($school_id);
         return view('superadmin.school', ["school"=>$school, "protected_id" => $school_id]);
     }
 

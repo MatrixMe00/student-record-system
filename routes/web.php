@@ -171,8 +171,19 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
     // school history
     Route::group(['middleware' => 'school.id', 'prefix' => 'history'], function () {
         Route::get("/", [SchoolController::class, "menu"])->name("history.menu");
-        Route::get("remarks", [SchoolController::class, "results"])->name("history.results");
-        Route::get("subjects", [SchoolController::class, "subjects"])->name("history.subjects");
+
+        // exam results
+        Route::get("results", [SchoolController::class, "results"])->name("history.results");
+        Route::get("results/{school_id?}/{academic_year?}", [SchoolController::class, "year_result_classes"])->name("history.results.programs");
+        Route::get("results/{school_id?}/{academic_year?}/{program?}/{term?}", [SchoolController::class, "class_results"])->name("history.results.class");
+        Route::get("student/{program}/{student}/{academic_year}/{term}", [SchoolController::class, "student_result"])->name("history.results.student");
+
+        // subject results
+        Route::get("subjects/", [SchoolController::class, "subjects"])->name("history.subjects");
+        Route::get("subjects/{school_id?}/{academic_year?}", [SchoolController::class, "year_subject_classes"])->name("history.subjects.programs");
+        Route::get("subjects/{school_id?}/{academic_year?}/{program?}", [SchoolController::class, "class_subjects"])->name("history.subjects.class");
+        Route::get("subjects/{school_id?}/{academic_year?}/{program?}/{subject?}", [SchoolController::class, "subject_results"])->name("history.subjects.fresult");
+        Route::get("subjects/{school_id?}/{academic_year?}/{program?}/{subject?}/{term?}", [SchoolController::class, "subject_results"])->name("history.subjects.results");
     });
 });
 

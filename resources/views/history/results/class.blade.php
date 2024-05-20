@@ -6,12 +6,15 @@
     @section("title", "Class Data")
 
     <x-app-main class="py-4">
+        {{-- navigation menu --}}
+        @include("history.partials._menu")
+
         <x-group-buttons-container class="w-full justify-center">
             @for ($i = 1; $i <= 3; $i++)
                 <x-group-button icon="" text="Term {{ $i }}"
                     :first="$i === 1" :last="$i === 3"
                     text_color="{{ $term == $i ? 'text-blue-500 hover:bg-blue-100' : '' }}"
-                    :link="$term == $i ? null : route('school-result.class', ['school_id' => $school_id, 'academic_year' => year_link($academic_year), 'program' => $program->id, 'term' => $i]) " />
+                    :link="$term == $i ? null : route($route_head.'.class', ['school_id' => $school_id, 'academic_year' => year_link($academic_year), 'program' => $program->id, 'term' => $i]) " />
             @endfor
         </x-group-buttons-container>
 
@@ -41,7 +44,7 @@
                                 <x-table-data>{{ __(positionFormat($result->position)) }}</x-table-data>
                                 <x-table-data class="cursor-pointer text-stone-500 group-hover:text-stone-800"
                                     title="View Results"
-                                    onclick="location.href='{{ route('school-result.student', ['academic_year' => year_link($academic_year), 'student' => $student->user_id, 'program' => $program->id, 'term' => $term]) }}'"
+                                    onclick="location.href='{{ route($route_head.'.student', ['academic_year' => year_link($academic_year), 'student' => $student->user_id, 'program' => $program->id, 'term' => $term]) }}'"
                                 >
                                     <i class="fas fa-scroll"></i>
                                 </x-table-data>

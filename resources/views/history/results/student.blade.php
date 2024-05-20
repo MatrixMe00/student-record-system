@@ -6,6 +6,9 @@
     @section("title", "Student Data")
 
     <x-app-main class="py-4">
+        {{-- navigation menu --}}
+        @include("history.partials._menu")
+
         <x-section-component title="Term {{ $term }}">
             @if ($results->count() > 0)
                 <x-table-component screens="" class="mt-3">
