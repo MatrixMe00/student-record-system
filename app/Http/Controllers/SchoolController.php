@@ -274,7 +274,7 @@ class SchoolController extends Controller
     private function set_routes(){
         $user = Auth::user();
         $this->exam_route = $user->role_id < 3 ? "school-result" : "history.results";
-        $this->subject_route = $user->role_id < 3 ? "subject-school" : "history.subjects";
+        $this->subject_route = $user->role_id < 3 ? "school-subject" : "history.subjects";
     }
 
     /**
