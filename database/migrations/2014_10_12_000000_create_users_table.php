@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId("role_id")->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
             $table->string('password');
             $table->rememberToken();
+            $table->boolean("is_deleted")->default(false);
             $table->boolean("is_active")->default(true);
             $table->timestamps();
         });

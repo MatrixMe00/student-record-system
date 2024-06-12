@@ -290,3 +290,32 @@ function year_link(string $academic_year, bool $encode = true) :string{
 
     return str_replace($search, $replace, $academic_year);
 }
+
+/**
+ * Typical for pages with two different forms. Use to differentiate the old values
+ * in case they are sharing the same keys
+ * @param string $submit_value The submit value of form
+ * @param string $old_value_key The key of old value from request
+ * @param ?string
+ */
+function dual_old(string $submit_value, string $old_value_key) :?string{
+    $submit = old('submit') == $submit_value;
+
+    return $submit ? old($old_value_key) : null;
+}
+
+/**
+ * Typical for pages with two different forms. Use for errors
+ * @param string $submit_value The submit value
+ * @param string $key The error key
+ * @return mixed
+ */
+function dual_error(string $submit_value, string $key, $errors){
+    if(empty($errors)){
+        return null;
+    }
+
+    $submit = old('submit') == $submit_value;
+
+    return $submit ? $errors->get($key) : null;
+}

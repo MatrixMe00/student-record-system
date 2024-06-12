@@ -1,6 +1,6 @@
-@props(["title" => null, "title_class" => "", "content_class" => "", "content"])
+@props(["title" => null, "title_class" => "", "content_class" => "", "content", "shadow" => "shadow-lg"])
 <div {{ $attributes->merge(["class"=>""]) }}>
-    <div class="bg-white p-6 rounded-lg shadow-lg">
+    <div class="bg-white p-6 rounded-lg {{ $shadow }}">
         @if ($title)
             <h2 class="text-2xl font-bold mb-2 text-gray-800 {{ $title_class }}">{{ $title }}</h2>
         @endif

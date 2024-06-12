@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Admin;
 use App\Models\DebtorsList;
 use App\Models\Payment;
+use App\Models\PaymentInformation;
 use App\Models\StudentBill;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -64,6 +66,16 @@ class AuthenticatedSessionController extends Controller
         $response = $this->create_cookie();
         $cookie = $response->headers->getCookies()[0];
 
+        // add necessary sessions
+        $this->add_sessions();
+
+        return redirect()->intended(RouteServiceProvider::HOME)->withCookie($cookie);
+    }
+
+    /**
+     * Creates necessary sessions for the authenticated user
+     */
+    private function add_sessions(){
         // add the school id as a session
         $this->add_school_id();
 
@@ -74,7 +86,22 @@ class AuthenticatedSessionController extends Controller
             $this->teacher_session();
         }
 
-        return redirect()->intended(RouteServiceProvider::HOME)->withCookie($cookie);
+        // see if system is ready to receive payments
+        $this->payment_ready();
+    }
+
+    /**
+     * This creates a session to determine if the system is ready to receive payments
+     */
+    private function payment_ready(){
+        $admins = Admin::all();
+        $ready = false;
+        if($admins->count() > 0){
+            $admin_payments = PaymentInformation::where("master", true)->get();
+            $ready = $admins->count() == $admin_payments->count();
+        }
+
+        session(["payment_is_ready" => $ready]);
     }
 
     /**

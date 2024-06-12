@@ -5,6 +5,7 @@ use App\Http\Controllers\BECECandidateController;
 use App\Http\Controllers\DebtorsListController;
 use App\Http\Controllers\GradesController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentInformationController;
 use App\Http\Controllers\PaystackController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\TeacherClassController;
 use App\Http\Controllers\TeacherRemarksController;
 use App\Http\Controllers\TeachersRemarkController;
 use App\Http\Controllers\UserController;
+use App\Models\PaystackBank;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -112,6 +114,12 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     // paystack processing
     Route::get("/paystack/callback", [PaystackController::class, "callback"])->name("paystack.callback");
     Route::get("/paystack/success", [PaystackController::class, "success"])->name("paystack.success");
+
+    // payment detail entries
+    Route::get("payment/accounts", [PaymentInformationController::class, "index"])->name("payment-account.all");
+    Route::get("payment/my-account", [PaymentInformationController::class, "edit"])->name("payment-account.user");
+    Route::post("payment/my-account", [PaymentInformationController::class, "store"])->name("payment-account.store");
+    Route::put("payment/my-account/{paymentInformation}", [PaymentInformationController::class, "update"])->name("payment-account.update");
 
     // bece controls
     Route::get("/bece-menu", [DebtorsListController::class, "index"])->name("bece.all")->middleware("student.payment-debt");
@@ -213,6 +221,13 @@ Route::middleware(['auth', 'system.admin'])->group(function(){
         Route::get("{school_id}/{academic_year}/{program}/{subject}", [SchoolController::class, "subject_results"])->name("school-subject.fresult");
         Route::get("{school_id}/{academic_year}/{program}/{subject}/{term}", [SchoolController::class, "subject_results"])->name("school-subject.results");
     });
+
+    // initialize paystack banks
+    Route::get("paystack/banks", function(){
+       $initialized = PaystackBank::initialize_banks();
+       $message = $initialized === true ? "Banks have been initialized successfully" : "Unknown error detected";
+       return back()->with(["success" => $initialized, "message" => $message]);
+    })->name("banks.create");
 
     // Route::get("/student-result/{program}/{student}/{academic_year}/{term}", [SchoolController::class, "student_result"])->name("school-subject.student");
 });

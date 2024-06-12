@@ -53,36 +53,21 @@ class LoginRequest extends FormRequest
         }
 
         $request_role = request()->role_id;
-        $user_role = Auth::user()->role_id;
+        $user = Auth::user();
+        $user_role = $user->role_id;
 
-        if($request_role == 3){
+        if($user->is_deleted){
+            $this->throw_error(['username' => "Requested user account does not exist or been deleted"]);
+        }elseif($request_role == 3){
             if($user_role > 3 && $user_role <= 5){
-                RateLimiter::hit($this->throttleKey());
-
-                Auth::guard('web')->logout();
-
-                throw ValidationException::withMessages([
-                    'role_id' => "Requested user is not bound to this login type",
-                ]);
+                $this->throw_error(['role_id' => "Requested user is not bound to this login type"]);
             }
         }elseif($request_role > 3 && $request_role <= 5){
             if($user_role != intval($request_role)){
-                RateLimiter::hit($this->throttleKey());
-
-                Auth::guard('web')->logout();
-
-                throw ValidationException::withMessages([
-                    'role_id' => "Requested user is not bound to this login type",
-                ]);
+                $this->throw_error(['role_id' => "Requested user is not bound to this login type"]);
             }
-        }elseif(Auth::user()->is_active === false){
-            RateLimiter::hit($this->throttleKey());
-
-            Auth::guard('web')->logout();
-
-            throw ValidationException::withMessages([
-                'role_id' => "Account has been deleted. Contact admin for help"
-            ]);
+        }elseif($user->is_active === false){
+            $this->throw_error(["role_id" => "Requested account has been deactivated. Contact admin for help"]);
         }
 
         RateLimiter::clear($this->throttleKey());
@@ -117,5 +102,16 @@ class LoginRequest extends FormRequest
     public function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->input('username')).'|'.$this->ip());
+    }
+
+    /**
+     * Throws an exception to the frontend
+     */
+    private function throw_error(array $messages){
+        RateLimiter::hit($this->throttleKey());
+
+        Auth::guard('web')->logout();
+
+        throw ValidationException::withMessages($messages);
     }
 }
