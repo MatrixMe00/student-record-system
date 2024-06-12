@@ -13,6 +13,7 @@
         ["name" => "School Management", "route" => "admin.schools", "users" => [1,2]],
         ["name" => "Student Bills", "route" => "bills.none", "users" => [3], "class" => "text-nowrap"],
         ["name" => "Records History", "route" => "history.menu", "users" => [3], "class" => "text-nowrap"],
+        ["name" => "Payment Accounts", "route" => "payment-account.all", "users" => [1,2,3], "class" => "text-nowrap"],
     ];
     $menu_links = [
         // ["name" => "", "route" => ""]
@@ -106,9 +107,11 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             @foreach ($nav_links as $nav_link)
-                <x-responsive-nav-link :href="route($nav_link['route'])" :active="request()->routeIs($nav_link['route'])">
-                    {{ __($nav_link['name']) }}
-                </x-responsive-nav-link>
+                @if ($nav_link["users"] == [0] || in_array($user->role_id, $nav_link["users"]))
+                    <x-responsive-nav-link :href="route($nav_link['route'])" :active="request()->routeIs($nav_link['route'])">
+                        {{ __($nav_link["name"]) }}
+                    </x-responsive-nav-link>
+                @endif
             @endforeach
         </div>
 
