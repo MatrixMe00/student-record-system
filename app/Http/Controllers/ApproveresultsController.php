@@ -60,6 +60,7 @@ class ApproveresultsController extends Controller
         return ApproveResults::where("program_id", $validated["program_id"])
                              ->where("semester", $validated["semester"])
                              ->where("academic_year", $cur_year)
+                             ->where("teacher_id", $validated["teacher_id"])
                              ->exists();
     }
 
