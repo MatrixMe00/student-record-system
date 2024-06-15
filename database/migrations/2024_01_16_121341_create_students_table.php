@@ -21,6 +21,8 @@ return new class extends Migration
             $table->foreignId("school_id")->nullable()->constrained()->nullOnDelete();
             $table->foreignId("program_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean("completed")->default(false);
+            $table->boolean("is_deleted")->default(false);
+            $table->boolean("is_active")->default(true);
             $table->timestamps();
         });
     }

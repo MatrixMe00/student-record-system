@@ -8,6 +8,7 @@ use App\Models\deletedusers;
 use App\Models\other;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\User;
 use App\Traits\UserModelTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -54,6 +55,11 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // prevent students from removing their accounts
+        if(Auth::user()->role_id == 5){
+            abort(401, "Cannot Remove Account");
+        }
+
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);
@@ -62,20 +68,84 @@ class ProfileController extends Controller
 
         Auth::logout();
 
-        // get the user data to be saved
-        // $deleted_user = $this->deletedUser($user);
+        $this->save_deleted_user($user);
 
-        // add deleted user to deleted user table
-        // deletedusers::create($deleted_user);
-
+        // save deleted user information
         $user->update([
-            "is_active" => false
+            "is_deleted" => false
         ]);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    /**
+     * Delete a user by admin
+     */
+    public function delete_user($username){
+        $user = User::where("username", $username)->first();
+
+        if($user->role_id > 2){
+            $user->update([
+                "is_deleted" => true
+            ]);
+
+            // update model
+            $user_m = $this->user_model($user);
+            $user_m->update([
+                "is_deleted" => true
+            ]);
+
+            // save deleted user recirds
+            $this->save_deleted_user($user);
+
+            $message_tail = session('school_id') ? "on your account" : "from the system";
+
+            $status = true; $message = "$username has been removed $message_tail";
+        }else{
+            $status = false; $message = "$username is a system admin, hence cannot be deleted from the system";
+        }
+
+
+        return redirect()->back()->with(["success" => $status, "message" => $message]);
+    }
+
+    /**
+     * Change status of a user by admin
+     */
+    public function status_change($username){
+        $user = User::where("username", $username)->first();
+
+        if($user->role_id > 2){
+            $user->update([
+                "is_active" => !$user->is_active
+            ]);
+
+            // update model
+            $user_m = $this->user_model($user);
+            $user_m->update([
+                "is_active" => !$user_m->is_active
+            ]);
+
+            $message_tail = session('school_id') ? "your account" : "the system";
+
+            $status = true; $message = "$username has been deactivated from $message_tail";
+        }else{
+            $status = false; $message = "$username is a system admin, hence cannot be deactivated externally from the system";
+        }
+
+
+        return redirect()->back()->with(["success" => $status, "message" => $message]);
+    }
+
+    private function save_deleted_user(User $user){
+        // get the user data to be saved
+        $deleted_user = $this->deletedUser($user);
+
+        // add deleted user to deleted user table
+        deletedusers::create($deleted_user);
     }
 
     private function deletedUser($user){
@@ -85,27 +155,13 @@ class ProfileController extends Controller
             "role_id" => $user->role_id
         ];
 
-        switch($user->role_id){
-            case 1:
-            case 2:
-            case 3:
-                $user_det = Admin::find($user);
-                break;
-            case 4:
-                $user_det = Teacher::find($user);
-                break;
-            case 5:
-                $user_det = Student::fund($user);
-                break;
-            default:
-                $user_det = other::find($user);
-        }
-
+        $user_det = $this->user_model($user);
         $deleted_user += [
-            "lname" => $user_det["lname"],
-            "oname" => $user_det["oname"],
-            "primary_phone" => $user_det["primary_phone"],
-            "secondary_phone" => $user_det["secondary_phone"]
+            "lname" => $user_det->lname,
+            "oname" => $user_det->oname,
+            "primary_phone" => $user_det->primary_phone,
+            "secondary_phone" => $user_det->secondary_phone,
+            "school_id" => $user_det->school_id
         ];
 
         return $deleted_user;

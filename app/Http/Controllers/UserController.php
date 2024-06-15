@@ -38,9 +38,7 @@ class UserController extends Controller
                 $options = [
                     "superadmins" => Admin::all(),
                     "admins" => SchoolAdmin::all(),
-                    "teachers" => Teacher::all(),
-                    "students" => Student::all(),
-                    "others" => other::all()
+                    "deleted" => deletedusers::all()
                 ];
                 $roles = Role::where("school_id", 0)->where("id", "<", 5)->get()->toArray();
                 $school_id[] = ["id" => 0, "name" => "No school"];
@@ -51,7 +49,7 @@ class UserController extends Controller
                     "admins" => SchoolAdmin::all(),
                     "teachers" => Teacher::all(),
                     "students" => Student::all(),
-                    "others" => other::all()
+                    "deleted" => deletedusers::all()
                 ];
                 $school_id = session('school_id');
                 $roles = Role::where("id", ">", "2")->where("school_id", 0)->orWhere("school_id", $school_id)->get()->toArray();
@@ -275,7 +273,7 @@ class UserController extends Controller
             case 2:
                 $options = [
                     "school_count" => School::all()->count(),
-                    "admin_count" => User::where('role_id', 3)->orWhere('role_id', '>', 5)->get()->count(),
+                    "admin_count" => User::where('role_id', 3)->get()->count(),
                     "superadmin_count" => Admin::all()->count(),
                     "student_count" => Student::all()->count(),
                     "teacher_count" => Teacher::all()->count(),

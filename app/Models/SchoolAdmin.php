@@ -17,13 +17,17 @@ class SchoolAdmin extends Model
     public function newQuery($excludeDeleted = true)
     {
         $query = parent::newQuery($excludeDeleted);
+        $table = self::getTable();
 
-        // based on the user school
-        if($this->school_id !== null || session('school_id')){
-            $query->where('school_id', ($this->school_id ?? session('school_id')));
+        // based on the user role
+        $school_id = session('school_id') ?? null;
+        if($school_id){
+            $query->where($table.'.school_id', $school_id);
         }else{
-            $query->where('school_id', '>', 0);
+            $query->where($table.".school_id", "!=", null);
         }
+
+        $query->where("$table.is_deleted", false);
 
         return $query;
     }

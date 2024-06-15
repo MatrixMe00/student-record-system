@@ -36,6 +36,8 @@
             </section>
         @endif
 
+        <x-session-component />
+
         <x-app-tab :tabs="array_keys($options)">
             @foreach ($options as $content_id => $option)
             @if ($option->count() > 0)

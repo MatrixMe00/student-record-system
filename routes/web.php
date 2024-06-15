@@ -75,6 +75,8 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get("user/{username}/delete", [ProfileController::class, 'delete_user'])->name("user.delete");
+    Route::get("user/{username}/status-change", [ProfileController::class, 'status_change'])->name("user.deactivate");
 
     // school settings
     Route::get("/my-school", [SchoolController::class, 'show'])->name('my-school');

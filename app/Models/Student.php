@@ -19,13 +19,15 @@ class Student extends Model
     public function newQuery($excludeDeleted = true)
     {
         $query = parent::newQuery($excludeDeleted);
+        $table = self::getTable();
 
         // based on the user role
         $school_id = session('school_id') ?? null;
-
         if($school_id){
-            $query->where(self::getTable().'.school_id', $school_id);
+            $query->where($table.'.school_id', $school_id);
         }
+
+        $query->where("$table.is_deleted", false);
 
         return $query;
     }

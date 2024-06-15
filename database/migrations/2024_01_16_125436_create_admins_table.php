@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string("primary_phone");
             $table->string("secondary_phone")->nullable();
             $table->foreignId("school_id")->nullable();
+            $table->boolean("is_deleted")->default(false);
+            $table->boolean("is_active")->default(true);
             $table->timestamps();
         });
     }
