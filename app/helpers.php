@@ -319,3 +319,22 @@ function dual_error(string $submit_value, string $key, $errors){
 
     return $submit ? $errors->get($key) : null;
 }
+
+/**
+ * Used for the payment display most especially
+ * @param string $type The bank type provided
+ * @param boolean $uppercase_strict Should strictly return uppercase
+ * @return string
+ */
+function payment_type($type, $uppercase_strict = false):string{
+    $has_space = false;
+
+    if(str_contains($type, "_")){
+        $type = str_replace("_", " ", $type);
+        $has_space = true;
+    }
+
+    $type = $has_space ? ucwords(strtolower($type)) : strtoupper($type);
+
+    return $uppercase_strict ? strtoupper($type) : $type;
+}

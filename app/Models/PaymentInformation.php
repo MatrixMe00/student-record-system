@@ -17,6 +17,6 @@ class PaymentInformation extends Model
     }
 
     public function bank() :BelongsTo{
-        return $this->belongsTo(PaystackBank::class, "code", "bank_code");
+        return $this->belongsTo(PaystackBank::class, "bank_code", "code");
     }
 }
