@@ -267,19 +267,32 @@ class PaymentInformationController extends Controller
      */
     public function edit()
     {
+        $options = $this->edit_options();
+        return view("payment-accounts.show", $options);
+    }
+
+    private function edit_options(){
         $user = Auth::user();
-        return view("payment-accounts.show", [
-            "personal_account" => PaymentInformation::where("user_id", $user->id)->where("type", "individual")->first(),
-            "school_account" => PaymentInformation::where("user_id", $user->id)->where("type", "school")->first(),
-            "tags" => [
-                ["text" => "Accounts", "icon" => "fas fa-file-invoice-dollar", "link" => route("payment-account.all")],
-                ["text" => "My Accounts", "icon" => "fas fa-file-invoice"]
-            ],
-            "admin" => $user->role_id == 3,
-            "user" => $this->user_model($user),
-            "school" => $user->role_id == 3 ? School::find(session('school_id')) : null,
-            "banks" => PaystackBank::all(["code", "name"])->toArray()
-        ]);
+        $creatable = $user->role_id < 3 || ($user->role_id > 2 && session("payment_is_ready"));
+
+        if($creatable){
+            $response = [
+                "personal_account" => PaymentInformation::where("user_id", $user->id)->where("type", "individual")->first(),
+                "school_account" => PaymentInformation::where("user_id", $user->id)->where("type", "school")->first(),
+                "tags" => [
+                    ["text" => "Accounts", "icon" => "fas fa-file-invoice-dollar", "link" => route("payment-account.all")],
+                    ["text" => "My Accounts", "icon" => "fas fa-file-invoice"]
+                ],
+                "admin" => $user->role_id == 3,
+                "user" => $this->user_model($user),
+                "school" => $user->role_id == 3 ? School::find(session('school_id')) : null,
+                "banks" => PaystackBank::all(["code", "name"])->toArray()
+            ];
+        }
+
+        $response["can_create"] = $creatable;
+
+        return $response;
     }
 
     /**

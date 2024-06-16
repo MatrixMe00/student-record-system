@@ -6,7 +6,7 @@
     @section("title", "My Accounts")
 
     <x-app-main class="py-4">
-        @if(session("payment_is_ready"))
+        @if($can_create)
             @if (auth()->user()->role_id == 1)
                 <x-primary-button onclick="location.href='{{ route('banks.create') }}'" class="mb-3">{{ count($banks) > 0 ? "Update Banks" : "Add Banks" }}</x-primary-button>
             @endif
