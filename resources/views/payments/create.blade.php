@@ -6,9 +6,11 @@
     @section("title", "Make Payment")
 
     <x-app-main>
-        @if ($amount <= 0)
-            <x-empty-div>{{ __("Payment disallowed. Invalid amount value provided. Contact the admin for assistance.") }}</x-empty-div>
-        @else
+        @if (session('payment_is_ready'))
+            @if ($amount <= 0)
+                <x-empty-div>{{ __("Payment disallowed. Invalid amount value provided. Contact the admin for assistance.") }}</x-empty-div>
+            @else
+
             <x-form-container maintitle="Make Payment for Service" subtitle="Use the form below to make payment for the service requested" class="bg-zinc-100">
                 <x-form-element action="" method="POST" id="paymentForm">
                     {{-- contact name --}}
@@ -115,6 +117,7 @@
                     }
                 </script>
             @endpush
+        @endif
         @endif
     </x-app-main>
 </x-app-layout>
