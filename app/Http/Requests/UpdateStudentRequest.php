@@ -27,9 +27,9 @@ class UpdateStudentRequest extends FormRequest
         return [
             "lname" => ["required", "string", "max:255"],
             "oname" => ["required", "string", "max:255"],
-            "next_of_kin" => ["sometimes", "required", "string", "max:255"],
-            "primary_phone" => ["required", "max:13", "min:10"],
-            "secondary_phone" => ["sometimes", "nullable", "max:13", "min:10"],
+            "next_of_kin" => ["sometimes", "nullable", "string", "max:255"],
+            "primary_phone" => ["sometimes", "nullable", "string", "max:13", "min:10"],
+            "secondary_phone" => ["sometimes", "nullable", "string", "max:13", "min:10"],
             "school_id" => ["sometimes", "required", "integer", Rule::exists("schools", 'id')],
             "program_id" => ["sometimes", "required", "integer", Rule::exists("programs", 'id')]
         ];

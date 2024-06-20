@@ -15,8 +15,8 @@ return new class extends Migration
             $table->foreignId("user_id")->primary()->constrained()->cascadeOnDelete();
             $table->string("lname");
             $table->string("oname");
-            $table->string("next_of_kin");
-            $table->string("primary_phone");
+            $table->string("next_of_kin")->nullable();
+            $table->string("primary_phone")->nullable();
             $table->string("secondary_phone")->nullable();
             $table->foreignId("school_id")->nullable()->constrained()->nullOnDelete();
             $table->foreignId("program_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();

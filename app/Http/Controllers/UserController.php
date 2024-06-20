@@ -175,12 +175,27 @@ class UserController extends Controller
     }
 
     /**
+     * This function is used in the multi create to prevent students of exactly the same name in the same class to be added
+     * @param array $student
+     * @return bool
+     */
+    private function student_in_class(array $student) :bool{
+        return Student::where("lname", $student["lname"])
+                      ->where("oname", $student["oname"])
+                      ->where("program_id", $student["program_id"])
+                      ->where("school_id", $student["school_id"])
+                      ->exists();
+    }
+
+    /**
      * This is used to create multiple students
+     * @param Collection|false $file_data The data from the file
+     * @param array $type array serving as a header
      */
     private function students_create($file_data, $type){
         $keys = ["lname","oname","primary_phone","secondary_phone","next_of_kin", "program_id"];
         $programs = [];
-        $count = 0;
+        $count = 0; $total = $file_data->count();
 
         if(request()->program_id == "mixed"){
             foreach($file_data as $data){
@@ -208,17 +223,19 @@ class UserController extends Controller
                 // defaults
                 $student["school_id"] = session('school_id');
 
-                // create user
-                $user = User::create([
-                    "username" => generateIndexNumber(session('school_id')),
-                    "role_id" => 5,
-                    "password" => "Password@1"
-                ]);
+                // create user if it doesnt exist
+                if(!$this->student_in_class($student)){
+                    $user = User::create([
+                        "username" => generateIndexNumber(session('school_id')),
+                        "role_id" => 5,
+                        "password" => "Password@1"
+                    ]);
 
-                $student["user_id"] = $user->id;
+                    $student["user_id"] = $user->id;
 
-                Student::create($student);
-                ++$count;
+                    Student::create($student);
+                    ++$count;
+                }
             }
         }else{
             $program_id = request()->program_id;
@@ -237,16 +254,18 @@ class UserController extends Controller
                 $student["school_id"] = session('school_id');
 
                 // create user
-                $user = User::create([
-                    "username" => generateIndexNumber(session('school_id')),
-                    "role_id" => 5,
-                    "password" => "Password@1"
-                ]);
+                if(!$this->student_in_class($student)){
+                    $user = User::create([
+                        "username" => generateIndexNumber(session('school_id')),
+                        "role_id" => 5,
+                        "password" => "Password@1"
+                    ]);
 
-                $student["user_id"] = $user->id;
+                    $student["user_id"] = $user->id;
 
-                Student::create($student);
-                ++$count;
+                    Student::create($student);
+                    ++$count;
+                }
             }
         }
         return $count;

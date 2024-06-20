@@ -24,11 +24,11 @@ class StoreStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id" => ["required", "integer", Rule::exists("users", "id")],
+            "user_id" => ["sometimes", "required", "integer", Rule::exists("users", "id")],
             "lname" => ["required", "string", "max:255"],
             "oname" => ["required", "string", "max:255"],
-            "next_of_kin" => ["required", "string", "max:255"],
-            "primary_phone" => ["required", "digits_between:10,13"],
+            "next_of_kin" => ["nullable", "string", "max:255"],
+            "primary_phone" => ["nullable", "digits_between:10,13"],
             "secondary_phone" => ["sometimes", "nullable", "digits_between:10,13"],
             "school_id" => ["required", "integer", Rule::exists("schools", 'id')],
             "program_id" => ["required", "integer", Rule::exists("programs", 'id')]

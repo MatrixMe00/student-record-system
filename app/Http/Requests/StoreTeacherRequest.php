@@ -24,7 +24,7 @@ class StoreTeacherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id" => ["integer", "required", Rule::exists("users", "id")],
+            "user_id" => ["sometimes", "integer", "required", Rule::exists("users", "id")],
             "lname" => ["string", "required", "max:255"],
             "oname" => ["string", "required", "max:255"],
             "primary_phone" => ["string", "required", "min:10", "max:13"],

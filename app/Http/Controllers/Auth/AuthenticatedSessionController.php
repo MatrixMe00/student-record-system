@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\DebtorsList;
 use App\Models\Payment;
 use App\Models\PaymentInformation;
+use App\Models\Settings;
 use App\Models\StudentBill;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -99,9 +100,12 @@ class AuthenticatedSessionController extends Controller
         if($admins->count() > 0){
             $admin_payments = PaymentInformation::where("master", true)->get();
             $ready = $admins->count() == $admin_payments->count();
+
+            // check if price has been set
+            $price = Settings::where("name", "system_price")->where("default_value", ">", 0)->exists();
         }
 
-        session(["payment_is_ready" => $ready]);
+        session(["payment_is_ready" => ($ready && $price)]);
     }
 
     /**

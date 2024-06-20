@@ -39,7 +39,7 @@ class StoreAdminRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id" => ["required", Rule::exists("users", "id"), "integer"],
+            "user_id" => ["sometimes", "required", Rule::exists("users", "id"), "integer"],
             "lname" => ["required", "max:255"],
             "oname" => ["required", "max:255"],
             "primary_phone" => ["required", "max:13", "min:10"],
