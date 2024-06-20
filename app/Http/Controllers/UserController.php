@@ -6,6 +6,8 @@ use App\Models\ActivityLog;
 use App\Models\Admin;
 use App\Models\deletedusers;
 use App\Models\other;
+use App\Models\Payment;
+use App\Models\PaymentInformation;
 use App\Models\Program;
 use App\Models\Role;
 use App\Models\School;
@@ -315,22 +317,27 @@ class UserController extends Controller
                 ];
                 break;
             default:
+                $user = Auth::user();
                 $options = [
                     "admin_count" => SchoolAdmin::all()->count(),
-                    "student_count" => Student::all()->count(),
+                    "students" => Student::all(),
                     "teacher_count" => Teacher::all()->count(),
                     "subject_count" => Subject::all()->count(),
                     "class_count" => Program::all()->count(),
                     "delete_count" => deletedusers::all()->count(),
-                    "activity_log" => ActivityLog::all()->take(15)
+                    "activity_log" => ActivityLog::all()->take(15),
+                    "amount_sum" => Payment::where("school_id", session('school_id'))->sum("amount"),
+                    "deduction_sum" => Payment::where("school_id", session('school_id'))->sum("deduction")
                 ];
 
                 $options["tasks"] = [
                     "add_teacher" => $options["teacher_count"],
                     "add_class" => $options["class_count"],
                     "add_subject" => $options["subject_count"],
-                    "add_student" => $options["student_count"],
-                    "teach_subj" => TeacherClass::where("school_id", session('school_id'))->get()->count()
+                    "add_student" => $options["students"]->count(),
+                    "teach_subj" => TeacherClass::where("school_id", session('school_id'))->get()->count(),
+                    "payment_info_self" => PaymentInformation::where("user_id", $user->id)->where("split_key", null)->exists(),
+                    "payment_info_school" => PaymentInformation::where("user_id", $user->id)->where("split_key", "!=", null)->exists()
                 ];
         }
 

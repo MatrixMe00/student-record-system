@@ -192,30 +192,23 @@ if(! function_exists("round_number")){
     /**
      * This function is used to add a suffix to numbers
      * @param $value This receives the value to be changed
+     * @param $round_start The number to start rounding from
      *
      * @return string It returns a string representation of the value
      */
-    function round_number($value){
-        $value = (int) $value;
-
+    function round_number($value, $round_start = 999){
         // start rounding from 1K
-        if($value < 999){
+        if($value < $round_start){
             return $value;
         }
 
+        $value = (int) $value;
+
         $divisor = array(
-            0 => array(
-                "div" => 1000000,
-                "val" => "M"
-            ),
-            1 => array(
-                "div" => 1000,
-                "val" => "K"
-            ),
-            2 => array(
-                "div" => 10,
-                "val" => ""
-            )
+            array("div" => 1000000000,"val" => "B"),
+            array("div" => 1000000,"val" => "M"),
+            array("div" => 1000,"val" => "K"),
+            array("div" => 10,"val" => "")
         );
 
         $final = "";
