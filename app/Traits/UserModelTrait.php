@@ -117,7 +117,11 @@ trait UserModelTrait
     /**
      * Returns the model of the user
      */
-    private function user_model(User $user) :Model|null{
+    private function user_model(?User $user) :Model|null{
+        if(is_null($user)){
+            return null;
+        }
+
         $model = null;
         switch($user->role_id){
             case 1:

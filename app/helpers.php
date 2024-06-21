@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ActivityLog;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -364,5 +365,16 @@ if(! function_exists("payment_type")){
         $type = $has_space ? ucwords(strtolower($type)) : strtoupper($type);
 
         return $uppercase_strict ? strtoupper($type) : $type;
+    }
+}
+
+if(! function_exists("readable_activity")){
+    /**
+     * Used for the Activity Log model, creates a helper for it in blade files
+     * @param string $activity_type The activity type name
+     * @return string
+     */
+    function readable_activity(string $activity_type) :string{
+        return ActivityLog::readable_activity($activity_type);
     }
 }

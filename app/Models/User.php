@@ -6,16 +6,23 @@ namespace App\Models;
 
 use App\Traits\UserModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, UserModelTrait;
+
+    /**
+     * @var Model $user_model An instance of the user's sub-model
+     */
+    public ?Model $user_model = null;
 
     /**
      * The attributes that are mass assignable.
@@ -44,6 +51,26 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /**
+     * sets up the user model
+     */
+    private function set_user_model(){
+        $role_id = $this->role_id ?? $this->attributes["role_id"];
+        if($role_id > 0 && $this->user_model == null){
+            $this->user_model = $this->user_model($this);
+        }
+    }
+
+    /**
+     * Set the user model attribute in the public scope
+     */
+    public function setUserModel(){
+        $this->set_user_model();
+    }
+
+    /**
+     * Automatically hash the password when setting it
+     */
     public function setPasswordAttribute($value){
         $this->attributes['password'] = Hash::make($value);
     }
@@ -56,5 +83,23 @@ class User extends Authenticatable
     // every user has many activity logs
     public function activityLogs(): HasMany{
         return $this->hasMany(ActivityLog::class);
+    }
+
+    // get lastname from here
+    public function getLnameAttribute(){
+        $this->set_user_model();
+        return $this->user_model?->lname;
+    }
+
+    // get othernames
+    public function getOnameAttribute(){
+        $this->set_user_model();
+        return $this->user_model?->oname;
+    }
+
+    // get fullname
+    public function getFullnameAttribute(){
+        $this->set_user_model();
+        return $this->user_mode?->fullname;
     }
 }
