@@ -16,6 +16,9 @@ return new class extends Migration
             $table->foreignId("school_id")->nullable()->after("activity_type")->constrained()->nullOnDelete();
             $table->boolean("add_admin")->default(false)->after("admin_level");
             $table->text("log_details")->nullable()->after("add_admin");
+            $table->boolean("is_error")->default(false)->after("log_details");
+            $table->string("ip_address")->after("is_error");
+            $table->string("user_agent")->after("ip_address");
         });
     }
 
@@ -24,6 +27,13 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropColumns("activitylogs", ["school_id", "admin_level", "add_admin", "log_details"]);
+        Schema::table('activitylogs', function (Blueprint $table) {
+            // Dropping the foreign key constraint and then the column
+            $table->dropForeign(['school_id']);
+            $table->dropColumn('school_id');
+
+            // Dropping the other columns
+            $table->dropColumn(['admin_level', 'add_admin', 'log_details', 'is_error', 'ip_address', 'user_agent']);
+        });
     }
 };

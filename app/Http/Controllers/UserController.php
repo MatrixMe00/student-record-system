@@ -285,10 +285,10 @@ class UserController extends Controller
      * Get the dashboard of the user
      */
     public function dashboard(){
-        $role_id = auth()->user()->role_id;
+        $user = auth()->user();
         $options = [];
 
-        switch($role_id){
+        switch($user->role_id){
             case 1:
                 $options["developer_count"] = User::where("role_id", 1)->get()->count();
             case 2:
@@ -298,13 +298,16 @@ class UserController extends Controller
                     "superadmin_count" => Admin::all()->count(),
                     "student_count" => Student::all()->count(),
                     "teacher_count" => Teacher::all()->count(),
-                    "delete_count" => deletedusers::all()->count()
+                    "delete_count" => deletedusers::all()->count(),
+                    "activity_logs" => ActivityLog::get_logs(limit: 5),
+                    "system_logs" => ActivityLog::get_logs(0, limit: 5)
                 ];
                 break;
             case 4:
                 $teacher = $this->user_model(auth()->user());
                 $options = [
-                    "teacher" => $teacher
+                    "teacher" => $teacher,
+                    "activity_logs" => ActivityLog::get_logs(limit: 5),
                 ];
                 break;
             case 5:
@@ -313,11 +316,11 @@ class UserController extends Controller
                     "current_class" => $student->program->name,
                     "average_grade" => $student->average_grade(),
                     "grade_value" => $student->grade_value(),
-                    "grade_description" => $student->grade_description()
+                    "grade_description" => $student->grade_description(),
+                    "activity_logs" => ActivityLog::get_logs(limit: 5),
                 ];
                 break;
             default:
-                $user = Auth::user();
                 $options = [
                     "admin_count" => SchoolAdmin::all()->count(),
                     "students" => Student::all(),
@@ -325,7 +328,7 @@ class UserController extends Controller
                     "subject_count" => Subject::all()->count(),
                     "class_count" => Program::all()->count(),
                     "delete_count" => deletedusers::all()->count(),
-                    "activity_log" => ActivityLog::all()->take(15),
+                    "activity_logs" => ActivityLog::get_logs(limit: 5),
                     "amount_sum" => Payment::where("school_id", session('school_id'))->sum("amount"),
                     "deduction_sum" => Payment::where("school_id", session('school_id'))->sum("deduction")
                 ];

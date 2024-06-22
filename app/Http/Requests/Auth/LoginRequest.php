@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Constants\LogType;
+use App\Models\ActivityLog;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +48,8 @@ class LoginRequest extends FormRequest
             if (! Auth::attempt(['email' => $this->input('username'), 'password' => $this->input('password')], $this->boolean('remember'))) {
                 RateLimiter::hit($this->throttleKey());
 
+                $this->add_log("Invalid username or password failed authentication");
+
                 throw ValidationException::withMessages([
                     'username' => trans('auth.failed'),
                 ]);
@@ -57,16 +61,20 @@ class LoginRequest extends FormRequest
         $user_role = $user->role_id;
 
         if($user->is_deleted){
+            $this->add_log("Deleted account '$user->username' tried to access account");
             $this->throw_error(['username' => "Requested user account does not exist or been deleted"]);
         }elseif($request_role == 3){
             if($user_role > 3 && $user_role <= 5){
+                $this->add_log("'$user->username' tried to access account on wrong login page");
                 $this->throw_error(['role_id' => "Requested user is not bound to this login type"]);
             }
         }elseif($request_role > 3 && $request_role <= 5){
             if($user_role != intval($request_role)){
+                $this->add_log("'$user->username' tried to access account on wrong login page");
                 $this->throw_error(['role_id' => "Requested user is not bound to this login type"]);
             }
         }elseif($user->is_active === false){
+            $this->add_log("Deactivated account '$user->username' tried to access account");
             $this->throw_error(["role_id" => "Requested account has been deactivated. Contact admin for help"]);
         }
 
@@ -94,6 +102,10 @@ class LoginRequest extends FormRequest
                 'minutes' => ceil($seconds / 60),
             ]),
         ]);
+    }
+
+    private function add_log($message){
+        ActivityLog::super_error_log(LogType::USER_LOGIN, $message);
     }
 
     /**

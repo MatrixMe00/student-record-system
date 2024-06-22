@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Constants\LogType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\ActivityLog;
 use App\Models\Admin;
 use App\Models\DebtorsList;
 use App\Models\Payment;
@@ -69,6 +71,9 @@ class AuthenticatedSessionController extends Controller
 
         // add necessary sessions
         $this->add_sessions();
+
+        // add a log
+        ActivityLog::super_success_log(LogType::USER_LOGIN);
 
         return redirect()->intended(RouteServiceProvider::HOME)->withCookie($cookie);
     }
@@ -200,6 +205,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        ActivityLog::dev_success_log(LogType::USER_LOGOUT);
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

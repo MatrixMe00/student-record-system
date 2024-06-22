@@ -170,6 +170,11 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        /**
+         * Personal service providers
+         */
+        App\Providers\LogTypeInitializer::class,
     ])->toArray(),
 
     /*

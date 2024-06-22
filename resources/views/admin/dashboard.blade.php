@@ -19,20 +19,8 @@
             </div>
         </x-section-component>
 
-        <x-section-component title="Recent Activities" class="shadow-md rounded">
-            @if ($activity_log->count() > 0)
-                <div class="overflow-auto border mt-2">
-                    <table class="w-full">
-                        <tbody>
-                            @foreach ($activity_log as $activity)
-                                <tr></tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @else
-                <x-empty-div>{{ __("No Activity log to display") }}</x-empty-div>
-            @endif
-        </x-section-component>
+        <x-user-activity title="Recent Activities"
+            :logs="$activity_logs" :is_admin="true" :show_name="true"
+        />
     </section>
 </x-app-main>

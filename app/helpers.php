@@ -1,9 +1,12 @@
 <?php
 
+use App\Constants\LogType;
 use App\Models\ActivityLog;
 use App\Models\Student;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 if(! function_exists("get_academic_year")){
     /**
@@ -376,5 +379,78 @@ if(! function_exists("readable_activity")){
      */
     function readable_activity(string $activity_type) :string{
         return ActivityLog::readable_activity($activity_type);
+    }
+}
+
+if (!function_exists('time_difference')) {
+    /**
+     * Get the time difference from the given date to now in a human-readable format.
+     *
+     * @param ?string $date The date to compare with now.
+     * @return string The time difference in a human-readable format.
+     */
+    function time_difference(?string $date) {
+        $givenDate = Carbon::parse($date);
+        $now = Carbon::now();
+
+        // Get the difference in seconds
+        $diffInSeconds = $now->diffInSeconds($givenDate, true);
+
+        if ($diffInSeconds < 60) {
+            return $diffInSeconds." ".Str::plural('sec', $diffInSeconds);
+        }
+
+        // Get the difference in minutes
+        $diffInMinutes = $now->diffInMinutes($givenDate, true);
+
+        if ($diffInMinutes < 60) {
+            return $diffInMinutes." ".Str::plural('min', $diffInMinutes);
+        }
+
+        // Get the difference in hours
+        $diffInHours = $now->diffInHours($givenDate, true);
+
+        if ($diffInHours < 24) {
+            return $diffInHours." ".Str::plural('hr', $diffInHours);
+        }
+
+        // Get the difference in days
+        $diffInDays = $now->diffInDays($givenDate, true);
+
+        if ($diffInDays < 7) {
+            return $diffInDays." ".Str::plural('day', $diffInDays);
+        }
+
+        // Get the difference in weeks
+        $diffInWeeks = $now->diffInWeeks($givenDate, true);
+
+        if ($diffInWeeks < 4) {
+            return $diffInWeeks." ".Str::plural('wk', $diffInWeeks);
+        }
+
+        // Get the difference in months
+        $diffInMonths = $now->diffInMonths($givenDate, true);
+
+        if ($diffInMonths < 12) {
+            return $diffInMonths." ".Str::plural('mon', $diffInMonths);
+        }
+
+        // Get the difference in years
+        $diffInYears = $now->diffInYears($givenDate, true);
+
+        return $diffInYears." ".Str::plural('yr', $diffInYears);
+    }
+}
+
+if(! function_exists("activity_log_icon")){
+    /**
+     * This provides the user activity icon
+     *
+     * @param string $activity_type The type of activity
+     * @return string
+     */
+    function activity_log_icon(string $activity_type) :string{
+        $icon = LogType::activity_icon($activity_type);
+        return is_null($icon) || $icon == "" ? "fas fa-exclamation-circle" : $icon;
     }
 }

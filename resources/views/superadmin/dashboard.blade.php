@@ -12,4 +12,15 @@
         <x-dashboard-card icon="fas fa-user-graduate" context="{{ __(round_number($student_count)) }}" title="Students" />
         <x-dashboard-card icon="fas fa-user-minus" context="{{ __(round_number($delete_count)) }}" title="Deleted Users" />
     </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 mt-4 p-2 gap-4 items-start">
+        <x-user-activity title="Recent Activities"
+            :logs="$activity_logs" :is_admin="true" :show_name="true"
+        />
+
+        <x-user-activity title="System Activities"
+            :logs="$system_logs" :is_admin="true" :show_name="true"
+            :dev="auth()->user()->role_id == 1"
+        />
+    </div>
 </x-app-main>
