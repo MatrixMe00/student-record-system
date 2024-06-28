@@ -4,7 +4,7 @@
         shadow-sm sm:rounded-lg py-4 gap-4">
         <x-dashboard-card icon="fas fa-school-flag" context="{{ $school_count }}" title="Schools" />
         @if (Auth::user()->role_id == 1)
-            <x-dashboard-card icon="fas fa-user-secret" context="{{ $superadmin_count }}" title="Developers" />
+            <x-dashboard-card icon="fas fa-user-secret" context="{{ $developer_count }}" title="Developers" />
         @endif
         <x-dashboard-card icon="fas fa-user-lock" context="{{ __(round_number($superadmin_count)) }}" title="Superadmins" />
         <x-dashboard-card icon="fas fa-user-tie" context="{{ __(round_number($admin_count)) }}" title="Admins" />

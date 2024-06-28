@@ -292,7 +292,7 @@ class UserController extends Controller
             case 1:
                 $options["developer_count"] = User::where("role_id", 1)->get()->count();
             case 2:
-                $options = [
+                $options = array_merge($options, [
                     "school_count" => School::all()->count(),
                     "admin_count" => User::where('role_id', 3)->get()->count(),
                     "superadmin_count" => Admin::all()->count(),
@@ -301,7 +301,7 @@ class UserController extends Controller
                     "delete_count" => deletedusers::all()->count(),
                     "activity_logs" => ActivityLog::get_logs(limit: 5),
                     "system_logs" => ActivityLog::get_logs(0, limit: 5)
-                ];
+                ]);
                 break;
             case 4:
                 $teacher = $this->user_model(auth()->user());
