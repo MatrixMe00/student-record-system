@@ -15,7 +15,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 mt-4 p-2 gap-4 items-start">
         <x-user-activity title="Recent Activities"
-            :logs="$activity_logs" :is_admin="true" :show_name="true"
+            :logs="$activity_logs" :is_admin="true"
         />
 
         <x-user-activity title="System Activities"

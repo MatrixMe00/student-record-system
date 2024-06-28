@@ -100,6 +100,6 @@ class User extends Authenticatable
     // get fullname
     public function getFullnameAttribute(){
         $this->set_user_model();
-        return $this->user_mode?->fullname;
+        return $this->user_model?->fullname;
     }
 }

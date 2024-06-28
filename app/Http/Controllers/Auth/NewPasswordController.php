@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Constants\LogType;
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
@@ -51,13 +53,20 @@ class NewPasswordController extends Controller
             }
         );
 
+        // create and set up the user
+        $user = User::where("email", $request->email)->first();
+        ActivityLog::$user_id = $user->id ?? 0;
+
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
-        return $status == Password::PASSWORD_RESET
-                    ? redirect()->route($this->login_page($request))->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                            ->withErrors(['email' => __($status)]);
+        if($status == Password::PASSWORD_RESET){
+            ActivityLog::dev_success_log(LogType::PASSWORD_CHANGE, log_details: $user);
+            return redirect()->route($this->login_page($request))->with('status', __($status));
+        }else{
+            return back()->withInput($request->only('email'))
+                         ->withErrors(['email' => __($status)]);
+        }
     }
 
     /**
@@ -66,12 +75,8 @@ class NewPasswordController extends Controller
      * @return string
      */
     private function login_page(Request $request) :string{
-        $page = $request->cookie("login_page") ?? "";
-
-        if(is_null($page) || empty($page)){
-            $user = User::where("email", $request->email)->first();
-            $page = $this->page_route($user->role_id);
-        }
+        $user = User::where("email", $request->email)->first();
+        $page = $this->page_route($user->role_id);
 
         return $page;
     }

@@ -329,6 +329,7 @@ class UserController extends Controller
                     "class_count" => Program::all()->count(),
                     "delete_count" => deletedusers::all()->count(),
                     "activity_logs" => ActivityLog::get_logs(limit: 5),
+                    "school_logs" => ActivityLog::get_logs(0, limit: 10),
                     "amount_sum" => Payment::where("school_id", session('school_id'))->sum("amount"),
                     "deduction_sum" => Payment::where("school_id", session('school_id'))->sum("deduction")
                 ];

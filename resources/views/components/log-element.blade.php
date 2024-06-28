@@ -11,9 +11,9 @@
     </span>
     <div class="p-4 {{ $activity->is_error ? 'bg-red-100' : 'bg-white' }} border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
         @if ($show_name && $owner->id != $user_id)
-            <p class="text-xs {{ $activity->is_error ? 'text-gray-600' : 'text-gray-500' }}">{{ $owner->username }}</p>
+            <p class="text-xs {{ $activity->is_error ? 'text-gray-600' : 'text-gray-500' }}">{{ $owner->username }} {{ $dev ? " | $activity->ip_address" : "" }}</p>
         @elseif ($show_name && $is_admin)
-            <p class="text-xs {{ $activity->is_error ? 'text-gray-600' : 'text-gray-500' }}">{{ __("You") }}</p>
+            <p class="text-xs {{ $activity->is_error ? 'text-gray-600' : 'text-gray-500' }}">{{ __("You") }} {{ $dev ? " | $activity->ip_address" : "" }}</p>
         @endif
         <div class="items-center justify-between sm:flex">
             <time class="mb-1 text-xs font-normal {{ $activity->is_error ? 'text-gray-700' : 'text-gray-400' }} sm:order-last sm:mb-0">{{ time_difference($activity->created_at) }} ago</time>

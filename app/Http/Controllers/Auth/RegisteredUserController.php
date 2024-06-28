@@ -2,15 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\OtherController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\TeacherController;
-use App\Http\Requests\StoreAdminRequest;
-use App\Http\Requests\StoreotherRequest;
-use App\Http\Requests\StoreStudentRequest;
-use App\Http\Requests\StoreTeacherRequest;
 use App\Models\User;
 use App\Traits\UserModelTrait;
 use Illuminate\Auth\Events\Registered;
@@ -68,7 +60,6 @@ class RegisteredUserController extends Controller
         ]);
 
         // create the user
-        // $user = User::create($user);
         $user = new User($user);
 
         // based on user role determine which user data should be stored
@@ -108,9 +99,9 @@ class RegisteredUserController extends Controller
      */
     private function store_user(Request $request, User $user){
         // check for a developer
-        $developer = User::where("role_id", 1)->exists();
-        if($developer && $user->role_id == 1){
-            return redirect()->back()->withErrors(['owner_error' => 'Current developer accounts cannot exceed 1']);
+        $developer = User::where("role_id", 1)->get();
+        if($developer->count() == 2 && $user->role_id == 1){
+            return redirect()->back()->withErrors(['owner_error' => 'Current developer accounts cannot exceed 2']);
         }
 
         // make validation from specified user

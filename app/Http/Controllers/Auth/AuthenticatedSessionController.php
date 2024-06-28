@@ -73,7 +73,7 @@ class AuthenticatedSessionController extends Controller
         $this->add_sessions();
 
         // add a log
-        ActivityLog::super_success_log(LogType::USER_LOGIN);
+        ActivityLog::success_log(LogType::USER_LOGIN);
 
         return redirect()->intended(RouteServiceProvider::HOME)->withCookie($cookie);
     }
@@ -104,7 +104,7 @@ class AuthenticatedSessionController extends Controller
         $ready = false;
         if($admins->count() > 0){
             $admin_payments = PaymentInformation::where("master", true)->get();
-            $ready = $admins->count() == $admin_payments->count();
+            $ready = ($admins->count() - 1) == $admin_payments->count();
 
             // check if price has been set
             $price = Settings::where("name", "system_price")->where("default_value", ">", 0)->exists();
@@ -205,7 +205,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        ActivityLog::dev_success_log(LogType::USER_LOGOUT);
+        ActivityLog::success_log(LogType::USER_LOGOUT);
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

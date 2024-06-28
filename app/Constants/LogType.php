@@ -15,9 +15,26 @@
 
         /// PROFILE BASED CONSTANTS
         /**
+         * @var string ACCOUNT_CREATE
+         */
+        const ACCOUNT_CREATE = "account-create";
+        /**
          * @var string ACCOUNT_UPDATE
          */
         const ACCOUNT_UPDATE = "account-update";
+        /**
+         * @var string ACCOUNT_DELETE
+         */
+        const ACCOUNT_DELETE = "account-delete";
+        /**
+         * @var string PASSWORD_CHANGE
+         */
+        const PASSWORD_CHANGE = "password-update";
+        /**
+         * @var string EMAIL_VERIFY
+         */
+        const EMAIL_VERIFY = "email-verify";
+
         /**
          * @var string SCHOOL_UPDATE
          */
@@ -44,7 +61,8 @@
         private static function activity_logs() :array{
             $logs = [
                 "login" => "fas fa-sign-in-alt", "logout" => "fas fa-sign-out-alt", "account-update" => "fas fa-user-edit",
-                "school-update" => "fas fa-edit", "school-add" => "fas fa-school"
+                "school-update" => "fas fa-edit", "school-add" => "fas fa-school", "account-create" => "fas fa-user-plus",
+                "account-delete" => "fas fa-user-times", "password-update" => "fas fa-key", "email-verify" => "fas fa-envelope-open-text"
             ];
 
             return $logs;

@@ -10,11 +10,20 @@ use Illuminate\Support\Facades\Auth;
 
 class ActivityLog extends Model
 {
-    use HasFactory, UserModelTrait;
+    use HasFactory;
     protected $table = "activitylogs";
 
     protected $guarded = [];
     const UPDATED_AT = null;
+
+    /**
+     * @var ?int $user_id A selected user id other than the authenticated user id
+     */
+    public static ?int $user_id = null;
+
+    /**
+     * @var bool $initialized Used to initialize the class
+     */
     private static bool $initialized = false;
 
     // many activity logs belong to one user
@@ -36,11 +45,6 @@ class ActivityLog extends Model
         if(!static::$initialized){
             static::$initialized = true;
         }
-    }
-
-    // get the specified model of this user
-    public function user_model() :Model{
-        return $this->user_model($this->user);
     }
 
     // Override the default newQuery method to add constraints
@@ -113,16 +117,21 @@ class ActivityLog extends Model
     }
 
     // creating a user log
-    private static function add_log(string $activity_type, string $message = "", bool $add_admin = false, $is_error = false, int $admin_level = 3, ?array $log_details = null){
+    private static function add_log(string $activity_type, string $message = "", bool $add_admin = false, $is_error = false, int $admin_level = 3, array|Model|null $log_details = null){
         $message = $message == "" ? static::common_activities($activity_type) : $message;
 
         if($log_details){
+            if(!is_array($log_details)){
+                $log_details = self::model_to_array($log_details);
+            }else{
+                $log_details = self::modify_array($log_details);
+            }
             $log_details = encode_array($log_details);
         }
 
         ActivityLog::create([
             "activity_type" => $activity_type, "message" => $message,
-            "user_id" => Auth::user()->id, "school_id" => session('school_id') ?? null,
+            "user_id" => self::$user_id ?? Auth::user()->id, "school_id" => session('school_id') ?? null,
             "admin_level" => $admin_level, "add_admin" => $add_admin, "log_details" => $log_details,
             "is_error" => $is_error, "ip_address" => request()->ip(), "user_agent" => request()->userAgent()
         ]);
@@ -132,19 +141,60 @@ class ActivityLog extends Model
      * Default success logs could be handled with this
      * @param string $activity_type The activity type
      * @param string $message The message to be logged
-     * @param ?array $log_details Other details to be logged
+     * @param array|Model|null $log_details Other details to be logged
      */
-    public static function success_log(string $activity_type, string $message = "", ?array $log_details = null){
+    public static function success_log(string $activity_type, string $message = "", array|Model|null $log_details = null){
         self::add_log($activity_type, $message, log_details: $log_details);
+    }
+
+    /**
+     * This modifies a log element into all arrays
+     *
+     * This will automatically make an array of the contents of an array
+     * @param array $log_details The log details to be transformed
+     * @return array
+     */
+    private static function modify_array(array $log_details){
+        $keys = array_keys($log_details);
+        $values = array_values($log_details);
+        $log_details = [];
+
+        foreach($values as $key_count => $value){
+            if($value instanceof Model || is_array($value))
+                $log_details[$keys[$key_count]] = self::transform_element($value);
+        }
+
+        return $log_details;
+    }
+
+    /**
+     * Converts a model or array into an array
+     *
+     * @param array|Model|null $element The element to be transformed
+     * @return ?array
+     */
+    private static function transform_element(array|Model|null $element) :?array{
+        // return null if element is null
+        if(is_null($element)){
+            return null;
+        }
+
+        // change model to array
+        if(!is_array($element)){
+            return self::model_to_array($element);
+        }
+
+        // no change
+        return $element;
     }
 
     /**
      * Default error logs could be handled with this
      * @param string $activity_type The activity type
      * @param string $message The message to be logged
-     * @param ?array $log_details Other details to be logged
+     * @param array|Model|null $log_details Other details to be logged
      */
-    public static function error_log(string $activity_type, string $message = "", ?array $log_details = null){
+    public static function error_log(string $activity_type, string $message = "", array|Model|null $log_details = null){
         self::add_log($activity_type, $message, is_error: true, log_details: $log_details);
     }
 
@@ -152,9 +202,9 @@ class ActivityLog extends Model
      * Success logs which includes superadmin access
      * @param string $activity_type The activity type
      * @param string $message The message to be logged
-     * @param ?array $log_details Other details to be logged
+     * @param array|Model|null $log_details Other details to be logged
      */
-    public static function super_success_log(string $activity_type, string $message = "", ?array $log_details = null){
+    public static function super_success_log(string $activity_type, string $message = "", array|Model|null $log_details = null){
         self::add_log($activity_type, $message, true, log_details: $log_details);
     }
 
@@ -162,9 +212,9 @@ class ActivityLog extends Model
      * Error logs which includes superadmin access
      * @param string $activity_type The activity type
      * @param string $message The message to be logged
-     * @param ?array $log_details Other details to be logged
+     * @param array|Model|null $log_details Other details to be logged
      */
-    public static function super_error_log(string $activity_type, string $message = "", ?array $log_details = null){
+    public static function super_error_log(string $activity_type, string $message = "", array|Model|null $log_details = null){
         self::add_log($activity_type, $message, true, is_error: true, log_details: $log_details);
     }
 
@@ -172,9 +222,9 @@ class ActivityLog extends Model
      * Success logs which seen only by dev users
      * @param string $activity_type The activity type
      * @param string $message The message to be logged
-     * @param ?array $log_details Other details to be logged
+     * @param array|Model|null $log_details Other details to be logged
      */
-    public static function dev_success_log(string $activity_type, string $message = "", ?array $log_details = null){
+    public static function dev_success_log(string $activity_type, string $message = "", array|Model|null $log_details = null){
         self::add_log($activity_type, $message, add_admin: true, admin_level: 1, log_details: $log_details);
     }
 
@@ -182,9 +232,9 @@ class ActivityLog extends Model
      * Error logs which seen only by dev users
      * @param string $activity_type The activity type
      * @param string $message The message to be logged
-     * @param ?array $log_details Other details to be logged
+     * @param array|Model|null $log_details Other details to be logged
      */
-    public static function dev_error_log(string $activity_type, string $message = "", ?array $log_details = null){
+    public static function dev_error_log(string $activity_type, string $message = "", array|Model|null $log_details = null){
         self::add_log($activity_type, $message, add_admin: true, admin_level: 1, is_error:true, log_details: $log_details);
     }
 
@@ -193,11 +243,13 @@ class ActivityLog extends Model
         $message = "";
 
         switch($activity_type){
-            case "login": $message = "Account login was successful"; break;
-            case "logout": $message = "You logged out of your account"; break;
-            case "account-update": $message = "You made an update to your account profile"; break;
-            case "school-update": $message = "Changes were made to your school account profile"; break;
-            case "school-add": $message = "Created your school account"; break;
+            case "login": $message = "account login was successful"; break;
+            case "logout": $message = "closed account session"; break;
+            case "account-update": $message = "updated account profile data"; break;
+            case "school-update": $message = "updated school account profile"; break;
+            case "school-add": $message = "created your school account"; break;
+            case "password-update": $message = "account password has been changed"; break;
+            case "email-verify": $message = "email verification was successful"; break;
         }
 
         return $message;
@@ -213,9 +265,28 @@ class ActivityLog extends Model
     }
 
     /**
+     * This sets the model into an array format
+     * @param Model $model The model to be stored
+     * @return array
+     */
+    private static function model_to_array(Model $model) :array{
+        $array = $model->toArray();
+        $array["model_class"] = class_basename($model);
+
+        return $array;
+    }
+
+    /**
      * The school this belongs to
      */
     public function school() :BelongsTo{
         return $this->belongsTo(School::class);
+    }
+
+    /**
+     * unserialize the log_details before sent to frontend
+     */
+    public function getLoginDetailsAttribute(){
+        return decode_array($this->getAttribute("log_details"));
     }
 }

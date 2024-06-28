@@ -45,7 +45,8 @@ class StoreAdminRequest extends FormRequest
             "primary_phone" => ["required", "max:13", "min:10"],
             "secondary_phone" => ["sometimes", "nullable", "digits_between:10,13"],
             "school_id" => ["nullable", "integer", Rule::requiredIf(function(){
-                return Auth::check() && Auth::user()->role_id == 3;
+                return Auth::check() && Auth::user()->role_id == 3;            }), Rule::excludeIf(function(){
+                return !is_null($this->school_id) && $this->school_id < 1;
             }), Rule::exists("schools", "id")]
         ];
     }

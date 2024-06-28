@@ -48,7 +48,8 @@ class LoginRequest extends FormRequest
             if (! Auth::attempt(['email' => $this->input('username'), 'password' => $this->input('password')], $this->boolean('remember'))) {
                 RateLimiter::hit($this->throttleKey());
 
-                $this->add_log("Invalid username or password failed authentication");
+                ActivityLog::$user_id = 0;
+                $this->add_log("Invalid username or password failed authentication", ["details" => ["username" => $this->input('username'), "password" => $this->input('password')]]);
 
                 throw ValidationException::withMessages([
                     'username' => trans('auth.failed'),
@@ -104,8 +105,8 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    private function add_log($message){
-        ActivityLog::super_error_log(LogType::USER_LOGIN, $message);
+    private function add_log($message, $log_details = null){
+        ActivityLog::super_error_log(LogType::USER_LOGIN, $message, $log_details);
     }
 
     /**

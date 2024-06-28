@@ -454,3 +454,27 @@ if(! function_exists("activity_log_icon")){
         return is_null($icon) || $icon == "" ? "fas fa-exclamation-circle" : $icon;
     }
 }
+
+if(! function_exists("fix_message")){
+    /**
+     * This function is used to fix placeholders in a message with the modal details
+     *
+     * @param string $message The message to be fixed
+     * @param ?object $model The model object to be created
+     * @return string
+     */
+    function fix_message(string $message, ?object $model = null){
+        // find all placeholders in the format {placeholder}
+        preg_match_all("/\{([^}]+)\}/", $message, $placeholders);
+
+        if(is_array($placeholders[1]) && !is_null($model)){
+            foreach($placeholders[1] as $expression){
+                $placeholder = '{'.$expression.'}';
+                $replace = eval('return $model->'.$expression.';');
+                $message = str_replace($placeholder, $replace, $message);
+            }
+        }
+
+        return $message;
+    }
+}

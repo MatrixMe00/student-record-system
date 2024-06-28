@@ -13,14 +13,20 @@
     </div>
 
     <section class="grid grid-cols-1 lg:grid-cols-2 mt-4 p-2 gap-4 items-start">
-        <x-section-component title="Tasks" class="shadow-md rounded">
-            <div class="overflow-auto border mt-2">
-                @include('admin.partials._dash_table')
-            </div>
-        </x-section-component>
+        <div class="grid gap-4">
+            <x-section-component title="Tasks" class="shadow-md rounded">
+                <div class="overflow-auto border mt-2">
+                    @include('admin.partials._dash_table')
+                </div>
+            </x-section-component>
 
-        <x-user-activity title="Recent Activities"
-            :logs="$activity_logs" :is_admin="true" :show_name="true"
+            <x-user-activity title="Recent Activities"
+                :logs="$activity_logs" :is_admin="true"
+            />
+        </div>
+
+        <x-user-activity title="School Activities"
+            :logs="$school_logs" :is_admin="true" :show_name="true"
         />
     </section>
 </x-app-main>
