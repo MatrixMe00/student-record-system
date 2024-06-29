@@ -7,7 +7,7 @@
 @endphp
 
 <x-form-container padding="" :showErrors="false">
-    <x-form-element>
+    <x-form-element @submit.prevent="true">
         <div class="sm:col-span-2">
             <p>Prices are calculated based on the current system price <b>{{ number_format(floatval($current_price),2) }}</b></p>
         </div>

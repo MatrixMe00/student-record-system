@@ -292,11 +292,32 @@ class PaymentInformationController extends Controller
                 "school" => $user->role_id == 3 ? School::find(session('school_id')) : null,
                 "banks" => PaystackBank::all(["code", "name"])->toArray()
             ];
+
+            // if a school has multiple admins, enforce that only one can be created
+            $response["registered_admin"] = $this->admin_personal_exists($response["personal_account"]);
         }
 
         $response["can_create"] = $creatable;
 
         return $response;
+    }
+
+    /**
+     * Checks if a specified school has an already existing personal/admin account
+     */
+    private function admin_personal_exists($user_account){
+        $is_current_admin = -1;
+        if(session("school_id") > 0 && $user_account){
+            $admin_account = PaymentInformation::where("school_id", session('school_id'))->where("type", "individual");
+
+            if($admin_account->exists()){
+                $admin_account = $admin_account->get()[0];
+
+                $is_current_admin = $admin_account->user_id == Auth::user()->id;
+            }
+        }
+
+        return $is_current_admin;
     }
 
     /**

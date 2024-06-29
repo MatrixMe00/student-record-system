@@ -1,5 +1,5 @@
 @php
-    $subtitle = "Information entered here is going to be used for to auto-procure payment to the account when a student makes result payment in your school."
+    $subtitle = "Information entered here is going to be used to auto-procure payment to the school account when a student makes payment for results or debts."
 @endphp
 
 <x-form-container subtitle="{{ $subtitle }}" padding="" :showErrors="old('submit') == 'school'">
