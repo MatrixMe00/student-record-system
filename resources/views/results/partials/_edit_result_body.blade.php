@@ -23,10 +23,12 @@
         </p>
     @elseif ($grades->count() > 0)
         @method("PUT")
+        <p class="text-sm text-center text-red-500">Please provide your raw marks. Clicking a field will show its original value</p>
 
         {{-- table with grades --}}
         @include('results.partials._result_body_grades')
     @else
+        <p class="text-sm text-center text-red-500">Please provide your raw marks. Clicking a field will show its original value</p>
         {{-- table with new student data --}}
         @include('results.partials._new_result_body')
     @endif
