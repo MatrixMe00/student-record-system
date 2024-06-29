@@ -16,8 +16,13 @@
         @if (env('APP_URL') == "http://localhost")
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @else
-            <link rel="stylesheet" href="{{ asset('assets/app.css') }}" />
-            <script src="{{ asset('assets/app.js') }}"></script>
+            @php
+                $app_js = "assets/app.js?v=".time();
+                $app_css = "assets/app.css?v=".time();
+            @endphp
+            <link rel="stylesheet" href="{{ asset($app_css) }}" />
+            <script src="{{ asset($app_js) }}"></script>
+            <script src="{{ asset('assets/alpine.js') }}"></script>
         @endif
     </head>
     <body class="font-sans text-gray-900 antialiased">
