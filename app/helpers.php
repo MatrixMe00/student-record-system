@@ -478,3 +478,54 @@ if(! function_exists("fix_message")){
         return $message;
     }
 }
+
+if(!function_exists("system_role_check")){
+    /**
+     * This is used especially for system settings and is used to check if a role exists
+     *
+     * @param string $settings_roles The roles from the settings
+     * @param ?int $user_role The user's role. Leave as null if its the authenticated user
+     * @return bool
+     */
+    function system_role_check(string $settings_roles, ?int $user_role = null) :bool{
+        if(is_null($user_role)){
+            $user_role = auth()->user()->role_id;
+        }
+
+        $roles = explode("-", $settings_roles);
+
+        return in_array($user_role, $roles);
+    }
+}
+
+if(!function_exists("chars_format")){
+    /**
+     * This function is used to change text formats
+     *
+     * This can covert a text to snake_case and vice versa
+     * @param string $text The text to format
+     * @return string
+     */
+    function chars_format($text) :string{
+        $special_chars = ["-","_"];
+
+        /**
+         * An internal servant if special characters as found
+         */
+        function check_chars($text, $special_chars){
+            foreach($special_chars as $char){
+                if(str_contains($text, $char)){
+                    return $char;
+                }
+            }
+
+            return false;
+        }
+
+        if($char = check_chars($text, $special_chars)){
+            return str_replace($char, " ", $text);
+        }else{
+            return str_replace($special_chars, " ", $text);
+        }
+    }
+}

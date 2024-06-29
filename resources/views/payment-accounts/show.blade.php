@@ -12,21 +12,31 @@
             @endif
 
             <x-nav-tags :tags="$tags" />
-            @php
-                $class = $admin ? "grid grid-cols-1 lg:grid-cols-2 gap-2 items-start" : "";
-            @endphp
 
             <x-session-component />
 
-            <section class="mt-3 {{ $class }}">
+            <section class="mt-3 grid grid-cols-1 lg:grid-cols-2 gap-2 items-start">
                 <x-section-component title="Personal Account" class="h-fit">
                     @include("payment-accounts.partials._personal")
                 </x-section-component>
 
-                @if ($admin)
+                @if ($admin && $personal_account)
                     <x-section-component title="School Account" class="h-fit">
                         @include("payment-accounts.partials._school")
                     </x-section-component>
+                @endif
+
+                @if (!$admin)
+                <section class="space-y-3">
+                    <x-section-component title="System Account Price">
+                        @include("payment-accounts.partials._system")
+                    </x-section-component>
+
+                    <x-section-component title="Admin Price Splits">
+                        @include("payment-accounts.partials._admin_price_splits")
+                    </x-section-component>
+                </section>
+
                 @endif
         </section>
 

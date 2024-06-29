@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\LogType;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\Settings;
 use App\Http\Requests\StoreSettingsRequest;
 use App\Http\Requests\UpdateSettingsRequest;
+use App\Models\ActivityLog;
 
 class SettingsController extends Controller
 {
@@ -30,7 +33,14 @@ class SettingsController extends Controller
     public function store(StoreSettingsRequest $request)
     {
         $validated = $request->validated();
-        Settings::create($validated);
+        $settings = Settings::create($validated);
+
+        ActivityLog::dev_success_log(LogType::SYSTEM_INFO, "new system settings created", $settings);
+
+        // enable or disable the price value
+        AuthenticatedSessionController::payment_ready();
+
+        return redirect()->back()->with(["success" => true, "message" => "System setting '$settings->visual_name' created"]);
     }
 
     /**
@@ -52,10 +62,25 @@ class SettingsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSettingsRequest $request, Settings $settings)
+    public function update(UpdateSettingsRequest $request, $key)
     {
-        $validated = $request->validated();
-        $settings->update($validated);
+        $settings = Settings::where("name", $key);
+
+        if($settings->exists()){
+            $settings = $settings->first();
+            $original = $settings;
+            $validated = $request->validated();
+            $settings->update($validated);
+
+            ActivityLog::dev_success_log(LogType::SYSTEM_INFO, "system setting '". chars_format($settings->name) ."' updated", ["current" => $settings, "original" => $original]);
+
+            // enable or disable the price value
+            AuthenticatedSessionController::payment_ready();
+        }else{
+            abort(404);
+        }
+
+        return back()->with(["success" => true, "message" => "System settings have been updated"]);
     }
 
     /**

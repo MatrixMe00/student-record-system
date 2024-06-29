@@ -16,10 +16,14 @@ class PaymentInformationController extends Controller
 {
     use UserModelTrait;
 
+    /**
+     * @var array USER_PRICES Prices in percentage format to be used during splits
+     */
     private const USER_PRICES = [
-        "developer" => 20,
+        "developer" => 18.33,
         "superadmin" => 25,
-        "admin" => 20
+        "system" => 15,
+        "admin" => 16.67
     ];
 
     /**

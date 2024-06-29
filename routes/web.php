@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\RemarkOptionsController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentBillController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherClassController;
@@ -230,6 +231,10 @@ Route::middleware(['auth', 'system.admin'])->group(function(){
        $message = $initialized === true ? "Banks have been initialized successfully" : "Unknown error detected";
        return back()->with(["success" => $initialized, "message" => $message]);
     })->name("banks.create");
+
+    // setting up system settings
+    Route::post("system-settings/create", [SettingsController::class, "store"])->name("system-settings.store");
+    Route::put("system-settings/update/{key}", [SettingsController::class, "update"])->name("system-settings.update");
 
     // Route::get("/student-result/{program}/{student}/{academic_year}/{term}", [SchoolController::class, "student_result"])->name("school-subject.student");
 });

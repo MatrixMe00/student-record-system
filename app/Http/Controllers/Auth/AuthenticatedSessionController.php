@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * @var User $user This holds the authenticated user
      */
-    private ?User $user = null;
+    private static ?User $user = null;
 
     /**
      * @var Model $model This holds the user model
@@ -60,10 +60,10 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         // set user as this user
-        $this->user = Auth::user();
+        self::$user = Auth::user();
 
         // create the user model
-        $this->model = $this->user_model($this->user);
+        $this->model = $this->user_model(self::$user);
 
         // create a cookie to hold the login name
         $response = $this->create_cookie();
@@ -86,28 +86,43 @@ class AuthenticatedSessionController extends Controller
         $this->add_school_id();
 
         // students should have payment details checked out
-        if($this->user->role_id == 5){
+        if(self::$user->role_id == 5){
             $this->check_payments();
-        }elseif($this->user->role_id == 4){
+        }elseif(self::$user->role_id == 4){
             $this->teacher_session();
         }
 
         // see if system is ready to receive payments
-        $this->payment_ready();
+        self::payment_ready();
+    }
+
+    /**
+     * This function gets the base payment registered into the system by system admins
+     */
+    private static function set_base_payment(){
+        $system_price = Settings::where("name", "system_price")->where("default_value", ">", 0);
+        if($system_price->exists()){
+            $system_price = $system_price->first();
+            return session(["base_price" => $system_price->default_value]);
+        }else{
+            return session(["base_price" => null]);
+        }
     }
 
     /**
      * This creates a session to determine if the system is ready to receive payments
      */
-    private function payment_ready(){
+    public static function payment_ready(){
         $admins = Admin::all();
         $ready = false;
         if($admins->count() > 0){
             $admin_payments = PaymentInformation::where("master", true)->get();
             $ready = ($admins->count() - 1) == $admin_payments->count();
 
+            self::set_base_payment();
+
             // check if price has been set
-            $price = Settings::where("name", "system_price")->where("default_value", ">", 0)->exists();
+            $price = boolval(session("base_price"));
         }
 
         session(["payment_is_ready" => ($ready && $price)]);
@@ -148,21 +163,21 @@ class AuthenticatedSessionController extends Controller
     private function add_payment_status(string $payment_type){
         switch($payment_type){
             case "result":
-                $status = Payment::where('student_id', $this->user->id)
+                $status = Payment::where('student_id', self::$user->id)
                                  ->where('expiry_date', ">", date("Y-m-d"))
                                  ->where('payment_type', 'results')
                                  ->orderBy('expiry_date', 'desc')->limit(1)->exists();
                 break;
             case "debt":
-                $status = DebtorsList::where('student_id', $this->user->id)
+                $status = DebtorsList::where('student_id', self::$user->id)
                                      ->where('status', true)->exists();
                 break;
             case "bill":
-                $status = StudentBill::where("student_id", $this->user->id)
+                $status = StudentBill::where("student_id", self::$user->id)
                                      ->where("status", true)->exists();
                 break;
             default:
-                $status = Payment::where('student_id', $this->user->id)
+                $status = Payment::where('student_id', self::$user->id)
                                  ->where('payment_type', strtolower($payment_type))
                                  ->orderBy('created_at', 'desc')->limit(1)->exists();
         }

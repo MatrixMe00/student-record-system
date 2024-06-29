@@ -129,6 +129,11 @@ class ActivityLog extends Model
             $log_details = encode_array($log_details);
         }
 
+        // set as a system error if there is no user activity involved
+        if(is_null(self::$user_id) && !Auth::check()){
+            self::$user_id = 0;
+        }
+
         ActivityLog::create([
             "activity_type" => $activity_type, "message" => $message,
             "user_id" => self::$user_id ?? Auth::user()->id, "school_id" => session('school_id') ?? null,
