@@ -16,13 +16,21 @@
             <x-session-component />
 
             <section class="mt-3 grid grid-cols-1 lg:grid-cols-2 gap-2 items-start">
-                <x-section-component title="Personal Account" class="h-fit">
-                    @include("payment-accounts.partials._personal")
-                </x-section-component>
+                {{-- superadmins have no restrictions but admins should set up school account first --}}
+                @if (!$admin || ($admin && $school_account))
+                    <x-section-component title="Personal Account" class="h-fit">
+                        @include("payment-accounts.partials._personal")
+                    </x-section-component>
+                @endif
 
-                @if ($admin && $personal_account)
-                    <x-section-component title="School Account" class="h-fit">
-                        @include("payment-accounts.partials._school")
+                @if ($admin)
+                    @if (session("school_result_price"))
+                        <x-section-component title="School Account" class="h-fit">
+                            @include("payment-accounts.partials._school")
+                        </x-section-component>
+                    @endif
+                    <x-section-component title="Results Check Price" class="h-fit">
+                        @include("payment-accounts.partials._school_price")
                     </x-section-component>
                 @endif
 

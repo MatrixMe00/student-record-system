@@ -5,6 +5,7 @@ use App\Models\ActivityLog;
 use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -527,5 +528,33 @@ if(!function_exists("chars_format")){
         }else{
             return str_replace($special_chars, " ", $text);
         }
+    }
+}
+
+if(!function_exists("make_request")){
+    /**
+     * Makes new request based on a key
+     * @param Request $request The request
+     * @param int $key The key
+     * @return Request
+     */
+    function make_request(Request $request, int $key){
+        // Initialize an empty array to store the new request data
+        $new_request_data = [];
+
+        // Loop through the request inputs
+        foreach ($request->all() as $inputKey => $inputValue) {
+            // Check if the input is an array and has the key
+            if (is_array($inputValue) && isset($inputValue[$key])) {
+                // Add the specific key's value to the new request data
+                $new_request_data[$inputKey] = $inputValue[$key];
+            } else {
+                // Otherwise, add the input as is to the new request data
+                $new_request_data[$inputKey] = $inputValue;
+            }
+        }
+
+        // Create a new Request object with the new request data
+        return new Request($new_request_data);
     }
 }

@@ -15,7 +15,13 @@
             {{-- account id --}}
             <div>
                 <x-input-label for="account_id_s" :value="__('Account ID')" readonly />
-                <x-text-input id="account_id_s" :value="$school_account->account_id" readonly />
+                <x-text-input id="account_id_s" name="account_id" :value="$school_account->account_id" readonly />
+            </div>
+
+            {{-- account name --}}
+            <div>
+                <x-input-label for="account_name_s" :value="__('Name on Account')" />
+                <x-text-input id="account_name_s" :value="$school_account->account_name" readonly />
             </div>
         @endif
 
@@ -23,6 +29,12 @@
         <div>
             <x-input-label for="school_name" :value="__('School Name')" />
             <x-text-input id="school_name" :value="$school->school_name" readonly />
+        </div>
+
+        {{-- Email --}}
+        <div>
+            <x-input-label for="email_p" :value="__('School Email')" />
+            <x-text-input id="email_p" name="email" :value="$school->school_email" readonly />
         </div>
 
         {{-- Bank Code --}}

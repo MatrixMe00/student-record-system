@@ -20,6 +20,10 @@
         /// System settings
         const SYSTEM_INFO = "system-info";
 
+        /// payment information
+        const SUB_ACCOUNT_CREATE = "sub-account-create";
+        const SUB_ACCOUNT_UPDATE = "sub-account-update";
+
         /**
          * Kick start the class
          */
@@ -39,7 +43,7 @@
                 "login" => "fas fa-sign-in-alt", "logout" => "fas fa-sign-out-alt", "account-update" => "fas fa-user-edit",
                 "school-update" => "fas fa-edit", "school-add" => "fas fa-school", "account-create" => "fas fa-user-plus",
                 "account-delete" => "fas fa-user-times", "password-update" => "fas fa-key", "email-verify" => "fas fa-envelope-open-text",
-                "system-info" => "fas fa-info-circle"
+                "system-info" => "fas fa-info-circle", "sub-account-create" => "fas fa-wallet", "sub-acccount-update" => "fas fa-sync-alt"
             ];
 
             return $logs;

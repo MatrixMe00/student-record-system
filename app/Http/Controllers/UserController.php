@@ -341,7 +341,8 @@ class UserController extends Controller
                     "add_student" => $options["students"]->count(),
                     "teach_subj" => TeacherClass::where("school_id", session('school_id'))->get()->count(),
                     "payment_info_self" => PaymentInformation::where("user_id", $user->id)->where("split_key", null)->exists(),
-                    "payment_info_school" => PaymentInformation::where("user_id", $user->id)->where("split_key", "!=", null)->exists()
+                    "payment_info_school" => PaymentInformation::where("user_id", $user->id)->where("split_key", "!=", null)->exists(),
+                    "price_amount_provided" => session('school_result_price') ?? false
                 ];
         }
 

@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('school_settings', function (Blueprint $table) {
-            $table->foreignId("school_id")->primary()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string("settings")->comment("A hashed data of the school settings");
-            $table->foreignId("admin_id");
+            $table->id();
+            $table->foreignId("school_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string("settings_name");
+            $table->string("value");
             $table->timestamps();
         });
     }

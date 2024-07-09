@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId("school_id")->nullable()->constrained()->nullOnDelete();
             $table->string("bank_code")->nullable();
             $table->string("account_number");
+            $table->string("account_name");
             $table->string("account_id")->unique();
             $table->string("split_key")->nullable();
             $table->enum("type", ["school", "individual"])->default("individual");

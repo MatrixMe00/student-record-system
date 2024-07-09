@@ -291,7 +291,7 @@ class ActivityLog extends Model
     /**
      * unserialize the log_details before sent to frontend
      */
-    public function getLoginDetailsAttribute(){
-        return decode_array($this->getAttribute("log_details"));
+    public function getLogDetailsAttribute(){
+        return decode_array($this->attributes["log_details"]);
     }
 }

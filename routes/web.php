@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\RemarkOptionsController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\SchoolSettingController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentBillController;
 use App\Http\Controllers\SubjectController;
@@ -196,6 +197,12 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
         Route::get("subjects/{school_id?}/{academic_year?}/{program?}/{subject?}", [SchoolController::class, "subject_results"])->name("history.subjects.fresult");
         Route::get("subjects/{school_id?}/{academic_year?}/{program?}/{subject?}/{term?}", [SchoolController::class, "subject_results"])->name("history.subjects.results");
     });
+
+    // school settings
+    Route::post("school-settings", [SchoolSettingController::class, "store"])->name("school-settings.store");
+    Route::put("school-settings/{school_setting}", [SchoolSettingController::class, "update"])->name("school-settings.update");
+    Route::match(["post", "put"], "school-settings/modify", [SchoolSettingController::class, "save_update"])->name("school-settings.modify");
+    Route::match(["post", "put"], "my-account/price", [PaymentInformationController::class, "update_payment"])->name("school-payment.modify");
 });
 
 // routes for only system admins

@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\LogType;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\PaymentInformation;
 use App\Http\Requests\StorePaymentInformationRequest;
 use App\Http\Requests\UpdatePaymentInformationRequest;
+use App\Models\ActivityLog;
 use App\Models\PaystackBank;
 use App\Models\School;
+use App\Models\SchoolSetting;
 use App\Models\User;
 use App\Traits\UserModelTrait;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -60,7 +65,7 @@ class PaymentInformationController extends Controller
                 break;
             case 3:
                 $options = [
-                    "accounts" => PaymentInformation::where("school_id", session('school_id'))
+                    "accounts" => PaymentInformation::where("school_id", session('school_id'))->get()
                 ];
                 break;
             default:
@@ -95,6 +100,8 @@ class PaymentInformationController extends Controller
 
         $p_info = PaymentInformation::create($validated);
 
+        ActivityLog::dev_success_log(LogType::SUB_ACCOUNT_CREATE, "{type} payment account created", $p_info);
+
         return back()->with(["success" => true, "message" => "Account created successfully"]);
     }
 
@@ -108,13 +115,15 @@ class PaymentInformationController extends Controller
         $sub_account = $this->create_sub_account($validated, $user);
 
         if($sub_account?->status == true){
+            $account_name = $sub_account->data->account_name;
             $sub_account = $sub_account->data->subaccount_code;
 
             if($user->role_id > 2 && $validated["type"] == "individual"){
-                $split_account = $this->create_split_account($sub_account, $user);
+                $split_account = $this->create_split_account($sub_account, request()->school_account, $user);
 
                 if($split_account->status == true){
                     $validated["split_key"] = $split_account->data->split_code;
+                    $validated["split_id"] = $split_account->data->id;
                 }else{
                     throw ValidationException::withMessages([
                         "message" => $split_account->message
@@ -123,7 +132,10 @@ class PaymentInformationController extends Controller
             }
 
             $validated["account_id"] = $sub_account;
+            $validated["account_name"] = $account_name;
         }else{
+            $message = $sub_account?->message ?? "";
+            ActivityLog::dev_error_log(LogType::SUB_ACCOUNT_CREATE, "{username} encountered a fail on creating sub account. $message", Auth::user());
             throw ValidationException::withMessages([
                 "message" => $sub_account?->message ?? "Error was encountered, account could not be saved. Check your network"
             ]);
@@ -136,7 +148,7 @@ class PaymentInformationController extends Controller
      * Creates a business name
      */
     private function create_name($id, $type, $is_user){
-        $end = $type == "subaccount" ? "Result" : "Personal";
+        $end = $type == "subaccount" ? "Personal" : "Result";
         $first = str_pad($id, 4, "0", STR_PAD_LEFT);
         $begin = $is_user ? "USR_" : "SCH_";
 
@@ -157,7 +169,8 @@ class PaymentInformationController extends Controller
             'business_name' => $business_name,
             'settlement_bank' => $validated["bank_code"],
             'account_number' => $validated["account_number"],
-            'percentage_charge' => $validated["type"] == "individual" ? 0 : 5
+            'percentage_charge' => $validated["type"] == "individual" ? 0 : 5,
+            'primary_contact_email' => request()->email ?? ''
         ];
 
         $fields_string = http_build_query($fields);
@@ -190,17 +203,19 @@ class PaymentInformationController extends Controller
     /**
      * This creates a split account
      * @param string $sub_account The sub account to be used
+     * @param string $school_account The school account
      */
-    private function create_split_account($sub_account, User $user){
+    private function create_split_account($sub_account, $school_account, User $user){
         $url = "https://api.paystack.co/split";
-        $sub_accounts = $this->create_sub_accounts($sub_account);
+        $sub_accounts = $this->create_sub_accounts($sub_account, $school_account);
         $name = $this->create_name($user->id, "split", true);
 
         $fields = [
             'name' => $name,
-            'type' => "percentage",
+            'type' => "flat",
             'currency' => "GHS",
-            'subaccounts' => $sub_accounts
+            'subaccounts' => $sub_accounts,
+            'bearer_type' => "account"
         ];
 
         $fields_string = http_build_query($fields);
@@ -226,6 +241,97 @@ class PaymentInformationController extends Controller
     }
 
     /**
+     * Updates the split account details
+     * @param string $personal_account The personal account id
+     * @param string $school_account The school account id
+     */
+    private function update_split_account(string $personal_account, string $school_account, ?string $split_id){
+
+    }
+
+    /**
+     * This is used to update an account details
+     * @param array $validated The validated information
+     * @return object
+     */
+    private function update_sub_account(array $validated) :object{
+        $user = Auth::user();
+        $account_id = request()->account_id;
+
+        $url = "https://api.paystack.co/subaccount/$account_id";
+        $is_user = $validated["type"] == "individual";
+        $business_name = $this->create_name($user->id, "subaccount", $is_user);
+
+        $fields = [
+            'primary_contact_email' => request()->email ?? '',
+            'business_name' => $business_name,
+            'settlement_bank' => $validated["bank_code"],
+            'account_number' => $validated["account_number"],
+            'percentage_charge' => $validated["type"] == "individual" ? 0 : 5
+        ];
+
+        $fields_string = http_build_query($fields);
+
+        //open connection
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch,CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Authorization: Bearer ".env("PAYSTACK_SECRET_KEY"),
+            "Cache-Control: no-cache",
+        ));
+
+        //So that curl_exec returns the contents of the cURL; rather than echoing it
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+
+        //execute post
+        $result = curl_exec($ch);
+        $result = json_decode($result);
+
+        return $result;
+    }
+
+    /**
+     * This deactivates a split account, and is usually the case when the price of the school has been set
+     * @param string $split_account_id The split account id to be removed
+     */
+    private function remove_split_account(?string $split_account_id){
+        if($split_account_id){
+            $url = "https://api.paystack.co/split/$split_account_id";
+
+            $fields = [
+                "name" => "Deactivated Split",
+                "active" => false
+            ];
+
+            $fields_string = http_build_query($fields);
+
+            //open connection
+            $ch = curl_init();
+
+            //set the url, number of POST vars, POST data
+            curl_setopt($ch,CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                "Authorization: Bearer ".env("PAYSTACK_SECRET_KEY"),
+                "Cache-Control: no-cache",
+            ));
+
+            //So that curl_exec returns the contents of the cURL; rather than echoing it
+            curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+
+            //execute post
+            $result = curl_exec($ch);
+            $result = json_decode($result);
+            dd($result, $split_account_id, $url);
+        }
+    }
+
+    /**
      * Gets the master accounts in the system
      */
     private function get_master_accounts(){
@@ -235,9 +341,12 @@ class PaymentInformationController extends Controller
     /**
      * Creates a sub account array
      * @param string $sub_account The sub account to be merged with master
+     * @param string $school_account The school account to be merged
      * @return array
      */
-    private function create_sub_accounts(string $sub_account) :array{
+    private function create_sub_accounts(string $sub_account, string $school_account) :array{
+        $system_price = floatval(session("base_price"));
+        $school_price = floatval(session("school_result_price"));
         $master_accounts = $this->get_master_accounts();
         $sub_accounts[0] = $this->split_subaccount($sub_account, $this->user_price());
 
@@ -246,16 +355,50 @@ class PaymentInformationController extends Controller
             $sub_accounts[] = $this->split_subaccount($account->account_id, $this->user_price($role));
         }
 
+        // add the school account details
+        $sub_accounts[] = $this->split_subaccount($school_account, $school_price, false);
+
         return $sub_accounts;
     }
 
     /**
      * Creates a sub account array for split
      */
-    private function split_subaccount($sub_account, $price){
+    private function split_subaccount($sub_account, $price, $use_base_price = true){
         return [
-            "subaccount" => $sub_account, "amount" => $price
+            "subaccount" => $sub_account, "share" => ($use_base_price ? $price * floatval(session('base_price')) : $price * 100)
         ];
+    }
+
+    /**
+     * Used by schools to update or save their payment records
+     * @param Request $request
+     */
+    public function update_payment(Request $request){
+        $school_setting = new SchoolSettingController();
+        $is_new_price = $request->value != session('school_result_price');
+
+        // make update or save
+        $school_setting->save_update($request);
+
+        // make update to session
+        AuthenticatedSessionController::payment_ready();
+
+        // make changes to split token
+        if($request->personal_account && $request->school_account){
+            if($request->split_id && $is_new_price){
+                $this->remove_split_account($request->split_id);
+                $split_details = $this->create_split_account($request->personal_account, $request->school_account, Auth::user());
+
+                $personal_account = PaymentInformation::where("account_id", $request->persoanl_account)->first();
+                $personal_account->update([
+                    "split_key" => $split_details->data->split_code,
+                    "split_id" => $split_details->data->id
+                ]);
+            }
+        }
+
+        return redirect()->back()->with(["success" => true, "message" => "Updates done to how much you charge"]);
     }
 
     /**
@@ -295,6 +438,10 @@ class PaymentInformationController extends Controller
 
             // if a school has multiple admins, enforce that only one can be created
             $response["registered_admin"] = $this->admin_personal_exists($response["personal_account"]);
+
+            if($user->role_id > 2){
+                $response["result_price"] = SchoolSetting::where("settings_name", "system_price")->get();
+            }
         }
 
         $response["can_create"] = $creatable;
@@ -325,11 +472,20 @@ class PaymentInformationController extends Controller
      */
     public function update(UpdatePaymentInformationRequest $request, PaymentInformation $paymentInformation)
     {
+        $original = $paymentInformation;
         $validated = $request->validated();
-        $validated = $this->create_accounts($validated);
-        $paymentInformation->update($validated);
+        $response = $this->update_sub_account($validated);
 
-        return back()->with(["success" => true, "message" => "Account details have been updated successfully"]);
+        if($response->status){
+            $paymentInformation->update($validated);
+            ActivityLog::success_log(LogType::SUB_ACCOUNT_UPDATE, "Account details have been updated", ["original" => $original, "current" => $paymentInformation]);
+            return back()->with(["success" => true, "message" => "Account details have been updated successfully"]);
+        }else{
+            ActivityLog::dev_error_log(LogType::SUB_ACCOUNT_UPDATE, "Account update failed: {$response->message}");
+            throw ValidationException::withMessages([
+                "message" => $response->message
+            ]);
+        }
     }
 
     /**

@@ -25,9 +25,10 @@ class UpdatePaymentInformationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "bank_code" => ["required", "string", Rule::exists("paystack_banks", "code")],
-            "type" => ["sometimes", "string"],
+            "user_id" => ["required", "integer", Rule::exists("users", "id")],
+            "bank_code" => ["required", "string"],
             "account_number" => ["required", "string"],
+            "type" => ["required", "string"],
         ];
     }
 }

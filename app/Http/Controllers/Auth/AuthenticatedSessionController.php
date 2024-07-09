@@ -10,6 +10,7 @@ use App\Models\Admin;
 use App\Models\DebtorsList;
 use App\Models\Payment;
 use App\Models\PaymentInformation;
+use App\Models\SchoolSetting;
 use App\Models\Settings;
 use App\Models\StudentBill;
 use App\Models\User;
@@ -113,6 +114,9 @@ class AuthenticatedSessionController extends Controller
      * This creates a session to determine if the system is ready to receive payments
      */
     public static function payment_ready(){
+        if(is_null(self::$user)){
+            self::$user = Auth::user();
+        }
         $admins = Admin::all();
         $ready = false;
         if($admins->count() > 0){
@@ -121,11 +125,30 @@ class AuthenticatedSessionController extends Controller
 
             self::set_base_payment();
 
+            if(self::$user->role_id > 2){
+                self::set_school_result_payment();
+            }
+
             // check if price has been set
             $price = boolval(session("base_price"));
         }
 
         session(["payment_is_ready" => ($ready && $price)]);
+    }
+
+    /**
+     * Used to set the school's price session
+     */
+    private static function set_school_result_payment(){
+        $school_price = SchoolSetting::where("settings_name", "system_price");
+        $response = null;
+
+        if($school_price->exists()){
+            $school_price = $school_price->first();
+            $response = $school_price->value;
+        }
+
+        return session(["school_result_price" => $response]);
     }
 
     /**
