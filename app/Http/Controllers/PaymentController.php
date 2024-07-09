@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
 use App\Models\DebtorsList;
+use App\Models\School;
 use App\Models\Student;
 use App\Models\StudentBill;
 use Illuminate\Support\Facades\Auth;
@@ -31,10 +32,26 @@ class PaymentController extends Controller
 
         $student_id = Auth::user()->id;
         $amount = $this->get_amount($type, $student_id);
+        $school = School::find(session("school_id"));
+        $accounts = $school->payment_information;
+
+        if($accounts){
+            if($type == "results"){
+                $account = $accounts->where("type", "individual")->first();
+                $paystack_add = "split_code: '$account->split_key'";
+            }else{
+                // add 5% to amount
+                $original = $amount;
+                $amount += ($amount * 0.05);
+                $account = $accounts->where("type", "school")->first();
+                $paystack_add = "subaccount: '$account->account_id'";
+            }
+        }
 
         return view('payments.create',[
             "student" => Student::find($student_id)->first(),
-            "type" => $type, "amount" => number_format($amount, 2)
+            "type" => $type, "amount" => number_format($amount, 2), "original" => $original ?? 0,
+            "paystack_add" => $paystack_add
         ]);
     }
 
@@ -53,7 +70,7 @@ class PaymentController extends Controller
                 }
                 break;
             case "results":
-                $amount = 10;
+                $amount = floatval(session("base_price")) + floatval(session("school_result_price"));
                 break;
             case "bill":
                 $bill = StudentBill::where("student_id", $student_id)

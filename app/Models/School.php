@@ -80,4 +80,11 @@ class School extends Model
     public function remarks() :HasMany{
         return $this->hasMany(TeacherRemarks::class);
     }
+
+    /**
+     * Gets the payment information for this school
+     */
+    public function payment_information() :HasMany{
+        return $this->hasMany(PaymentInformation::class);
+    }
 }
