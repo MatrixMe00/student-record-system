@@ -73,7 +73,7 @@
                                 email: $("#paymentForm input#contact_email").val(),
                                 amount: parseFloat($("#paymentForm input#amount").val()) * 100,
                                 email: 'safosah00@gmail.com',
-                                {!! $paystack_add !!},
+                                {!! $paystack_add !!}
                                 currency: 'GHS',
                                 metadata: {
                                     custom_fields: [

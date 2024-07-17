@@ -38,20 +38,20 @@ class PaymentController extends Controller
         if($accounts->count() > 0){
             if($type == "results"){
                 $account = $accounts->where("type", "individual")->first();
-                $paystack_add = "split_code: '$account->split_key'";
+                $paystack_add = "split_code: '$account->split_key',";
             }else{
                 // add 5% to amount
                 $original = $amount;
                 $amount += ($amount * 0.05);
                 $account = $accounts->where("type", "school")->first();
-                $paystack_add = "subaccount: '$account->account_id'";
+                $paystack_add = "subaccount: '$account->account_id',";
             }
         }
 
         return view('payments.create',[
             "student" => Student::find($student_id)->first(),
             "type" => $type, "amount" => number_format($amount, 2), "original" => $original ?? 0,
-            "paystack_add" => $paystack_add
+            "paystack_add" => $paystack_add ?? ""
         ]);
     }
 
