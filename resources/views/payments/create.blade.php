@@ -6,8 +6,11 @@
     @section("title", "Make Payment")
 
     <x-app-main>
-        {{-- @if (session('payment_is_ready')) --}}
-        @if (true)
+        @php
+            // live test site should bypass payment is ready check
+            $live_test = str_contains(strtolower(env("APP_URL")), "test.");
+        @endphp
+        @if (session('payment_is_ready') || $live_test)
             @if ($amount <= 0)
                 <x-empty-div>{{ __("Payment disallowed. Invalid amount value provided. Contact the admin for assistance.") }}</x-empty-div>
             @else
