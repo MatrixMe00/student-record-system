@@ -11,7 +11,10 @@
             @method("PUT")
         @endif
 
-        <x-info-card shadow="" class="sm:col-span-2 text-sm">System takes a base amount of <b>GH¢ {{ number_format(session('base_price'), 2) }}</b>, you can add up to a maximum of GHC 3.00</x-info-card>
+        @php
+            $max_price = 4;
+        @endphp
+        <x-info-card shadow="" class="sm:col-span-2 text-sm">System takes a base amount of <b>GH¢ {{ number_format(session('base_price'), 2) }}</b>, you can add up to a maximum of GH¢ {{ number_format($max_price,2) }}</x-info-card>
 
         {{-- parse if it has a personal account --}}
         <x-text-input type="hidden" name="personal_account" value="{{ $personal_account?->account_id }}" />
@@ -27,14 +30,14 @@
 
         {{-- Current Price --}}
         <div>
-            <x-input-label for="price" :value="__('Current Price (GHC)')" />
+            <x-input-label for="price" :value="__('Current Price (GH¢)')" />
             <x-text-input id="price" x-model="total" readonly />
         </div>
 
         {{-- New default value --}}
         <div>
             <x-input-label for="value" :value="__('Your Price')" />
-            <x-text-input type="number" step="0.01" max="3" min="0" id="value" name="value" placeholder="New Price to be added" x-model="current_price"
+            <x-text-input type="number" step="0.01" max="{{ $max_price }}" min="0" id="value" name="value" placeholder="New Price to be added" x-model="current_price"
                 @change="total=parseFloat(parseFloat(current_price)+parseFloat(system_price)).toFixed(2)"
                 @blur="current_price=parseFloat(current_price).toFixed(2)"
             />
