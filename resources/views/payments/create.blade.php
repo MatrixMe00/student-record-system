@@ -6,7 +6,8 @@
     @section("title", "Make Payment")
 
     <x-app-main>
-        @if (session('payment_is_ready'))
+        {{-- @if (session('payment_is_ready')) --}}
+        @if (true)
             @if ($amount <= 0)
                 <x-empty-div>{{ __("Payment disallowed. Invalid amount value provided. Contact the admin for assistance.") }}</x-empty-div>
             @else
