@@ -35,7 +35,7 @@ class PaymentController extends Controller
         $school = School::find(session("school_id"));
         $accounts = $school->payment_information;
 
-        if($accounts){
+        if($accounts->count() > 0){
             if($type == "results"){
                 $account = $accounts->where("type", "individual")->first();
                 $paystack_add = "split_code: '$account->split_key'";
