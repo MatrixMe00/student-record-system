@@ -5,7 +5,7 @@
 
     @section("title", "Edit Class Data")
 
-    <x-app-main>
+    <x-app-main class="grid lg:grid-cols-2">
         <div class="bg-zinc-50 mt-4 flex items-center w-full p-8 mx-auto lg:px-12">
             <div class="w-full">
                 <h1 class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
@@ -72,8 +72,8 @@
         </div>
 
         @if ($class_data->count() > 0)
-            <section class="bg-zinc-50 mt-8 py-6">
-                <x-table-component title="Class Subjects [{{ $class_data->count() }}]">
+            <section class="bg-zinc-50 mt-8 py-6 lg:px-4">
+                <x-table-component screens="" title="Class Subjects [{{ $class_data->count() }}]">
                     @section('thead')
                         <thead>
                             <tr>

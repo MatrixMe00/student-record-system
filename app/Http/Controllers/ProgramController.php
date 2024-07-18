@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ClassExport;
 use App\Models\Program;
 use App\Http\Requests\StoreProgramRequest;
 use App\Http\Requests\UpdateProgramRequest;
@@ -34,6 +35,13 @@ class ProgramController extends Controller
     public function create()
     {
         //
+    }
+
+    /**
+     * Gets a class list
+     */
+    public function class_list(Program $program){
+        return ExcelController::export(new ClassExport($program), "$program->name");
     }
 
     /**

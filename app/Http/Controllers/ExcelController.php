@@ -22,4 +22,12 @@ class ExcelController extends Controller
 
         return false;
     }
+
+    public static function export($object, $file_name){
+        $file_name = str_contains($file_name, ".") ? $file_name : "$file_name.xlsx";
+
+        if($object){
+            return Excel::download($object, $file_name);
+        }
+    }
 }

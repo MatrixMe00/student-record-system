@@ -152,6 +152,9 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
     Route::get("/class/{program}/edit", [ProgramController::class, 'edit']);
     Route::put("/class/{program}/edit", [ProgramController::class, 'update']);
 
+    // class list
+    Route::get("classes/spid{program}/download", [ProgramController::class, "class_list"])->name("class-list.download");
+
     // subjects
     Route::get("/subjects", [SubjectController::class, 'index'])->name('subject.all');
     Route::post("/subject/add", [SubjectController::class, 'store'])->name("add-subject");

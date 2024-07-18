@@ -5,7 +5,7 @@
 
     @section("title", "Classes")
 
-    <x-app-main class="mt-4">
+    <x-app-main class="py-4">
         {{-- show the success message after creation --}}
         <x-session-component />
 
@@ -36,17 +36,29 @@
                     @php
                         $teacher = $program->teacher;
                         $teacher_name = !is_null($teacher) ? "{$teacher->lname} {$teacher->oname}" : "Not Set";
+                        $ttl_studs = $program->students->count();
 
                         $extras = [
-                            ["title" => "Student Count", "content" => $program->students->count()." students"],
+                            ["title" => "Student Count", "content" => "$ttl_studs students"],
                             ["title" => "Class Teacher", "content" => $teacher_name]
                         ];
+
+                        // extra buttons
+                        $buttons = [];
+                        if($ttl_studs > 0){
+                            $buttons[] = [
+                                "name" => "Download", "title" => "Download Class List",
+                                "class"=>"text-green-600", "url" => route('class-list.download', ['program' => $program->id])
+                            ];
+                        }
+
                     @endphp
                     <x-content-card
                         class="bg-white hover:bg-neutral-50"
                         title="{{ $program->name }}" item_id="{{ $program->id }}"
                         :sub_title="$program->slug ?? 'No Slug name'"
-                        path_head="class" :extras="$extras" />
+                        path_head="class" :extras="$extras"
+                        :buttons="$buttons" />
                 @endforeach
             </x-content-grid>
         @else

@@ -2,7 +2,7 @@
         "title", "item_id", "path_head" => null, "sub_title" => "", "content" => null,
         "avatar_url" => "", "extras" => [], "editable" => true, "card_link" => "javascript:void(0)",
         "image_size" => "", "removable" => true, "view_text" => "View", "edit_text" => "Edit",
-        "delete_text" => "Delete"
+        "delete_text" => "Delete", "buttons" => null
     ])
 
 <a
@@ -74,6 +74,15 @@
 
     @if ($removable)
         <span class="cursor-pointer text-red-500 hover:underline hover:underline-offset-4" onclick="location.href='/{{ $path_head }}/{{ $item_id }}/delete'">{{ __($delete_text) }}</span>
+    @endif
+
+    @if ($buttons)
+        @foreach ($buttons as $button)
+            <span
+                class="cursor-pointer {{ $button['class'] ?? '' }} hover:underline hover:underline-offset-4"
+                title="{{ $button['title'] ?? '' }}" onclick="location.href='{{ $button['url'] ?? '#' }}'"
+            >{{ $button["name"] }}</span>
+        @endforeach
     @endif
   </div>
 </a>
