@@ -26,7 +26,10 @@ class UpdateSettingsRequest extends FormRequest
         return [
             "visual_name" => ["required", "string"],
             "default_value" => ["nullable", "sometimes", "string"],
-            "role_access" => ["required", "string"]
+            "role_access" => ["required", "string"],
+            "input_type" => ["sometimes", "required", "string"],
+            "placeholder" => ["sometimes", "nullable", "string"],
+            "options" => ["sometimes", "nullable", "string"]
         ];
     }
 }

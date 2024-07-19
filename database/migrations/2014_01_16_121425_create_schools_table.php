@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string("school_email");
             $table->string("school_head");
             $table->foreignId("admin_id")->nullable();
+            $table->text("head_signature")->nullable();
             $table->timestamps();
         });
     }

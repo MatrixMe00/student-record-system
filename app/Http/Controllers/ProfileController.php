@@ -56,7 +56,7 @@ class ProfileController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         // prevent students from removing their accounts
-        if(Auth::user()->role_id == 5){
+        if(Auth::user()->role_id > 3){
             abort(401, "Cannot Remove Account");
         }
 

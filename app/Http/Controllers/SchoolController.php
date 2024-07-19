@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\LogType;
 use App\Models\School;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
+use App\Models\ActivityLog;
 use App\Models\Admin;
 use App\Models\Grades;
+use App\Models\Payment;
 use App\Models\Program;
 use App\Models\SchoolAdmin;
+use App\Models\Settings;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\TeacherRemarks;
 use App\Models\TeachersRemark;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
@@ -292,7 +298,7 @@ class SchoolController extends Controller
         // store school id into user school
         $this->update_user($school->id, $request->admin_id);
 
-        if(auth()->user()){
+        if(Auth::check()){
             // update the session school id
             session(["school_id" => $school->id]);
             return redirect()->route('dashboard');
@@ -304,9 +310,101 @@ class SchoolController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(School $school)
+    public function show(?School $school = null)
     {
         //
+    }
+
+    /**
+     * This gets the current school settings
+     * @param School $school The requested school
+     * @return Collection
+     */
+    private function get_school_settings(School $school) :Collection{
+        $response = new Collection();
+
+        $system_settings = Settings::where("role_access", "like", "%3%")->get();
+        $school_settings = $school->settings;
+
+        $system_settings->each(function($settings) use ($school_settings, $response){
+            $name = $settings["name"];
+            $visual = $settings["visual_name"];
+            $default_val = $settings["default_value"];
+            $input_type = $settings["input_type"];
+            $placeholder = $settings["placeholder"];
+            $options = $settings["options"];
+
+            // find match in school settings
+            $match = $school_settings->firstWhere("settings_name", $name);
+            $value = $match ? $match["value"] : $default_val;
+
+            $value = $this->evaluate_value($value);
+
+            $response->push([
+                "name" => $name, "text" => $visual, "value" => $value,
+                "input_type" => $input_type, "placeholder" => $placeholder,
+                "options" => $options
+            ]);
+        });
+
+        return $response;
+    }
+
+    /**
+     * This is used to handle values with functions
+     * @param ?string $value The value
+     * @return mixed
+     */
+    function evaluate_value(?string $value){
+        if(!empty($value) && str_contains($value, "func")){
+            $value = str_replace("func ", "", $value);
+
+            if($value = parse_function_call($value)){
+                // check if parameters are functions and evaluate them
+                foreach($value["params"] as $key => $param){
+                    if($param = parse_function_call($param)){
+                        $param["params"] = $this->format_param($param["params"]);
+                        $value["params"][$key] = call_user_func_array($param["function"], array_values($param["params"]));
+                    }
+                }
+
+                $value = call_user_func_array($value["function"], array_values($value["params"]));
+            }else{
+                $value = null;
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * This formats params so that they have their proper values and datatype
+     * @param array $params The parameters to format
+     * @return array
+     */
+    private function format_param(array $params){
+        if($params){
+            foreach($params as $key => $param){
+                $params[$key] = $this->parse_data_type($param);
+            }
+        }
+
+        return $params;
+    }
+
+    /**
+     * Parses the datatype
+     */
+    private function parse_data_type($data){
+        if(is_integer($data)){
+            return intval($data);
+        }elseif(is_float($data)){
+            return floatval($data);
+        }elseif($data == "null" || empty($data)){
+            return null;
+        }
+
+        return $data;
     }
 
     /**
@@ -320,9 +418,21 @@ class SchoolController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(School $school)
+    public function edit(?School $school = null)
     {
-        //
+        if(!$school || is_null($school)){
+            $school = School::find(session("school_id") ?? 0);
+            if(!$school){
+                abort(404);
+            }
+        }
+
+        $school_settings = $this->get_school_settings($school);
+
+        return view("admin.my-school", [
+            "school" => $school, "school_admin" => $school->admin_id == Auth::user()->id,
+            "school_settings" => $school_settings
+        ]);
     }
 
     /**
@@ -339,9 +449,44 @@ class SchoolController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(School $school)
+    public function destroy(Request $request)
     {
+        if(session("school_id") || $request->school_id){
+            $school = School::find(session('school_id') ?? $request->school_id);
+        }else{
+            abort(401);
+        }
+
+        // prevent students from removing their accounts
+        if(Auth::user()->role_id > 3){
+            abort(401, "Cannot Remove Account");
+        }
+
+        // if school is not found, abort
+        if(empty($school)){
+            abort(404);
+        }
+
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $school_details = [
+            "school" => $school->toArray(),
+            "teacher_count" => $school->teachers->count(),
+            "student_count" => $school->students->count(),
+            "admin" => $school?->admin->toArray(),
+            "amount" => Payment::school_total_transactions($school->id)
+        ];
+
+        // remove accounts
+        PaymentInformationController::remove_accounts($school);
+
+        ActivityLog::dev_success_log(LogType::SCHOOL_DELETE, $school->school_name." has been permanently deleted from the system, together with all the resources.", $school_details);
         $school->delete();
+
+        // log user account out and
+        return redirect()->route('logout');
     }
 
     /**

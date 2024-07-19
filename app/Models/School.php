@@ -52,8 +52,8 @@ class School extends Model
     }
 
     // every school has one setting
-    public function settings() :HasOne{
-        return $this->hasOne(SchoolSetting::class);
+    public function settings() :HasMany{
+        return $this->hasMany(SchoolSetting::class);
     }
 
     // school has a list of subjects

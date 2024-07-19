@@ -16,6 +16,7 @@
 
         const SCHOOL_UPDATE = "school-update";
         const SCHOOL_ADD = "school-add";
+        const SCHOOL_DELETE = "school-delete";
 
         /// System settings
         const SYSTEM_INFO = "system-info";
@@ -41,7 +42,7 @@
         private static function activity_logs() :array{
             $logs = [
                 "login" => "fas fa-sign-in-alt", "logout" => "fas fa-sign-out-alt", "account-update" => "fas fa-user-edit",
-                "school-update" => "fas fa-edit", "school-add" => "fas fa-school", "account-create" => "fas fa-user-plus",
+                "school-update" => "fas fa-edit", "school-add" => "fas fa-school", "school-delete" => "fas fa-school", "account-create" => "fas fa-user-plus",
                 "account-delete" => "fas fa-user-times", "password-update" => "fas fa-key", "email-verify" => "fas fa-envelope-open-text",
                 "system-info" => "fas fa-info-circle", "sub-account-create" => "fas fa-wallet", "sub-acccount-update" => "fas fa-sync-alt"
             ];

@@ -72,14 +72,15 @@ class SchoolSettingController extends Controller
      * @param ?int $key The desired resource to pick from the request
      */
     private function process_request(Request|string $request_setting, ?int $key = null){
-        $setting = $request_setting;
         // save or update based on settings existence
         if($request_setting instanceof Request){
             $setting = $request_setting->settings_name;
+        }else{
+            $setting = $request_setting;
         }
 
-        if($key){
-            $request_setting = make_request($request_setting, $key);
+        if(!is_null($key) && is_integer($key)){
+            $request_setting = make_request(request(), $key);
         }
 
         if($this->check_setting($setting, $setting_object)){
@@ -100,7 +101,8 @@ class SchoolSettingController extends Controller
 
         $school_setting->update($validated);
 
-        ActivityLog::dev_success_log(LogType::SYSTEM_INFO, "{school->name} changed the settings for {settings_name}", ["original" => $original, "current" => $school_setting]);
+        if(model_changed($school_setting))
+            ActivityLog::dev_success_log(LogType::SYSTEM_INFO, "{school->name} changed the settings for {settings_name}", ["original" => $original, "current" => $school_setting]);
 
         $message = chars_format($school_setting->settings_name." has been updated");
 
@@ -110,6 +112,7 @@ class SchoolSettingController extends Controller
             return redirect()->back()->with(["success" => true, "message" => $message]);
         }
     }
+
 
     public function destroy(SchoolSetting $schoolSetting)
     {

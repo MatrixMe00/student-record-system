@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string("visual_name");
             $table->string("default_value")->nullable();
             $table->string("role_access");
+            $table->string("type");
+            $table->string("placeholder")->nullable();
+            $table->text("options")->nullable();
             $table->timestamps();
         });
     }

@@ -81,7 +81,8 @@ Route::middleware(['auth', 'school.check'])->group(function () {
     Route::get("user/{username}/status-change", [ProfileController::class, 'status_change'])->name("user.deactivate");
 
     // school settings
-    Route::get("/my-school", [SchoolController::class, 'show'])->name('my-school');
+    Route::get("/my-school", [SchoolController::class, 'edit'])->name('my-school');
+    Route::delete("/my-school", [SchoolController::class, "destroy"])->name("school.destroy");
 
     // results
     Route::get("/results", [GradesController::class, "index"])->name("result.all");

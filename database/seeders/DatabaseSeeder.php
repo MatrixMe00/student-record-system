@@ -40,18 +40,7 @@ class DatabaseSeeder extends Seeder
             ["name" => "teacher", "access_value" => 3],
             ["name" => "student", "access_value" => 3]
         ];
-        $settings = [
-            ["name" => "attendance", "visual_name" => "Total Class Attendance", "role_access" => "1-2-3-4"],
-            ["name" => "max_form", "visual_name" => "Highest Form Level", "default_value" => 3, "role_access" => "1-2-3-4"],
-            ["name" => "r_date", "visual_name" => "Reopening Date", "role_access" => "1-2-3-4"],
-            ["name" => "v_date", "visual_name" => "Vacation Date", "role_access" => "1-2-3-4"],
-            ["name" => "roll_number", "visual_name" => "Number on Roll", "role_access" => "1-2-3-4"],
-            ["name" => "head_signature", "visual_name" => "Headmaster's Signature", "role_access" => "1-2-3"],
-            ["name" => "academic_year", "visual_name" => "Current Academic Year", "role_access" => "1-2-3"],
-            ["name" => "academic_start", "visual_name" => "Month Academic year starts", "role_access" => "1-2-3"],
-            ["name" => "academic_end", "visual_name" => "Month Academic year ends", "role_access" => "1-2-3"]
-            // ["name" => "", "visual_name" => "", "role_access" => ""]
-        ];
+        $settings = SettingsSeeder::$settings;
 
         // create the roles
         foreach($roles as $role){

@@ -102,11 +102,14 @@ class AuthenticatedSessionController extends Controller
      */
     private static function set_base_payment(){
         $system_price = Settings::where("name", "system_price")->where("default_value", ">", 0);
+        $result_max = Settings::where("name", "result_max")->where("default_value", ">", 0);
+
         if($system_price->exists()){
             $system_price = $system_price->first();
-            return session(["base_price" => $system_price->default_value]);
+            $result_max = $result_max?->first();
+            return session(["base_price" => $system_price->default_value, "result_max_price" => $result_max?->default_value]);
         }else{
-            return session(["base_price" => null]);
+            return session(["base_price" => null, "result_max_price" => null]);
         }
     }
 

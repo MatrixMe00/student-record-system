@@ -2,10 +2,13 @@
 
 use App\Constants\LogType;
 use App\Models\ActivityLog;
+use App\Models\School;
 use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -499,6 +502,24 @@ if(!function_exists("system_role_check")){
     }
 }
 
+if(!function_exists("check_chars")){
+    /**
+     * Used to check if there are special characters in a string
+     * @param string $text The main text
+     * @param array $special_chars An array of special characters
+     * @return string|false
+     */
+    function check_chars($text, $special_chars){
+        foreach($special_chars as $char){
+            if(str_contains($text, $char)){
+                return $char;
+            }
+        }
+
+        return false;
+    }
+}
+
 if(!function_exists("chars_format")){
     /**
      * This function is used to change text formats
@@ -509,19 +530,6 @@ if(!function_exists("chars_format")){
      */
     function chars_format($text) :string{
         $special_chars = ["-","_"];
-
-        /**
-         * An internal servant if special characters as found
-         */
-        function check_chars($text, $special_chars){
-            foreach($special_chars as $char){
-                if(str_contains($text, $char)){
-                    return $char;
-                }
-            }
-
-            return false;
-        }
 
         if($char = check_chars($text, $special_chars)){
             return str_replace($char, " ", $text);
@@ -556,5 +564,135 @@ if(!function_exists("make_request")){
 
         // Create a new Request object with the new request data
         return new Request($new_request_data);
+    }
+}
+
+if(!function_exists("insert_options")){
+    /**
+     * This is used to insert input options (usually attributes) to an input element
+     *
+     * This is generally useful to display the items from the settings menu
+     * @param ?string $options
+     * @return string
+     */
+    function insert_options(?string $options) :?array{
+        $response = null;
+        if($options){
+            $options = explode(", ", $options);
+            $response = [];
+
+            foreach($options as $option){
+                $response = array_merge($response, create_attribute($option));
+            }
+        }
+
+        return $response;
+    }
+}
+
+if(!function_exists("create_attribute")){
+    /**
+     * This function is used to split the option into key and value
+     * @param string $option
+     * @return array
+     */
+    function create_attribute(string $option) :array{
+        $option = explode("=", $option);
+
+        $attribute = $option[0];
+        $value = $option[1] ?? true;
+
+        return [$attribute => $value];
+    }
+}
+
+if(!function_exists("school")){
+    /**
+     * This is used to return the current school logged in
+     * @param ?int $school_id The school id
+     * @return ?School
+     */
+    function school(?int $school_id = null){
+        $school = null;
+        $school_id = $school_id ?? session("school_id");
+
+        if(Auth::check()){
+            $school = School::find($school_id);
+
+            if(!$school->exists()){
+                $school = null;
+            }
+        }
+
+        return $school;
+    }
+}
+
+if(!function_exists("parse_function_call")){
+    /**
+     * Extract function name and parameters from a function call string.
+     *
+     * @param string $functionCall The function call string (e.g., "get_academic_year(now(), '2024-05-01')")
+     * @return array An array with the function name and its parameters.
+     */
+    function parse_function_call($functionCall) {
+        // Define the regular expression to match function name and parameters
+        $pattern = '/^(\w+)\s*\((.*?)\)$/s';
+
+        // Use regular expression to extract function name and parameters
+        if (preg_match($pattern, $functionCall, $matches)) {
+            $functionName = $matches[1];
+            $parametersString = $matches[2];
+
+            // Split parameters by commas, considering quoted strings and nested commas
+            $parameters = [];
+            $nestedLevel = 0;
+            $startPos = 0;
+            $length = strlen($parametersString);
+
+            for ($i = 0; $i < $length; $i++) {
+                $char = $parametersString[$i];
+
+                if ($char === '(') {
+                    $nestedLevel++;
+                } elseif ($char === ')') {
+                    $nestedLevel--;
+                } elseif ($char === ',' && $nestedLevel === 0) {
+                    $parameters[] = trim(substr($parametersString, $startPos, $i - $startPos));
+                    $startPos = $i + 1;
+                }
+            }
+
+            // Add the last parameter
+            $parameters[] = trim(substr($parametersString, $startPos));
+
+            // Clean up any excess whitespace
+            $parameters = array_map(function($param) {
+                return trim($param, " \t\n\r\0\x0B\"'");
+            }, $parameters);
+
+            return [
+                'function' => $functionName,
+                'params' => $parameters
+            ];
+        }
+
+        return false; // Invalid function call string
+    }
+}
+
+if(!function_exists("model_changed")){
+    /**
+     * Used to determine if a setting was changed
+     * @param Model $model The setting
+     * @return bool
+     */
+    function model_changed(Model $model) :bool{
+        $changes = $model->getChanges();
+
+        if(array_key_exists("updated_at", $changes))
+            unset($changes["updated_at"]);
+
+        return !empty($changes);
     }
 }

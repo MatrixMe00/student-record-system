@@ -25,8 +25,11 @@ class StoreSettingsRequest extends FormRequest
         return [
             "name" => ["required", "unique:".Settings::class, "string"],
             "visual_name" => ["required", "string"],
-            "default_value" => ["nullable", "sometimes", "string"],
-            "role_access" => ["required", "string"]
+            "default_value" => ["sometimes", "nullable", "string"],
+            "role_access" => ["required", "string"],
+            "input_type" => ["required", "string"],
+            "placeholder" => ["sometimes", "nullable", "string"],
+            "options" => ["sometimes", "nullable", "string"]
         ];
     }
 }

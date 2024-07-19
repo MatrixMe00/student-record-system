@@ -37,10 +37,24 @@ class SettingsController extends Controller
 
         ActivityLog::dev_success_log(LogType::SYSTEM_INFO, "new system settings created", $settings);
 
-        // enable or disable the price value
-        AuthenticatedSessionController::payment_ready();
+        // set necessary options
+        $this->set_options($settings->name);
 
         return redirect()->back()->with(["success" => true, "message" => "System setting '$settings->visual_name' created"]);
+    }
+
+    /**
+     * This is used to enable or disable certain features or settings in the system
+     *
+     * @param string $settings_name The name of the settings
+     */
+    private function set_options(string $settings_name){
+        switch($settings_name){
+            case "system_price":
+                // enable or disable the price value
+                AuthenticatedSessionController::payment_ready();
+                break;
+        }
     }
 
     /**
@@ -74,8 +88,8 @@ class SettingsController extends Controller
 
             ActivityLog::dev_success_log(LogType::SYSTEM_INFO, "system setting '". chars_format($settings->name) ."' updated", ["current" => $settings, "original" => $original]);
 
-            // enable or disable the price value
-            AuthenticatedSessionController::payment_ready();
+            // enable or disable setting features
+            $this->set_options($settings->name);
         }else{
             abort(404);
         }
@@ -89,5 +103,7 @@ class SettingsController extends Controller
     public function destroy(Settings $settings)
     {
         $settings->delete();
+
+        return back()->with(["success" => true, "message" => $settings->name." has been deleted"]);
     }
 }

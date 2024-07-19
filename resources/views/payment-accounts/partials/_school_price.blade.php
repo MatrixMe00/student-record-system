@@ -12,9 +12,9 @@
         @endif
 
         @php
-            $max_price = 4;
+            $max_price = session('result_max_price') ?? 0;
         @endphp
-        <x-info-card shadow="" class="sm:col-span-2 text-sm">System takes a base amount of <b>GH¢ {{ number_format(session('base_price'), 2) }}</b>, you can add up to a maximum of GH¢ {{ number_format($max_price,2) }}</x-info-card>
+        <x-info-card shadow="" class="sm:col-span-2 text-sm">System takes a base amount of <b>GH¢ {{ number_format(session('base_price'), 2) }}</b>, you can add up to a maximum of <b>GH¢ {{ number_format($max_price,2) }}</b></x-info-card>
 
         {{-- parse if it has a personal account --}}
         <x-text-input type="hidden" name="personal_account" value="{{ $personal_account?->account_id }}" />
@@ -27,6 +27,10 @@
         <x-text-input type="hidden" name="school_id" value="{{ session('school_id') }}" />
         {{-- settings name --}}
         <x-text-input type="hidden" name="settings_name" value="system_price" />
+
+        @if (isset($add_internal))
+            <x-text-input name="active_tab" value="payment" type="hidden" />
+        @endif
 
         {{-- Current Price --}}
         <div>

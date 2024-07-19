@@ -173,26 +173,9 @@ class PaymentInformationController extends Controller
             'primary_contact_email' => request()->email ?? ''
         ];
 
-        $fields_string = http_build_query($fields);
+        $result = self::paystack_api_curl($url, $fields, true);
 
-        //open connection
-        $ch = curl_init();
-
-        //set the url, number of POST vars, POST data
-        curl_setopt($ch,CURLOPT_URL, $url);
-        curl_setopt($ch,CURLOPT_POST, true);
-        curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bearer ".env("PAYSTACK_SECRET_KEY"),
-            "Cache-Control: no-cache",
-        ));
-
-        //So that curl_exec returns the contents of the cURL; rather than echoing it
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
-
-        //execute post
-        $result = curl_exec($ch);
-        return json_decode($result);
+        return $result;
     }
 
     /**
@@ -218,26 +201,8 @@ class PaymentInformationController extends Controller
             'bearer_type' => "account"
         ];
 
-        $fields_string = http_build_query($fields);
-
-        //open connection
-        $ch = curl_init();
-
-        //set the url, number of POST vars, POST data
-        curl_setopt($ch,CURLOPT_URL, $url);
-        curl_setopt($ch,CURLOPT_POST, true);
-        curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bearer ".env("PAYSTACK_SECRET_KEY"),
-            "Cache-Control: no-cache",
-        ));
-
-        //So that curl_exec returns the contents of the cURL; rather than echoing it
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
-
-        //execute post
-        $result = curl_exec($ch);
-        return json_decode($result);
+        $result = self::paystack_api_curl($url, $fields, true);
+        return $result;
     }
 
     /**
@@ -270,6 +235,19 @@ class PaymentInformationController extends Controller
             'percentage_charge' => $validated["type"] == "individual" ? 0 : 5
         ];
 
+        $result = self::paystack_api_curl($url, $fields);
+
+        return $result;
+    }
+
+    /**
+     * Make a paystack connection
+     * @param string $url The url
+     * @param array $fields The fields string
+     * @param bool $post_request Tells if the connection is a post or put request
+     * @return object
+     */
+    private static function paystack_api_curl(string $url, array $fields, bool $post_request = false) :object{
         $fields_string = http_build_query($fields);
 
         //open connection
@@ -277,7 +255,11 @@ class PaymentInformationController extends Controller
 
         //set the url, number of POST vars, POST data
         curl_setopt($ch,CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        if(!$post_request){
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        }else{
+            curl_setopt($ch,CURLOPT_POST, true);
+        }
         curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             "Authorization: Bearer ".env("PAYSTACK_SECRET_KEY"),
@@ -295,10 +277,23 @@ class PaymentInformationController extends Controller
     }
 
     /**
+     * Deactivates a sub account
+     * @param string $account_id The account id
+     */
+    private static function deactivate_sub_account(string $account_id){
+        $url = "https://api.paystack.co/subaccount/$account_id";
+        $fields = [
+            "active" => false
+        ];
+
+        self::paystack_api_curl($url, $fields);
+    }
+
+    /**
      * This deactivates a split account, and is usually the case when the price of the school has been set
      * @param string $split_account_id The split account id to be removed
      */
-    private function remove_split_account(?string $split_account_id){
+    private static function remove_split_account(?string $split_account_id){
         if($split_account_id){
             $url = "https://api.paystack.co/split/$split_account_id";
 
@@ -307,27 +302,8 @@ class PaymentInformationController extends Controller
                 "active" => false
             ];
 
-            $fields_string = http_build_query($fields);
-
-            //open connection
-            $ch = curl_init();
-
-            //set the url, number of POST vars, POST data
-            curl_setopt($ch,CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-            curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                "Authorization: Bearer ".env("PAYSTACK_SECRET_KEY"),
-                "Cache-Control: no-cache",
-            ));
-
-            //So that curl_exec returns the contents of the cURL; rather than echoing it
-            curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
-
-            //execute post
-            $result = curl_exec($ch);
-            $result = json_decode($result);
-            dd($result, $split_account_id, $url);
+            $result = self::paystack_api_curl($url, $fields);
+            // dd($result, $split_account_id, $url);
         }
     }
 
@@ -387,10 +363,10 @@ class PaymentInformationController extends Controller
         // make changes to split token
         if($request->personal_account && $request->school_account){
             if($request->split_id && $is_new_price){
-                $this->remove_split_account($request->split_id);
+                self::remove_split_account($request->split_id);
                 $split_details = $this->create_split_account($request->personal_account, $request->school_account, Auth::user());
 
-                $personal_account = PaymentInformation::where("account_id", $request->persoanl_account)->first();
+                $personal_account = PaymentInformation::where("account_id", $request->personal_account)->first();
                 $personal_account->update([
                     "split_key" => $split_details->data->split_code,
                     "split_id" => $split_details->data->id
@@ -485,6 +461,23 @@ class PaymentInformationController extends Controller
             throw ValidationException::withMessages([
                 "message" => $response->message
             ]);
+        }
+    }
+
+    /**
+     * This is used during deleting of a school account
+     */
+    public static function remove_accounts(School $school){
+        $accounts = $school->payment_information;
+
+        if($accounts->count() > 0){
+            foreach($accounts as $account){
+                // deactivate the split key if it exists
+                self::remove_split_account($account->split_id);
+
+                // deactivate the account
+                self::deactivate_sub_account($account->account_id);
+            }
         }
     }
 
