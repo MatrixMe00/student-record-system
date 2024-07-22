@@ -8,7 +8,7 @@
     {{ $attributes->merge(["class" => ""]) }}
 >
     <td>
-        <span class="{{ empty($painttd) ? 'bg-white' : $painttd }} border rounded-md mt-2 block py-3 px-2 text-nowrap">{{ $student?->user?->username ?? "Undefined" }}</span>
+        <span class="{{ empty($painttd) ? 'bg-white' : $painttd }} border rounded-md mt-2 block py-3 px-2 text-nowrap">{{ $student->user->username }}</span>
         <x-text-input name="student_id[]" :value="$student->user_id" type="hidden"/>
         @if ($rowid > 0)
             <x-text-input name="id[]" :value="$rowid" type="hidden" />
