@@ -303,7 +303,7 @@ class PaymentInformationController extends Controller
             ];
 
             $result = self::paystack_api_curl($url, $fields);
-            // dd($result, $split_account_id, $url);
+            dd($result, $split_account_id, $url);
         }
     }
 

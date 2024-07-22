@@ -113,7 +113,7 @@ class GradesController extends Controller
         $count = -1;
         $defaults = array_slice($validated, 0, 6);
         $stud_data = array_slice($validated, 6, 9);
-        $academic_year = get_academic_year(date("d-m-Y"));
+        $academic_year = get_academic_year(now());
 
         // save each entry
         while(++$count < count($validated["student_id"])){
@@ -226,6 +226,9 @@ class GradesController extends Controller
             $data = $this->format_update_data($defaults, $stud_data, $count, $is_admin);
 
             $grade = Grades::find($stud_data["id"][$count] ?? 0);
+            if(is_null($grade)){
+                $data["academic_year"] = get_academic_year(now());
+            }
             !is_null($grade) ? $grade->update($data) : Grades::create($data);
         }
 
