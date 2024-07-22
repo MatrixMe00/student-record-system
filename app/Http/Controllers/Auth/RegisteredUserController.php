@@ -45,16 +45,24 @@ class RegisteredUserController extends Controller
         $email_required = "required";
 
         // exceptions for student role types
+        $email_unique = "unique:".User::class;
+
         if($request->role_id == 5){
             $email_required = "nullable";
             $request->merge([
                 "password" => "Password@1", "password_confirmation" => "Password@1"
             ]);
+        }elseif($request->role_id == 4){
+            $email_unique = "";
         }
+
+        $email_check = $email_unique ?
+                        [$email_required, 'string', 'lowercase', 'email', 'max:255', "unique:".User::class] :
+                        [$email_required, 'string', 'lowercase', 'email', 'max:255'];
 
         $user = $request->validate([
             'username' => ['required', 'string', 'unique:'.User::class],
-            'email' => [$email_required, 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => $email_check,
             'role_id' => ['required', 'integer', Rule::exists("roles", "id")],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);

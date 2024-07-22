@@ -72,7 +72,7 @@ class ProfileController extends Controller
 
         // save deleted user information
         $user->update([
-            "is_deleted" => false
+            "is_deleted" => true
         ]);
 
         $request->session()->invalidate();
@@ -98,8 +98,8 @@ class ProfileController extends Controller
                 "is_deleted" => true
             ]);
 
-            // save deleted user recirds
-            $this->save_deleted_user($user);
+            // save deleted user records
+            $this->save_deleted_user($user_m);
 
             $message_tail = session('school_id') ? "on your account" : "from the system";
 
@@ -140,7 +140,7 @@ class ProfileController extends Controller
         return redirect()->back()->with(["success" => $status, "message" => $message]);
     }
 
-    private function save_deleted_user(User $user){
+    private function save_deleted_user($user){
         // get the user data to be saved
         $deleted_user = $this->deletedUser($user);
 
@@ -150,18 +150,14 @@ class ProfileController extends Controller
 
     private function deletedUser($user){
         $deleted_user = [
-            "user_id" => $user->id,
-            "email" => $user->email,
-            "role_id" => $user->role_id
-        ];
-
-        $user_det = $this->user_model($user);
-        $deleted_user += [
-            "lname" => $user_det->lname,
-            "oname" => $user_det->oname,
-            "primary_phone" => $user_det->primary_phone,
-            "secondary_phone" => $user_det->secondary_phone,
-            "school_id" => $user_det->school_id
+            "user_id" => $user->user->id,
+            "email" => $user->user->email,
+            "role_id" => $user->user->role_id,
+            "lname" => $user->lname,
+            "oname" => $user->oname,
+            "primary_phone" => $user->primary_phone,
+            "secondary_phone" => $user->secondary_phone,
+            "school_id" => $user->school_id
         ];
 
         return $deleted_user;
