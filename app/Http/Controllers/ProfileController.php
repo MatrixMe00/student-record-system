@@ -94,6 +94,25 @@ class ProfileController extends Controller
 
             // update model
             $user_m = $this->user_model($user);
+
+            if($user->role_id == 4){
+                $classes = $user_m->classes;
+
+                // remove all classes for this teacher
+                if($classes){
+                    foreach($classes as $class){
+                        $class->delete();
+                    }
+                }
+
+                // remove class
+                if($user_m->class){
+                    $user_m->class->update([
+                        "class_teacher" => null
+                    ]);
+                }
+            }
+
             $user_m->update([
                 "is_deleted" => true
             ]);

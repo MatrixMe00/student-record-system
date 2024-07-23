@@ -65,7 +65,7 @@
                     <!-- District -->
                     <div>
                         <x-input-label for="district" :value="__('District')" />
-                        <x-text-input id="district" type="text" name="district" :value="old('district')" placeholder="P.O.Box XX" required />
+                        <x-text-input id="district" type="text" name="district" :value="old('district')" placeholder="Circuit District" required />
                         <x-input-error :messages="$errors->get('district')" class="mt-2" />
                     </div>
 

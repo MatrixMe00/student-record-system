@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("result_token")->unique();
             $table->foreignId("school_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("program_id")->constrained();
+            $table->foreignId("program_id")->constrained()->cascadeOnDelete();
             $table->foreignId("subject_id")->constrained()->cascadeOnDelete();
             $table->foreignId("teacher_id")->constrained("teachers", "user_id");
             $table->integer("semester");

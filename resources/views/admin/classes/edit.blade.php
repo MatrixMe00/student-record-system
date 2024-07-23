@@ -85,7 +85,7 @@
                     <tbody>
                         @foreach ($class_data as $data)
                             <tr>
-                                <x-table-data>{{ __($data->teacher->lname." ".$data->teacher->oname) }}</x-table-data>
+                                <x-table-data>{{ __($data->teacher->fullname) }}</x-table-data>
                                 <x-table-data>{{ __($data->subject->name) }}</x-table-data>
                             </tr>
                         @endforeach
