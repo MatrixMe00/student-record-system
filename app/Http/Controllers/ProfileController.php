@@ -95,6 +95,8 @@ class ProfileController extends Controller
             // update model
             $user_m = $this->user_model($user);
 
+            // delete other details for a teacher
+            // this mimicks the effects of the reference key in real delete
             if($user->role_id == 4){
                 $classes = $user_m->classes;
 
@@ -126,7 +128,6 @@ class ProfileController extends Controller
         }else{
             $status = false; $message = "$username is a system admin, hence cannot be deleted from the system";
         }
-
 
         return redirect()->back()->with(["success" => $status, "message" => $message]);
     }

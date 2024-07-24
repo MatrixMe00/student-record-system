@@ -68,6 +68,7 @@ Route::get("/setup", function(){
 
 Route::get("/register-school", [SchoolController::class, 'create'])->middleware('school.check')->name("school.create");
 Route::post("/register-school", [SchoolController::class, 'store'])->name("school.store");
+Route::put("/school/update", [SchoolController::class, 'update'])->name("school.update");
 Route::get("/schools", [SchoolController::class, 'index'])->name("school.index");
 
 // dashboards

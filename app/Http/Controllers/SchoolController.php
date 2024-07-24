@@ -440,10 +440,12 @@ class SchoolController extends Controller
      */
     public function update(UpdateSchoolRequest $request, School $school)
     {
+        $logo_path = $this->store_logo();
         $validated = $request->validated();
+        $validated["logo_path"] = $logo_path ?? $request->logo_current;
         $school->update($validated);
 
-        return redirect()->back();
+        return redirect()->back()->with(["success" => true, "message" => "School Details have been updated"]);
     }
 
     /**
@@ -508,9 +510,6 @@ class SchoolController extends Controller
      * Saves a copy of the school logo on storage
      */
     private function store_logo(bool $store = true){
-        if($store){
-
-        }
         if(!empty(request()->logo_path)){
             $path = request()->file('logo_path')->store('images/school-logo');
 
