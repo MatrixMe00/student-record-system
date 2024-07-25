@@ -89,12 +89,14 @@ class Grades extends Model
             $class_total = $result->sum("class_mark");
             $exam_total = $result->sum("exam_mark");
 
-            return [
-                "student" => $result->first()->student,
-                "class_total" => $class_total,
-                "exam_total" => $exam_total,
-                "total" => intval($exam_total + $class_total)
-            ];
+            if($result->first()->student){
+                return [
+                    "student" => $result->first()->student,
+                    "class_total" => $class_total,
+                    "exam_total" => $exam_total,
+                    "total" => intval($exam_total + $class_total)
+                ];
+            }
         });
 
         return $totals->sortByDesc("total");
