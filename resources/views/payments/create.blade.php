@@ -76,7 +76,7 @@
                                 key: "{{ env('PAYSTACK_PUBLIC_KEY') }}",
                                 email: $("#paymentForm input#contact_email").val(),
                                 amount: parseFloat($("#paymentForm input#amount").val()) * 100,
-                                email: 'safosah00@gmail.com',
+                                email: $("#contact_email").val(),
                                 {!! $paystack_add !!}
                                 currency: 'GHS',
                                 metadata: {
