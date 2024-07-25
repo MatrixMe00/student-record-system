@@ -19,13 +19,16 @@
                 $remark_options = $remark_options->toArray();
             @endphp
             @foreach($student_marks as $student)
-                <x-remark-entry-row
-                    :student="$student['student']" :key="$loop->index"
-                    :totalmark="old('class_mark.'.$loop->index, $student['total'])"
-                    :total_studs="$total_studs"
-                    :remarks="$remark_options"
-                    :remarkhead="$remark_head"
-                />
+                @if ($student)
+                    <x-remark-entry-row
+                        :student="$student['student']" :key="$loop->index"
+                        :totalmark="old('class_mark.'.$loop->index, $student['total'])"
+                        :total_studs="$total_studs"
+                        :remarks="$remark_options"
+                        :remarkhead="$remark_head"
+                    />
+                @endif
+
             @endforeach
         </tbody>
     </table>
