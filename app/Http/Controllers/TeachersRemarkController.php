@@ -85,7 +85,7 @@ class TeachersRemarkController extends Controller
             "semester" => $remark->semester,
             "program_id" => $remark->program_id,
             "teacher_id" => $remark->teacher_id,
-            "academic_year" => get_academic_year($remark->created_at)
+            "academic_year" => $remark->academic_year
         ]);
 
         return $grade->class_results();

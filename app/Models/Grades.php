@@ -90,7 +90,7 @@ class Grades extends Model
             $exam_total = $result->sum("exam_mark");
 
             return [
-                "student" => Student::find($result->first()->student_id),
+                "student" => $result->first()->student,
                 "class_total" => $class_total,
                 "exam_total" => $exam_total,
                 "total" => intval($exam_total + $class_total)
