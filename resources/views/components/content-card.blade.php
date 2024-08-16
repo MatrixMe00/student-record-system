@@ -1,12 +1,12 @@
 @props([
         "title", "item_id", "path_head" => null, "sub_title" => "", "content" => null,
         "avatar_url" => "", "extras" => [], "editable" => true, "card_link" => "javascript:void(0)",
-        "image_size" => "", "removable" => true, "view_text" => "View", "edit_text" => "Edit",
+        "image_size" => "", "removable" => true, "view_text" => "View", "edit_text" => "Edit", "card_to_view" => false,
         "delete_text" => "Delete", "buttons" => null
     ])
 
 <a
-  href="{{ $card_link }}"
+  href="{{ !$card_to_view ? $card_link : 'javascript:void(0)' }}"
   {{ $attributes->merge(["class"=>"relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8"]) }}
 >
 
@@ -78,10 +78,24 @@
 
     @if ($buttons)
         @foreach ($buttons as $button)
-            <span
-                class="cursor-pointer {{ $button['class'] ?? '' }} hover:underline hover:underline-offset-4"
-                title="{{ $button['title'] ?? '' }}" onclick="location.href='{{ $button['url'] ?? '#' }}'"
-            >{{ $button["name"] }}</span>
+            @if (isset($button["modal"]))
+                <span
+                    class="cursor-pointer {{ $button['class'] ?? '' }} hover:underline hover:underline-offset-4"
+                    title="{{ $button['title'] ?? '' }}"
+                    x-on:click.prevent="$dispatch('open-modal', '{{ $button['modal']['name'] }}')"
+                    @if (isset($button["attributes"]))
+                        {{ card_attributes($button["attributes"]) }}
+                    @endif
+                >
+                    {{ $button["name"] }}
+                </span>
+            @else
+                <span
+                    class="cursor-pointer {{ $button['class'] ?? '' }} hover:underline hover:underline-offset-4"
+                    title="{{ $button['title'] ?? '' }}" onclick="location.href='{{ $button['url'] ?? '#' }}'"
+                >{{ $button["name"] }}</span>
+            @endif
+
         @endforeach
     @endif
   </div>

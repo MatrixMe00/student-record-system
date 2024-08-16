@@ -696,3 +696,20 @@ if(!function_exists("model_changed")){
         return !empty($changes);
     }
 }
+
+if(! function_exists("card_attributes")){
+    /**
+     * Used to get the string format of an arrayed card attribute
+     * @param array $attributes The attributes
+     * @return string
+     */
+    function card_attributes(array $attributes) :string{
+        $response = [];
+
+        foreach($attributes as $key => $value){
+            $response[] = "$key = \"$value\"";
+        }
+
+        return implode(" ", $response);
+    }
+}

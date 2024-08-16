@@ -215,6 +215,8 @@ Route::middleware(['auth', 'system.admin'])->group(function(){
     // superadmin school assess pages
     Route::get("/admin-schools", [SchoolController::class, "index"])->name("admin.schools");
     Route::get("/school-menu/{school_id}", [SchoolController::class, "school_menu"])->name("school.menu");
+    Route::get("admin-schools/{school}/status", [SchoolController::class, "status_change"])->name("school.status-change");
+    Route::get("admin-schools/delete", [SchoolController::class, "destroy"])->name("admin-school.destroy");
 
     // BECE candidates
     Route::get("/bece-candidates/{school_id}", [BECECandidateController::class, "index"])->name("school.candidates");

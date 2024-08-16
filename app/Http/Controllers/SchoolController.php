@@ -449,6 +449,16 @@ class SchoolController extends Controller
     }
 
     /**
+     * This is used to change the status of a school
+     */
+    public function status_change(School $school){
+        $school->status = !$school->status;
+        $school->update();
+
+        return back()->with(["success" => true, "message" => "Status changed for ". (!empty($school->slug) ? $school->slug : $school->name)]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request)
