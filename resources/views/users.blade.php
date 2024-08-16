@@ -47,10 +47,9 @@
                     x-show="contentBox=='{{ $content_id }}'">
                     @php
                         $user_role = auth()->user()->role_id;
-                        $is_super = $user_role <= 2 || $user_role == 1;
                     @endphp
                     @foreach ($option as $user)
-                        <x-app-user-card :user="$user" :is_super="$is_super" />
+                        <x-app-user-card :user="$user" :is_super="$user_role <= 2" :is_dev="$user_role == 1" />
                     @endforeach
                 </div>
             @else

@@ -1,9 +1,9 @@
-@props(["user", "is_super" => false])
+@props(["user", "is_super" => false, "is_dev" => false])
 
 @php
     $status_text = ($user->is_active ?? $user->user->is_active) ? "Deactivate" : "Activate";
     $is_deleted = $user->is_deleted ?? $user->user->is_deleted;
-    if($user->user->role_id > 3 || ($is_super && $user->user->role_id > 2)){
+    if($user->user->role_id > 3 || ($is_super && $user->user->role_id > 2) || $is_dev){
         $username = "/user/{$user->user->username}";
         $edit = $username."/edit";
         $delete = $username."/delete";
