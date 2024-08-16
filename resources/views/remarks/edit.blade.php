@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <x-app-header>Data for {{ $program->name }}, Term {{ $remark_head->semester." (".$academic_year.")" }}</x-app-header>
+        <x-app-header>Data for {{ $program->name }}, Term {{ $remark_head->semester." (".$remark_head->academic_year.")" }}</x-app-header>
     </x-slot>
 
     @section("title", "Result Data")

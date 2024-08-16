@@ -25,54 +25,60 @@
             @page{
                 size: A4; margin-left: 0
             }
-            @media print{
-                html, body{
-                    width: 210mm; height: 297mm;
-                }
+            .b-right{
+                border-right: thin solid lightgrey;
             }
         </style>
     </head>
 
     <body>
         <x-app-main class="">
-            <x-section-component class="">
+            <section class="">
                 <table class="w-full border mx-auto" shadow="">
-                    {{-- school data --}}
-                    <tr class="border-y">
-                        <x-thead-data class="border-0 text-center flex flex-col gap-1">
-                            <span class="text-[12pt]">{{ $school->school_name }}</span>
-                            <span>{{ "$school->box_number | $school->gps_address" }}</span>
-                            <span>{{ "$school->circuit Circuit" }}</span>
-                            @if ($school->district)
-                                <span>{{ "$school->district District" }}</span>
-                            @endif
-                        </x-thead-data>
-                        <x-table-data class="p-0">
-                            <img src="{{ url("storage/".$school->logo_path) }}" alt="" class="w-[20mm] h-[20mm]">
-                        </x-table-data>
-                    </tr>
-                    <tr>
-                        <x-thead-data class="text-center" colspan="2">Terminal Report</x-thead-data>
-                    </tr>
+                    <tbody>
+                        {{-- school data --}}
+                        <tr class="border-y">
+                            <x-thead-data class="border-0 text-center flex flex-col gap-1">
+                                <span class="text-[12pt]">{{ $school->school_name }}</span>
+                                <span>{{ "$school->box_number | $school->gps_address" }}</span>
+                                <span>{{ "$school->circuit Circuit" }}</span>
+                                @if ($school->district)
+                                    <span>{{ "$school->district District" }}</span>
+                                @endif
+                            </x-thead-data>
+                            <x-table-data class="p-0">
+                                <img src="{{ url("storage/".$school->logo_path) }}" alt="" class="w-[20mm] h-[20mm]">
+                            </x-table-data>
+                        </tr>
+                        <tr>
+                            <x-thead-data class="text-center" colspan="2">Terminal Report</x-thead-data>
+                        </tr>
+                    </tbody>
                 </table>
 
                 <section class="mt-3">
                     {{-- info table --}}
-                    <table class="w-full border" shadow="">
+                    <table class="w-full border mx-auto" shadow="">
                         <tbody>
                             <tr class="border-t">
                                 <x-thead-data>Name</x-thead-data>
-                                <x-table-data colspan="2" style="border-right: thin solid lightgrey">{{ "$student->lname $student->oname" }}</x-table-data>
+                                <x-table-data class="b-right" colspan="2" >{{ "$student->lname $student->oname" }}</x-table-data>
                                 {{-- <x-thead-data>Class</x-thead-data> --}}
-                                <x-table-data colspan="2">{{ $program->name }}</x-table-data>
+                                <x-table-data colspan="3">{{ $program->name }}</x-table-data>
                             </tr>
                             <tr class="border-t">
                                 <x-thead-data class>Position</x-thead-data>
-                                <x-table-data class="border-b" style="border-right: thin solid lightgrey">{{ positionFormat($remark?->position) }}</x-table-data>
+                                <x-table-data class="border-b b-right" >{{ positionFormat($remark?->position) }}</x-table-data>
                                 <x-thead-data class>Attendance</x-thead-data>
-                                <x-table-data class="border-b" style="border-right: thin solid lightgrey">{{ $remark?->attendance." of ".$remark?->head_remark->total_attendance }}</x-table-data>
+                                <x-table-data class="border-b b-right" >{{ $remark?->attendance." of ".$remark?->head_remark->total_attendance }}</x-table-data>
                                 <x-thead-data>Term</x-thead-data>
                                 <x-table-data>{{ $semester }}</x-table-data>
+                            </tr>
+                            <tr class="border-t">
+                                <x-thead-data>Vacation Date</x-thead-data>
+                                <x-table-data class="b-right">{{ date("l jS F, Y", strtotime($remark_head->vacation)) }}</x-table-data>
+                                <x-thead-data>Reopening Date</x-thead-data>
+                                <x-table-data class="border-b">{{ date("l jS F, Y", strtotime($remark_head->reopening)) }}</x-table-data>
                             </tr>
                         </tbody>
                     </table>
@@ -162,7 +168,7 @@
                         </div>
                     </div>
                 </section>
-            </x-section-component>
+            </section>
         </x-app-main>
     </body>
 

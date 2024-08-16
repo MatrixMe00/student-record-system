@@ -7,6 +7,7 @@ use App\Models\Grades;
 use App\Models\Program;
 use App\Models\RemarkOptions;
 use App\Models\School;
+use App\Models\SchoolSetting;
 use App\Models\Teacher;
 use App\Models\TeacherRemarks;
 use App\Models\TeachersRemark;
@@ -62,18 +63,20 @@ class TeachersRemarkController extends Controller
             $programs = null;
         }
 
+        // school_settings
+        $school_settings = SchoolSetting::select("settings_name", "value")->whereIn("settings_name", ["r_date", "v_date", "attendance"])->pluck("value", "settings_name")->toArray();
 
         return view("remarks.edit",[
             "remarks" => $remarks,
             "remark_head" => $this_remark,
             "student_marks" => $students,
             "remark_options" => RemarkOptions::all(["id", "remark as name"]),
-            "academic_year" => get_academic_year($this_remark->created_at),
             "is_admin" => $is_admin,
             "program" => $this_remark->program,
             "edit_all" => in_array($this_remark->status, ["pending", "rejected"]) && !$is_admin,
             "edit_once" => $this_remark->status == "pending",
-            "programs" => $programs
+            "programs" => $programs,
+            "school_settings" => $school_settings
         ]);
     }
 
