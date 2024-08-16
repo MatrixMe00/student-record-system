@@ -23,6 +23,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -72,6 +73,16 @@ class AuthenticatedSessionController extends Controller
 
         // add necessary sessions
         $this->add_sessions();
+
+        // check if the school is active
+        if($school = school()){
+            if(!$school->status){
+                $message = self::$user->role_id == 3 ? "School has been deactivated. Contact system admin for support" : "Your account has been temporarily deactivated";
+                Auth::guard('web')->logout();
+
+                throw ValidationException::withMessages(["username" => $message]);
+            }
+        }
 
         // add a log
         ActivityLog::success_log(LogType::USER_LOGIN);

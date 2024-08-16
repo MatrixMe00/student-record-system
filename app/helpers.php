@@ -619,7 +619,7 @@ if(!function_exists("school")){
         if(Auth::check()){
             $school = School::find($school_id);
 
-            if(!$school->exists()){
+            if(!$school || is_null($school)){
                 $school = null;
             }
         }
