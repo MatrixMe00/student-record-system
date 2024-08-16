@@ -45,8 +45,11 @@
                     class="bg-gray-50 grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
                     shadow border border-gray-100 p-8 text-gray-700 rounded-lg -mt-2"
                     x-show="contentBox=='{{ $content_id }}'">
+                    @php
+                        $is_super = auth()->user()->role_id <= 2;
+                    @endphp
                     @foreach ($option as $user)
-                        <x-app-user-card :user="$user" />
+                        <x-app-user-card :user="$user" :is_super="$is_super" />
                     @endforeach
                 </div>
             @else
