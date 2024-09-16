@@ -82,9 +82,9 @@
                 <span
                     class="cursor-pointer {{ $button['class'] ?? '' }} hover:underline hover:underline-offset-4"
                     title="{{ $button['title'] ?? '' }}"
-                    x-on:click.prevent="$dispatch('open-modal', '{{ $button['modal']['name'] }}')"
+                    onclick="jqueryDispatch('{{ $button['modal']['name'] }}')"
                     @if (isset($button["attributes"]))
-                        {{ card_attributes($button["attributes"]) }}
+                        {!! card_attributes($button["attributes"]) !!}
                     @endif
                 >
                     {{ $button["name"] }}

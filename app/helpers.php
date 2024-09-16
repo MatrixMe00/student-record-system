@@ -468,14 +468,16 @@ if(! function_exists("fix_message")){
      * @return string
      */
     function fix_message(string $message, ?object $model = null){
-        // find all placeholders in the format {placeholder}
-        preg_match_all("/\{([^}]+)\}/", $message, $placeholders);
+        if(!is_null($model)){
+            // find all placeholders in the format {placeholder}
+            preg_match_all("/\{([^}]+)\}/", $message, $placeholders);
 
-        if(is_array($placeholders[1]) && !is_null($model)){
-            foreach($placeholders[1] as $expression){
-                $placeholder = '{'.$expression.'}';
-                $replace = eval('return $model->'.$expression.';');
-                $message = str_replace($placeholder, $replace, $message);
+            if(is_array($placeholders[1]) && !is_null($model)){
+                foreach($placeholders[1] as $expression){
+                    $placeholder = '{'.$expression.'}';
+                    $replace = eval('return $model->'.$expression.';');
+                    $message = str_replace($placeholder, $replace, $message);
+                }
             }
         }
 

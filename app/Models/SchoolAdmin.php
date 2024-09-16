@@ -13,6 +13,17 @@ class SchoolAdmin extends Model
 
     protected $guarded = [];
 
+    // perform some delete functionalities
+    protected static function boot() {
+        parent::boot();
+
+        static::deleting(function($school_admin){
+            if($school_admin->user){
+                $school_admin->user->delete();
+            }
+        });
+    }
+
     // Override the default newQuery method to add constraints
     public function newQuery($excludeDeleted = true)
     {

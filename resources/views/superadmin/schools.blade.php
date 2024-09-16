@@ -49,10 +49,12 @@
                 </x-modal>
 
                 @push("scripts")
+                    <x-jquery-dispatch />
                     <script>
                         $(document).ready(function(){
-                            $(".school-delete-button").click(function(){
-                                $("title").text($(this).attr("data-id"));
+                            $(".school-delete-btn").click(function(){
+                                const school_id = $(this).attr("data-id");
+                                $("#modal_school_id").val(school_id);
                             })
                         })
                     </script>

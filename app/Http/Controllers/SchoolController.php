@@ -6,6 +6,7 @@ use App\Constants\LogType;
 use App\Models\School;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
+use App\Jobs\ProcessDeletedSchoolLogs;
 use App\Models\ActivityLog;
 use App\Models\Admin;
 use App\Models\Grades;
@@ -455,7 +456,7 @@ class SchoolController extends Controller
         $school->status = !$school->status;
         $school->update();
 
-        return back()->with(["success" => true, "message" => "Status changed for ". (!empty($school->slug) ? $school->slug : $school->name)]);
+        return back()->with(["success" => true, "message" => "Status changed for ". (!empty($school->slug) ? $school->slug : $school->school_name)]);
     }
 
     /**
@@ -469,19 +470,12 @@ class SchoolController extends Controller
             abort(401);
         }
 
-        // prevent students from removing their accounts
-        if(Auth::user()->role_id > 3){
-            abort(401, "Cannot Remove Account");
-        }
-
         // if school is not found, abort
         if(empty($school)){
             abort(404);
         }
 
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+        $role_id = Auth::user()->role_id;
 
         $school_details = [
             "school" => $school->toArray(),
@@ -495,10 +489,16 @@ class SchoolController extends Controller
         PaymentInformationController::remove_accounts($school);
 
         ActivityLog::dev_success_log(LogType::SCHOOL_DELETE, $school->school_name." has been permanently deleted from the system, together with all the resources.", $school_details);
+        ProcessDeletedSchoolLogs::dispatch($school);
+
+        // finally remove school
         $school->delete();
 
-        // log user account out and
-        return redirect()->route('logout');
+        // log user account out or redirect to previous page if superadmin
+        if($role_id > 2)
+            return redirect()->route('logout');
+        else
+            return redirect()->back()->with(["success" => true, "message" => $school_details["school"]["school_name"]." has been deleted from the system"]);
     }
 
     /**

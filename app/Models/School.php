@@ -87,4 +87,18 @@ class School extends Model
     public function payment_information() :HasMany{
         return $this->hasMany(PaymentInformation::class);
     }
+
+    protected static function boot(){
+        parent::boot();
+
+        static::deleting(function($school){
+            $students = $school->students()->pluck("user_id");
+            $teachers = $school->teachers()->pluck("user_id");
+            $admins = $school->school_admins()->pluck("user_id");
+
+            $ids = array_merge($students->toArray(), $teachers->toArray(), $admins->toArray());
+
+            User::whereIn("id", $ids)->delete();
+        });
+    }
 }

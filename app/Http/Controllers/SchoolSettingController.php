@@ -24,7 +24,7 @@ class SchoolSettingController extends Controller
         ]);
 
         $settings = SchoolSetting::create($validated);
-        ActivityLog::dev_success_log(LogType::SYSTEM_INFO, "{school->name} has added a new system settings for {settings_name}", $settings);
+        ActivityLog::dev_success_log(LogType::SYSTEM_INFO, "{school->school_name} has added a new system settings for {settings_name}", $settings);
 
         $message = chars_format($settings->settings_name)." data has been added successfully";
 
@@ -102,7 +102,7 @@ class SchoolSettingController extends Controller
         $school_setting->update($validated);
 
         if(model_changed($school_setting))
-            ActivityLog::dev_success_log(LogType::SYSTEM_INFO, "{school->name} changed the settings for {settings_name}", ["original" => $original, "current" => $school_setting]);
+            ActivityLog::dev_success_log(LogType::SYSTEM_INFO, "{school->school_name} changed the settings for {settings_name}", ["original" => $original, "current" => $school_setting]);
 
         $message = chars_format($school_setting->settings_name." has been updated");
 

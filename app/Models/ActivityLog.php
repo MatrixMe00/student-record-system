@@ -282,6 +282,25 @@ class ActivityLog extends Model
     }
 
     /**
+     * This is used to change an array into a model
+     * @param array $array The array
+     * @return ?Model
+     */
+    public static function array_to_model(?array $array) :?Model{
+        if(!isset($array["model_class"])){
+            return null;
+        }
+        $model = "\App\Models\\".$array["model_class"];
+
+        // remove the class name
+        unset($array["model_class"]);
+
+        $model = new $model($array);
+
+        return $model;
+    }
+
+    /**
      * The school this belongs to
      */
     public function school() :BelongsTo{

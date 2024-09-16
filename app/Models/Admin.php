@@ -14,6 +14,17 @@ class Admin extends Model
     protected $guarded = [];
     protected $primaryKey = "user_id";
 
+    // perform some delete functionalities
+    protected static function boot() {
+        parent::boot();
+
+        static::deleting(function($admin){
+            if($admin->user){
+                $admin->user->delete();
+            }
+        });
+    }
+
     // admin is a user
     public function user(): BelongsTo{
         return $this->belongsTo(User::class);

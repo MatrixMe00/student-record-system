@@ -15,6 +15,17 @@ class Student extends Model
     protected $guarded = [];
     protected $primaryKey = "user_id";
 
+    // perform some delete functionalities
+    protected static function boot() {
+        parent::boot();
+
+        static::deleting(function($student){
+            if($student->user){
+                $student->user->delete();
+            }
+        });
+    }
+
     // Override the default newQuery method to add constraints
     public function newQuery($excludeDeleted = true)
     {

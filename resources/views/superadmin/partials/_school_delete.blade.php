@@ -1,5 +1,6 @@
 <form method="post" action="{{ route('admin-school.destroy') }}" class="p-6">
     @csrf
+    @method("delete")
 
     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
         {{ __('Are you sure you want to delete this school?') }}
@@ -12,7 +13,8 @@
     <div class="mt-6">
         <x-text-input
             name="school_id"
-            type="text"
+            id="modal_school_id"
+            type="hidden"
             class="mt-1 block w-3/4"
             readonly
         />
@@ -21,7 +23,7 @@
     </div>
 
     <div class="mt-6 flex justify-end">
-        <x-secondary-button x-on:click="$dispatch('close')">
+        <x-secondary-button type="reset" x-on:click="$dispatch('close')">
             {{ __('Cancel') }}
         </x-secondary-button>
 
