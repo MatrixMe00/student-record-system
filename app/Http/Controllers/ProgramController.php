@@ -30,6 +30,17 @@ class ProgramController extends Controller
     }
 
     /**
+     * This is used to get all students in a class
+     * @param Program $program The program
+     */
+    public function students(Program $program){
+        return view("admin.students.index", [
+            "students" => $program->students,
+            "program" => $program
+        ]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()

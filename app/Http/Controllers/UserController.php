@@ -49,7 +49,6 @@ class UserController extends Controller
                 $options = [
                     "admins" => SchoolAdmin::all(),
                     "teachers" => Teacher::all(),
-                    "students" => Student::all(),
                     "deleted" => deletedusers::all()
                 ];
                 $school_id = session('school_id');

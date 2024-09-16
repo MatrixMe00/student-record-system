@@ -103,6 +103,13 @@
                         <x-text-input id="school_name" type="text" readonly value="{{ $model->school->school_name ?? 'No School' }}" />
                     </div>
 
+                    {{-- picture --}}
+                    <div>
+                        <x-input-label for="profile_img" :value="__('Profile Picture')" />
+                        <x-text-input id="profile_img" type="file" disabled onclick="alert('coming soon')" />
+                        <a href="javascript:void(0)" class="text-blue-500 hover:text-blue-600 text-sm">View Existing</a>
+                    </div>
+
                     {{-- form mode --}}
                     <x-text-input type="hidden" name="non_submit" value="1" />
 

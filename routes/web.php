@@ -14,6 +14,7 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SchoolSettingController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentBillController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherClassController;
 use App\Http\Controllers\TeacherRemarksController;
@@ -156,6 +157,9 @@ Route::middleware(['auth','school.check','school.admin'])->group(function(){
 
     // class list
     Route::get("classes/spid{program}/download", [ProgramController::class, "class_list"])->name("class-list.download");
+
+    // class student list
+    Route::get("class/spid{program}/students", [ProgramController::class, "students"])->name("program.students");
 
     // subjects
     Route::get("/subjects", [SubjectController::class, 'index'])->name('subject.all');

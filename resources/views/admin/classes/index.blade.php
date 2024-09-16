@@ -50,6 +50,10 @@
                                 "name" => "Download", "title" => "Download Class List",
                                 "class"=>"text-green-600", "url" => route('class-list.download', ['program' => $program->id])
                             ];
+                            $buttons[] = [
+                                "name" => "Students", "title" => "View Class List",
+                                "class" => "text-slate-600", "url" => route('program.students', ['program' => $program->id])
+                            ];
                         }
 
                     @endphp
