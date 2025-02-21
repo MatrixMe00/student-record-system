@@ -44,7 +44,7 @@
                 "login" => "fas fa-sign-in-alt", "logout" => "fas fa-sign-out-alt", "account-update" => "fas fa-user-edit",
                 "school-update" => "fas fa-edit", "school-add" => "fas fa-school", "school-delete" => "fas fa-school", "account-create" => "fas fa-user-plus",
                 "account-delete" => "fas fa-user-times", "password-update" => "fas fa-key", "email-verify" => "fas fa-envelope-open-text",
-                "system-info" => "fas fa-info-circle", "sub-account-create" => "fas fa-wallet", "sub-acccount-update" => "fas fa-sync-alt"
+                "system-info" => "fas fa-info-circle", "sub-account-create" => "fas fa-wallet", "sub-account-update" => "fas fa-sync-alt"
             ];
 
             return $logs;

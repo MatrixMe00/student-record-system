@@ -39,7 +39,7 @@ class UserController extends Controller
                 $options = [
                     "superadmins" => Admin::all(),
                     "admins" => SchoolAdmin::all(),
-                    "deleted" => deletedusers::all()
+                    "deleted" => deletedusers::all()->take(20)
                 ];
                 $roles = Role::where("school_id", 0)->where("id", "<", 5)->get()->toArray();
                 $school_id[] = ["id" => 0, "name" => "No school"];
