@@ -1,66 +1,216 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Student Record System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Version 1.0.0**
 
-## About Laravel
+A comprehensive multi-tenant student record management system built with Laravel, designed for schools to efficiently manage students, grades, payments, and academic activities.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📋 Overview
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The Student Record System is a powerful, multi-tenant web application that enables schools to manage their entire academic operations from a single platform. With support for multiple schools, role-based access control, and comprehensive features for student management, grading, payments, and reporting.
 
-## Learning Laravel
+### Key Highlights
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- 🏫 **Multi-School Support** - Manage multiple schools on one platform
+- 👥 **Role-Based Access** - Five distinct user roles with appropriate permissions
+- 📊 **Complete Grade Management** - From entry to approval and reporting
+- 💰 **Payment Integration** - Paystack integration for seamless payments
+- 📈 **Comprehensive Reporting** - Historical records, exports, and analytics
+- 🔐 **Secure & Isolated** - School-level data isolation and security
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Quick Start
 
-## Laravel Sponsors
+### Requirements
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP 8.2 or higher
+- Composer
+- Node.js 18+ and npm
+- SQLite (default) or MySQL/PostgreSQL
+- Web server (Apache/Nginx) or PHP built-in server
 
-### Premium Partners
+### Installation
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+1. **Clone or extract the project**
+   ```bash
+   cd student-record-system
+   ```
 
-## Contributing
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **Install Node dependencies**
+   ```bash
+   npm install
+   ```
 
-## Code of Conduct
+4. **Environment Setup**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. **Configure Database**
+   
+   Edit `.env` file and set your database configuration:
+   ```env
+   DB_CONNECTION=sqlite
+   # Or for MySQL/PostgreSQL:
+   # DB_CONNECTION=mysql
+   # DB_HOST=127.0.0.1
+   # DB_PORT=3306
+   # DB_DATABASE=student_records
+   # DB_USERNAME=root
+   # DB_PASSWORD=
+   ```
 
-## Security Vulnerabilities
+6. **Run Migrations**
+   ```bash
+   php artisan migrate
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+7. **Seed Database (Optional)**
+   ```bash
+   php artisan db:seed
+   ```
 
-## License
+8. **Build Frontend Assets**
+   ```bash
+   npm run build
+   # Or for development:
+   npm run dev
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+9. **Start Development Server**
+   ```bash
+   php artisan serve
+   ```
+
+   The application will be available at `http://localhost:8000`
+
+---
+
+## ⚙️ Configuration
+
+### Initial Setup
+
+1. **Access the setup page**
+   - Navigate to `/setup` to create the first system administrator
+   - This will activate the system
+
+2. **School Registration**
+   - After setup, register your first school
+   - Complete school information and settings
+
+3. **Configure Payment Gateway (Optional)**
+   - Add Paystack API keys in system settings if using payment features
+   - Configure payment accounts for schools
+
+### Environment Variables
+
+Key environment variables to configure:
+
+```env
+APP_NAME="Student Record System"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+# Database Configuration
+DB_CONNECTION=sqlite
+
+# Payment Gateway (Paystack)
+PAYSTACK_PUBLIC_KEY=your_public_key
+PAYSTACK_SECRET_KEY=your_secret_key
+PAYSTACK_MERCHANT_EMAIL=your_email
+```
+
+---
+
+## 📚 Features
+
+For a complete list of features, see [FEATURES.md](FEATURES.md)
+
+### Core Features Include:
+
+- **Student Management** - Registration, profiles, promotion
+- **Grade Management** - Entry, approval, consolidation
+- **Payment System** - Paystack integration, billing, debt tracking
+- **Academic Management** - Classes, subjects, programs
+- **Reporting** - Historical records, exports (Excel, PDF), analytics
+- **BECE Management** - Candidate preparation and results
+- **Teacher Remarks** - Comments and reports
+- **Activity Logging** - Comprehensive audit trails
+
+---
+
+## 👥 User Roles
+
+The system supports five user roles:
+
+1. **Developer** - Full system access
+2. **Superadmin** - System-wide administration
+3. **School Admin** - School-level management
+4. **Teacher** - Grade entry and remarks
+5. **Student** - View results and manage payments
+
+---
+
+## 🛠️ Technology Stack
+
+- **Backend:** Laravel 12.48.1
+- **Frontend:** Tailwind CSS 3.4, Alpine.js 3.15
+- **Build Tool:** Vite 7.3
+- **Database:** SQLite (default), MySQL, PostgreSQL
+- **Payment:** Paystack Integration
+- **Export:** Excel, PDF, QR Code generation
+
+---
+
+## 📖 Documentation
+
+- [Features List](FEATURES.md) - Complete feature documentation
+- [Project Context](.ai/PROJECT_CONTEXT.md) - Technical architecture details
+
+---
+
+## 🔒 Security
+
+- Role-based access control (RBAC)
+- School-level data isolation
+- Password hashing (bcrypt)
+- CSRF protection
+- Encrypted identifiers
+- Activity logging and audit trails
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 🤝 Support
+
+For issues, questions, or contributions, please refer to the project documentation or contact the development team.
+
+---
+
+## 🎯 Getting Started Guide
+
+1. Complete installation steps above
+2. Run migrations and seeders
+3. Access `/setup` to create first admin
+4. Register your school
+5. Start adding users, classes, and students
+6. Configure payment settings if needed
+7. Begin using the system!
+
+---
+
+**Built with ❤️ using Laravel**
