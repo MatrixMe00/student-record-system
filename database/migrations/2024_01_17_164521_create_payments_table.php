@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('reference')->unique();
-            $table->foreignId('school_id')->constrained();
+            $table->foreignId('school_id')->constrained()->cascadeOnDelete();
             $table->string("contact_name");
             $table->string("contact_email");
             $table->string("contact_phone");
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->float("deduction")->default(0);
             $table->string("payment_status")->default("pending");
             $table->string("payment_method")->default("mobile_money");
-            $table->foreignId("student_id")->constrained('students', 'user_id');
+            $table->foreignId("student_id")->constrained('students', 'user_id')->cascadeOnDelete();
             $table->timestamps();
             $table->dateTime("expiry_date")->default(function(){
                 return now()->addMonth(4);

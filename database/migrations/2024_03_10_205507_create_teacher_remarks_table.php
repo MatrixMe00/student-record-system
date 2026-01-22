@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string("remark_token");
             $table->foreignId("school_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("teacher_id")->constrained("teachers", "user_id");
+            $table->foreignId("teacher_id")->constrained("teachers", "user_id")->cascadeOnDelete();
             $table->foreignId("program_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("student_id")->constrained("students", "user_id");
+            $table->foreignId("student_id")->constrained("students", "user_id")->cascadeOnDelete();
             $table->integer("semester");
             $table->integer("total_marks");
             $table->integer("attendance");

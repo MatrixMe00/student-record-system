@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('admins', function (Blueprint $table) {
-            $table->foreign('school_id')
-                  ->references('id')
-                  ->on('schools')
-                  ->cascadeOnDelete();
+        Schema::table('schools', function (Blueprint $table) {
+            $table->foreign('admin_id')
+                  ->references('user_id')
+                  ->on('admins')
+                  ->nullOnDelete();
         });
     }
 
@@ -24,8 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('admins', function (Blueprint $table) {
-            $table->dropForeign(['school_id']);
+        Schema::table('schools', function (Blueprint $table) {
+            $table->dropForeign(['admin_id']);
         });
     }
 };

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('debtors_lists', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("school_id")->constrained();
-            $table->foreignId("student_id")->constrained("students", "user_id");
+            $table->foreignId("school_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("student_id")->constrained("students", "user_id")->cascadeOnDelete();
             $table->string("payment_type")->default("debt");
             $table->float("amount");
             $table->boolean("status")->default(true);

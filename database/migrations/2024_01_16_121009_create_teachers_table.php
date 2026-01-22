@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("secondary_phone")->nullable();
             $table->foreignId("school_id")->nullable()->constrained()->nullOnDelete();
             $table->boolean("class_teacher")->default(false);
-            $table->foreignId("program_id")->nullable()->comment("This is the class this teacher is class teacher of");
+            $table->foreignId("program_id")->nullable()->constrained()->nullOnDelete()->comment("This is the class this teacher is class teacher of");
             $table->boolean("is_deleted")->default(false);
             $table->boolean("is_active")->default(true);
             $table->timestamps();

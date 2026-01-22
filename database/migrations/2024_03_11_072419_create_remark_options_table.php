@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('remark_options', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("school_id")->constrained();
-            $table->foreignId("admin_id")->constrained("admins", "user_id");
+            $table->foreignId("school_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("admin_id")->constrained("admins", "user_id")->cascadeOnDelete();
             $table->string("remark");
             $table->timestamps();
         });

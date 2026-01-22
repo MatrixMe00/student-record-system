@@ -63,6 +63,22 @@
 - If requirements are unclear, stop and ask
 - Do not assume future features
 
+## Branch Management
+- When a task requires a branch, create it immediately with appropriate naming:
+  - `feature/description` - New features
+  - `bugfix/description` - Bug fixes
+  - `hotfix/description` - Urgent fixes
+  - `docs/description` - Documentation
+  - `refactor/description` - Code improvements
+- Update `BRANCHES.md` when:
+  - Creating a branch that might be revisited
+  - Completing a branch (mark as completed)
+  - Do NOT add branches that won't be revisited (one-time fixes)
+- When branch work is complete, provide PR information in `PR_DESCRIPTION.md`
+- When providing PR information, ensure you keep things simple and only touch what needs to be touched.
+- Features that need to be documented should be pointed out so that the docs branch can be switched to to handle the documentation of that feature.
+- Always work on the appropriate branch for the task
+
 ## Output
 - Produce small, reviewable diffs
 - Explain decisions briefly when non-obvious
