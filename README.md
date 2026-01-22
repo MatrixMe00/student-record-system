@@ -173,8 +173,17 @@ The system supports five user roles:
 
 ## 📖 Documentation
 
+- [User Documentation](docs/README.md) - Complete user guides and documentation
+- [Getting Started Guide](docs/getting-started.md) - Initial setup and first steps
 - [Features List](FEATURES.md) - Complete feature documentation
 - [Project Context](.ai/PROJECT_CONTEXT.md) - Technical architecture details
+
+### User Guides
+- [Student Guide](docs/user-guides/student-guide.md)
+- [Teacher Guide](docs/user-guides/teacher-guide.md)
+- [School Admin Guide](docs/user-guides/school-admin-guide.md)
+- [Superadmin Guide](docs/user-guides/superadmin-guide.md)
+- [Developer Guide](docs/user-guides/developer-guide.md)
 
 ---
 
