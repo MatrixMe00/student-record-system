@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('teachers_remarks', function (Blueprint $table) {
             $table->id();
             $table->string("remark_token")->unique();
-            $table->foreignId("school_id")->constrained();
-            $table->foreignId("teacher_id")->constrained("teachers", "user_id");
-            $table->foreignId("program_id")->constrained();
+            $table->foreignId("school_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("teacher_id")->constrained("teachers", "user_id")->cascadeOnDelete();
+            $table->foreignId("program_id")->constrained()->cascadeOnDelete();
             $table->integer("semester");
             $table->integer("total_attendance")->nullable();
             $table->enum("status", ["pending", "rejected", "accepted", "submitted"])->default("pending");
-            $table->foreignId("admin_id")->nullable();
+            $table->foreignId("admin_id")->nullable()->constrained("admins", "user_id")->nullOnDelete();
             $table->date("reopening")->nullable();
             $table->date("vacation")->nullable();
             $table->string("academic_year");
