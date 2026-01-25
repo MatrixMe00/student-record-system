@@ -249,7 +249,9 @@
                                 <div class="ml-3 text-sm">
                                     <label for="privacy_policy" class="text-gray-600">
                                         I agree to the 
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-700 font-semibold">Privacy Policy</a>
+                                        <a href="{{ route('privacy') }}" target="_blank" class="text-indigo-600 hover:text-indigo-700 font-semibold">Privacy Policy</a>
+                                        and 
+                                        <a href="{{ route('terms') }}" target="_blank" class="text-indigo-600 hover:text-indigo-700 font-semibold">Terms of Service</a>
                                         and consent to being contacted by EduRecordsGH.
                                     </label>
                                 </div>

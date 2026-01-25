@@ -69,11 +69,11 @@
         <p class="text-gray-400 text-sm">
           &copy; {{ date('Y') }} {{ config('app.name', 'EduRecordsGH') }}. All rights reserved.
         </p>
-        <div class="flex items-center space-x-6">
-          <a href="javascript:void(0)" class="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Privacy Policy">
+        <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6">
+          <a href="{{ route('privacy') }}" class="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Privacy Policy">
             Privacy Policy
           </a>
-          <a href="javascript:void(0)" class="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Terms of Service">
+          <a href="{{ route('terms') }}" class="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Terms of Service">
             Terms of Service
           </a>
         </div>

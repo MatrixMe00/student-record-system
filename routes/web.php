@@ -46,6 +46,14 @@ Route::get("/contact-us", function(){
     return view("home.contact");
 })->name("contact");
 
+Route::get("/privacy-policy", function(){
+    return view("home.privacy");
+})->name("privacy");
+
+Route::get("/terms-of-service", function(){
+    return view("home.terms");
+})->name("terms");
+
 // logins
 Route::get('/admin-login', function () {
     return view("auth.login", [
