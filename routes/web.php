@@ -38,9 +38,21 @@ Route::get("/", function(){
     return view("welcome");
 })->name("index");
 
+Route::get("/about-us", function(){
+    return view("home.about");
+})->name("about");
+
 Route::get("/contact-us", function(){
     return view("home.contact");
 })->name("contact");
+
+Route::get("/privacy-policy", function(){
+    return view("home.privacy");
+})->name("privacy");
+
+Route::get("/terms-of-service", function(){
+    return view("home.terms");
+})->name("terms");
 
 // logins
 Route::get('/admin-login', function () {
@@ -71,6 +83,7 @@ Route::get("/register-school", [SchoolController::class, 'create'])->middleware(
 Route::post("/register-school", [SchoolController::class, 'store'])->name("school.store");
 Route::put("/school/update", [SchoolController::class, 'update'])->name("school.update");
 Route::get("/schools", [SchoolController::class, 'index'])->name("school.index");
+Route::get("/schools/{school:school_slug}", [SchoolController::class, 'show'])->name("school.show");
 
 // dashboards
 Route::get('/dashboard', [UserController::class, 'dashboard'])->middleware(['auth', 'verified', 'school.check'])->name('dashboard');
