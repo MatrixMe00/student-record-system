@@ -38,6 +38,10 @@ Route::get("/", function(){
     return view("welcome");
 })->name("index");
 
+Route::get("/about-us", function(){
+    return view("home.about");
+})->name("about");
+
 Route::get("/contact-us", function(){
     return view("home.contact");
 })->name("contact");

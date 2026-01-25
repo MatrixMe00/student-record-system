@@ -12,7 +12,7 @@
           <!-- Desktop Navigation -->
           <div class="hidden md:flex md:items-center md:space-x-8">
             <x-nav-menu-link href="{{ route('index') }}" is_current="{{ request()->routeIs('index') }}">Home</x-nav-menu-link>
-            <x-nav-menu-link href="javascript:void(0)" :is_current="false">About Us</x-nav-menu-link>
+            <x-nav-menu-link href="{{ route('about') }}" is_current="{{ request()->routeIs('about') }}">About Us</x-nav-menu-link>
             <x-nav-menu-link href="{{ route('school.index') }}" is_current="{{ request()->routeIs('school.index') }}">Schools</x-nav-menu-link>
             <x-nav-menu-link href="{{ route('contact') }}" is_current="{{ request()->routeIs('contact') }}">Contact Us</x-nav-menu-link>
             @auth
@@ -59,7 +59,7 @@
         >
           <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
             <x-nav-menu-link href="{{ route('index') }}" is_current="{{ request()->routeIs('index') }}" class="block px-3 py-2 rounded-md text-base font-medium">Home</x-nav-menu-link>
-            <x-nav-menu-link href="javascript:void(0)" :is_current="false" class="block px-3 py-2 rounded-md text-base font-medium">About Us</x-nav-menu-link>
+            <x-nav-menu-link href="{{ route('about') }}" is_current="{{ request()->routeIs('about') }}" class="block px-3 py-2 rounded-md text-base font-medium">About Us</x-nav-menu-link>
             <x-nav-menu-link href="{{ route('school.index') }}" is_current="{{ request()->routeIs('school.index') }}" class="block px-3 py-2 rounded-md text-base font-medium">Schools</x-nav-menu-link>
             <x-nav-menu-link href="{{ route('contact') }}" is_current="{{ request()->routeIs('contact') }}" class="block px-3 py-2 rounded-md text-base font-medium">Contact Us</x-nav-menu-link>
             @auth

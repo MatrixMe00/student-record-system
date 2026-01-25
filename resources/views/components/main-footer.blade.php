@@ -22,7 +22,7 @@
             </a>
           </li>
           <li>
-            <a href="javascript:void(0)" class="hover:text-white transition-colors duration-200">
+            <a href="{{ route('about') }}" class="hover:text-white transition-colors duration-200">
               About Us
             </a>
           </li>
