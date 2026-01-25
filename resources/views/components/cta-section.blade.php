@@ -1,17 +1,17 @@
 @props(['title', 'description' => null, 'subDescription' => null, 'buttons' => []])
 
-<section class="py-16 px-4 bg-indigo-600 md:px-8">
+<section class="py-12 sm:py-16 px-4 bg-indigo-600 md:px-8">
     <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">
             {{ $title }}
         </h2>
         @if($description)
-            <p class="text-xl text-indigo-100 mb-2">
+            <p class="text-lg sm:text-xl text-indigo-100 mb-2">
                 {{ $description }}
             </p>
         @endif
         @if($subDescription)
-            <p class="text-lg text-indigo-200 mb-8">
+            <p class="text-base sm:text-lg text-indigo-200 mb-6 sm:mb-8">
                 {{ $subDescription }}
             </p>
         @endif

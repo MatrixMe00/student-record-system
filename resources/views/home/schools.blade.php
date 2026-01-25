@@ -167,7 +167,7 @@
                     x-transition:leave="transition ease-in duration-200"
                     x-transition:leave-start="opacity-100 scale-100"
                     x-transition:leave-end="opacity-0 scale-95"
-                    class="relative bg-white rounded-2xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                    class="relative bg-white rounded-lg sm:rounded-2xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto mx-2 sm:mx-4"
                 >
                     {{-- Modal Header --}}
                     <div class="sticky top-0 bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4 rounded-t-2xl">
@@ -183,9 +183,9 @@
                     </div>
 
                     {{-- Modal Body --}}
-                    <div class="p-6" x-show="selectedSchool">
+                    <div class="p-4 sm:p-6" x-show="selectedSchool">
                         {{-- School Overview --}}
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
                             <div>
                                 <h4 class="text-sm font-semibold text-gray-500 uppercase mb-2">School Type</h4>
                                 <p class="text-lg text-gray-900 capitalize" x-text="selectedSchool?.type"></p>
@@ -219,26 +219,26 @@
                         </div>
 
                         {{-- Statistics --}}
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                            <div class="bg-indigo-50 rounded-lg p-4 text-center">
-                                <i class="fas fa-user-graduate text-3xl text-indigo-600 mb-2"></i>
-                                <p class="text-2xl font-bold text-gray-900" x-text="selectedSchool?.students"></p>
-                                <p class="text-sm text-gray-600">Students</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
+                            <div class="bg-indigo-50 rounded-lg p-3 sm:p-4 text-center">
+                                <i class="fas fa-user-graduate text-2xl sm:text-3xl text-indigo-600 mb-2"></i>
+                                <p class="text-xl sm:text-2xl font-bold text-gray-900" x-text="selectedSchool?.students"></p>
+                                <p class="text-xs sm:text-sm text-gray-600">Students</p>
                             </div>
-                            <div class="bg-purple-50 rounded-lg p-4 text-center">
-                                <i class="fas fa-chalkboard-teacher text-3xl text-purple-600 mb-2"></i>
-                                <p class="text-2xl font-bold text-gray-900" x-text="selectedSchool?.teachers"></p>
-                                <p class="text-sm text-gray-600">Teachers</p>
+                            <div class="bg-purple-50 rounded-lg p-3 sm:p-4 text-center">
+                                <i class="fas fa-chalkboard-teacher text-2xl sm:text-3xl text-purple-600 mb-2"></i>
+                                <p class="text-xl sm:text-2xl font-bold text-gray-900" x-text="selectedSchool?.teachers"></p>
+                                <p class="text-xs sm:text-sm text-gray-600">Teachers</p>
                             </div>
-                            <div class="bg-green-50 rounded-lg p-4 text-center">
-                                <i class="fas fa-book text-3xl text-green-600 mb-2"></i>
-                                <p class="text-2xl font-bold text-gray-900" x-text="selectedSchool?.programs"></p>
-                                <p class="text-sm text-gray-600">Programs</p>
+                            <div class="bg-green-50 rounded-lg p-3 sm:p-4 text-center">
+                                <i class="fas fa-book text-2xl sm:text-3xl text-green-600 mb-2"></i>
+                                <p class="text-xl sm:text-2xl font-bold text-gray-900" x-text="selectedSchool?.programs"></p>
+                                <p class="text-xs sm:text-sm text-gray-600">Programs</p>
                             </div>
-                            <div class="bg-yellow-50 rounded-lg p-4 text-center">
-                                <i class="fas fa-graduation-cap text-3xl text-yellow-600 mb-2"></i>
-                                <p class="text-2xl font-bold text-gray-900" x-text="selectedSchool?.subjects"></p>
-                                <p class="text-sm text-gray-600">Subjects</p>
+                            <div class="bg-yellow-50 rounded-lg p-3 sm:p-4 text-center">
+                                <i class="fas fa-graduation-cap text-2xl sm:text-3xl text-yellow-600 mb-2"></i>
+                                <p class="text-xl sm:text-2xl font-bold text-gray-900" x-text="selectedSchool?.subjects"></p>
+                                <p class="text-xs sm:text-sm text-gray-600">Subjects</p>
                             </div>
                         </div>
 
@@ -259,22 +259,20 @@
                     </div>
 
                     {{-- Modal Footer --}}
-                    <div class="sticky bottom-0 bg-gray-50 px-6 py-4 rounded-b-2xl border-t border-gray-200">
-                        <div class="flex justify-between items-center">
+                    <div class="sticky bottom-0 bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 rounded-b-lg sm:rounded-b-2xl border-t border-gray-200">
+                        <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
                             <button 
                                 @click="closeModal()"
-                                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+                                class="px-4 sm:px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors text-sm sm:text-base"
                             >
                                 Close
                             </button>
-                            <div class="flex space-x-3">
-                                <a 
-                                    :href="`{{ url('/schools') }}/${selectedSchool?.slug}`"
-                                    class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold"
-                                >
-                                    View Full Details <i class="fas fa-arrow-right ml-2"></i>
-                                </a>
-                            </div>
+                            <a 
+                                :href="`{{ url('/schools') }}/${selectedSchool?.slug}`"
+                                class="px-4 sm:px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold text-center text-sm sm:text-base"
+                            >
+                                View Full Details <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
                         </div>
                     </div>
                 </div>

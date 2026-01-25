@@ -20,25 +20,25 @@
     </section>
 
     {{-- Mission & Vision --}}
-    <section class="py-20 px-4 bg-gray-50 md:px-8">
+    <section class="py-12 sm:py-16 lg:py-20 px-4 bg-gray-50 md:px-8">
         <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="p-8 bg-white rounded-xl shadow-md">
-                    <div class="w-16 h-16 bg-indigo-600 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fas fa-bullseye text-white text-3xl"></i>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                <div class="p-6 sm:p-8 bg-white rounded-xl shadow-md">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 bg-indigo-600 rounded-lg flex items-center justify-center mb-4 sm:mb-6">
+                        <i class="fas fa-bullseye text-white text-2xl sm:text-3xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
-                    <p class="text-gray-700 leading-relaxed">
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Our Mission</h3>
+                    <p class="text-sm sm:text-base text-gray-700 leading-relaxed">
                         To empower Basic and Secondary Schools across Ghana with modern, efficient, and secure digital tools that simplify academic record management, enabling educators to focus on what matters most - teaching and student development.
                     </p>
                 </div>
 
-                <div class="p-8 bg-white rounded-xl shadow-md">
-                    <div class="w-16 h-16 bg-purple-600 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fas fa-eye text-white text-3xl"></i>
+                <div class="p-6 sm:p-8 bg-white rounded-xl shadow-md">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 bg-purple-600 rounded-lg flex items-center justify-center mb-4 sm:mb-6">
+                        <i class="fas fa-eye text-white text-2xl sm:text-3xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
-                    <p class="text-gray-700 leading-relaxed">
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Our Vision</h3>
+                    <p class="text-sm sm:text-base text-gray-700 leading-relaxed">
                         To become the leading student record management platform in Ghana, transforming how schools handle academic data and making quality education administration accessible to all educational institutions.
                     </p>
                 </div>
@@ -47,18 +47,18 @@
     </section>
 
     {{-- What We Offer --}}
-    <section class="py-20 px-4 bg-white md:px-8">
+    <section class="py-12 sm:py-16 lg:py-20 px-4 bg-white md:px-8">
         <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
                     What EduRecordsGH Offers
                 </h2>
-                <p class="text-xl text-gray-600">
+                <p class="text-lg sm:text-xl text-gray-600">
                     Comprehensive solutions tailored for Basic and Secondary Schools
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 <x-feature-card 
                     icon="fas fa-users" 
                     title="Multi-School Platform" 

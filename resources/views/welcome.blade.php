@@ -12,18 +12,18 @@
     <x-target-audience-section />
 
     {{-- Features Section --}}
-    <section id="features" class="py-20 px-4 bg-white md:px-8">
+    <section id="features" class="py-12 sm:py-16 lg:py-20 px-4 bg-white md:px-8">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <div class="text-center mb-10 sm:mb-16">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
                     Powerful Features for Modern Schools
                 </h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                <p class="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-2">
                     Everything you need to manage your school's academic operations efficiently
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 <x-feature-card 
                     icon="fas fa-school" 
                     title="Multi-School Support" 
@@ -71,18 +71,18 @@
     </section>
 
     {{-- Login Section --}}
-    <section id="logins" class="py-20 px-4 bg-gray-50 md:px-8">
+    <section id="logins" class="py-12 sm:py-16 lg:py-20 px-4 bg-gray-50 md:px-8">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
                     Access Your Account
                 </h2>
-                <p class="text-xl text-gray-600">
+                <p class="text-lg sm:text-xl text-gray-600">
                     Choose your login type to access the system
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                 <x-welcome-tag href="{{ route('admin.login') }}" tag_name="Admin Login" icon="fas fa-user-clock"/>
                 <x-welcome-tag href="{{ route('teacher.login') }}" tag_name="Teacher Login" icon="fas fa-person-chalkboard" />
                 <x-welcome-tag href="{{ route('login') }}" tag_name="Student Login" icon="fas fa-user-graduate" />

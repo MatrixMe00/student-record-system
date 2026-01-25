@@ -1,6 +1,6 @@
 <footer class="bg-gray-900 text-gray-300">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
       <!-- Brand Section -->
       <div class="col-span-1 md:col-span-2">
         <div class="mb-4">
@@ -64,8 +64,8 @@
     </div>
 
     <!-- Bottom Bar -->
-    <div class="mt-8 pt-8 border-t border-gray-800">
-      <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+    <div class="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-800">
+      <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 text-center sm:text-left">
         <p class="text-gray-400 text-sm">
           &copy; {{ date('Y') }} {{ config('app.name', 'EduRecordsGH') }}. All rights reserved.
         </p>

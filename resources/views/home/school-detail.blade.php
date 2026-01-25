@@ -10,21 +10,21 @@
             <div class="max-w-7xl mx-auto relative z-10">
                 <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
                     {{-- School Logo/Icon --}}
-                    <div class="w-32 h-32 bg-white rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 bg-white rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
                         @if($school->logo_path)
                             <img src="{{ asset($school->logo_path) }}" alt="{{ $school->school_name }}" class="w-full h-full object-cover rounded-xl">
                         @else
-                            <i class="fas fa-school text-6xl text-indigo-600"></i>
+                            <i class="fas fa-school text-4xl sm:text-6xl text-indigo-600"></i>
                         @endif
                     </div>
 
                     {{-- School Info --}}
                     <div class="flex-1 text-center md:text-left">
-                        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ $school->school_name }}</h1>
-                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-indigo-100">
+                        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 break-words">{{ $school->school_name }}</h1>
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 text-indigo-100 text-sm sm:text-base">
                             <span class="flex items-center">
                                 <i class="fas fa-map-marker-alt mr-2"></i>
-                                {{ $school->district ?? 'N/A' }}
+                                <span class="break-words">{{ $school->district ?? 'N/A' }}</span>
                             </span>
                             <span class="flex items-center">
                                 <i class="fas fa-tag mr-2"></i>
@@ -32,7 +32,7 @@
                             </span>
                             <span class="flex items-center">
                                 <i class="fas fa-user-tie mr-2"></i>
-                                {{ $school->school_head }}
+                                <span class="break-words">{{ $school->school_head }}</span>
                             </span>
                         </div>
                     </div>
@@ -45,20 +45,20 @@
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-indigo-600">{{ $school->students->count() }}</div>
-                        <div class="text-sm text-gray-600">Students</div>
+                        <div class="text-2xl sm:text-3xl font-bold text-indigo-600">{{ $school->students->count() }}</div>
+                        <div class="text-xs sm:text-sm text-gray-600">Students</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-purple-600">{{ $school->teachers->count() }}</div>
-                        <div class="text-sm text-gray-600">Teachers</div>
+                        <div class="text-2xl sm:text-3xl font-bold text-purple-600">{{ $school->teachers->count() }}</div>
+                        <div class="text-xs sm:text-sm text-gray-600">Teachers</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-green-600">{{ $school->programs->count() }}</div>
-                        <div class="text-sm text-gray-600">Programs</div>
+                        <div class="text-2xl sm:text-3xl font-bold text-green-600">{{ $school->programs->count() }}</div>
+                        <div class="text-xs sm:text-sm text-gray-600">Programs</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-yellow-600">{{ $school->subjects->count() }}</div>
-                        <div class="text-sm text-gray-600">Subjects</div>
+                        <div class="text-2xl sm:text-3xl font-bold text-yellow-600">{{ $school->subjects->count() }}</div>
+                        <div class="text-xs sm:text-sm text-gray-600">Subjects</div>
                     </div>
                 </div>
             </div>

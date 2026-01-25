@@ -30,16 +30,16 @@
     $gradientClass = $gradientClasses[$gradientFrom] ?? $gradientClasses['blue'];
 @endphp
 
-<div class="p-6 bg-gradient-to-br {{ $gradientClass }} rounded-xl border hover:shadow-lg transition-shadow duration-200">
+<div class="p-4 sm:p-6 bg-gradient-to-br {{ $gradientClass }} rounded-xl border hover:shadow-lg transition-shadow duration-200">
     @if($variant === 'card')
-        <div class="w-12 h-12 {{ $iconBgClass }} rounded-lg flex items-center justify-center mb-4">
-            <i class="{{ $icon }} text-white text-2xl"></i>
+        <div class="w-10 h-10 sm:w-12 sm:h-12 {{ $iconBgClass }} rounded-lg flex items-center justify-center mb-3 sm:mb-4">
+            <i class="{{ $icon }} text-white text-lg sm:text-xl md:text-2xl"></i>
         </div>
     @else
-        <i class="{{ $icon }} text-3xl {{ $iconTextClass }} mb-4"></i>
+        <i class="{{ $icon }} text-2xl sm:text-3xl {{ $iconTextClass }} mb-3 sm:mb-4"></i>
     @endif
-    <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ $title }}</h3>
-    <p class="text-gray-600">
+    <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">{{ $title }}</h3>
+    <p class="text-sm sm:text-base text-gray-600">
         {{ $description }}
     </p>
 </div>
