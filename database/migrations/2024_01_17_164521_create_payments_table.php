@@ -25,9 +25,7 @@ return new class extends Migration
             $table->string("payment_method")->default("mobile_money");
             $table->foreignId("student_id")->constrained('students', 'user_id')->cascadeOnDelete();
             $table->timestamps();
-            $table->dateTime("expiry_date")->default(function(){
-                return now()->addMonth(4);
-            });
+            $table->dateTime("expiry_date")->nullable();
         });
     }
 

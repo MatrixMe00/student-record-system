@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('school_settings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("school_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId("school_id")->constrained()->cascadeOnDelete();
             $table->string("settings_name");
             $table->string("value");
             $table->timestamps();
