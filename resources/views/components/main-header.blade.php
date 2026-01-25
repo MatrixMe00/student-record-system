@@ -4,8 +4,8 @@
         <div class="flex items-center justify-between h-16">
           <!-- Logo -->
           <div class="flex-shrink-0">
-            <a href="{{ route('index') }}" class="flex items-center space-x-2">
-              <x-application-logo icon="fas fa-school text-2xl" />
+            <a href="{{ route('index') }}" class="flex items-center">
+              <x-application-logo variant="compact" />
             </a>
           </div>
 

@@ -3,9 +3,8 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
       <!-- Brand Section -->
       <div class="col-span-1 md:col-span-2">
-        <div class="flex items-center space-x-2 mb-4">
-          <x-application-logo icon="fas fa-school text-3xl text-white" />
-          <span class="text-xl font-bold text-white">{{ config('app.name', 'EduRecordsGH') }}</span>
+        <div class="mb-4">
+          <x-application-logo text-color="text-white" />
         </div>
         <p class="text-gray-400 leading-relaxed max-w-md">
           A comprehensive multi-tenant student record management system designed for schools to efficiently manage students, grades, payments, and academic activities.

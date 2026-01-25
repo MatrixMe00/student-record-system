@@ -3,8 +3,8 @@
     @section("title", $page_title)
 
     @section("logo")
-        <a href="/">
-            <x-application-logo icon="{{ $login_icon }}" class="w-20 h-20 fill-current text-gray-500" />
+        <a href="/" class="flex justify-center">
+            <x-application-logo variant="icon-only" icon="{{ $login_icon }}" />
         </a>
     @endsection
 
