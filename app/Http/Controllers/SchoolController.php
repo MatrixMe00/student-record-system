@@ -40,11 +40,14 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        $schools = School::all();
-
         if(request()->routeIs("admin.schools")){
+            $schools = School::all();
             return view('superadmin.schools', ["schools" => $schools]);
         }else{
+            // Only show active schools for public view
+            $schools = School::where('status', true)
+                ->withCount(['students', 'teachers', 'programs', 'subjects'])
+                ->get();
             return view('home.schools', ["schools" => $schools]);
         }
     }
@@ -311,9 +314,14 @@ class SchoolController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(?School $school = null)
+    public function show(School $school)
     {
-        //
+        // Load relationships for detailed view
+        $school->load(['students', 'teachers', 'programs', 'subjects', 'admin']);
+        
+        return view('home.school-detail', [
+            'school' => $school
+        ]);
     }
 
     /**

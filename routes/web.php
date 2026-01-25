@@ -75,6 +75,7 @@ Route::get("/register-school", [SchoolController::class, 'create'])->middleware(
 Route::post("/register-school", [SchoolController::class, 'store'])->name("school.store");
 Route::put("/school/update", [SchoolController::class, 'update'])->name("school.update");
 Route::get("/schools", [SchoolController::class, 'index'])->name("school.index");
+Route::get("/schools/{school:school_slug}", [SchoolController::class, 'show'])->name("school.show");
 
 // dashboards
 Route::get('/dashboard', [UserController::class, 'dashboard'])->middleware(['auth', 'verified', 'school.check'])->name('dashboard');
