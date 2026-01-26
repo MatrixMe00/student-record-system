@@ -48,7 +48,7 @@ class LoginRequest extends FormRequest
             if (! Auth::attempt(['email' => $this->input('username'), 'password' => $this->input('password')], $this->boolean('remember'))) {
                 RateLimiter::hit($this->throttleKey());
 
-                ActivityLog::$user_id = 0;
+                ActivityLog::$user_id = ActivityLog::SYSTEM_USER_ID; // System user for failed login attempts
                 $this->add_log("Invalid username or password failed authentication", ["details" => ["username" => $this->input('username'), "password" => $this->input('password')]]);
 
                 throw ValidationException::withMessages([

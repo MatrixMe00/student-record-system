@@ -298,7 +298,7 @@ class UserController extends Controller
                     "teacher_count" => Teacher::all()->count(),
                     "delete_count" => deletedusers::all()->count(),
                     "activity_logs" => ActivityLog::get_logs(limit: 5),
-                    "system_logs" => ActivityLog::get_logs(0, limit: 5)
+                    "system_logs" => ActivityLog::get_logs(ActivityLog::SYSTEM_USER_ID, limit: 5)
                 ]);
                 break;
             case 4:
@@ -327,7 +327,7 @@ class UserController extends Controller
                     "class_count" => Program::all()->count(),
                     "delete_count" => deletedusers::all()->count(),
                     "activity_logs" => ActivityLog::get_logs(limit: 5),
-                    "school_logs" => ActivityLog::get_logs(0, limit: 10),
+                    "school_logs" => ActivityLog::get_logs(ActivityLog::SYSTEM_USER_ID, limit: 10),
                     "amount_sum" => Payment::where("school_id", session('school_id'))->sum("amount"),
                     "deduction_sum" => Payment::where("school_id", session('school_id'))->sum("deduction")
                 ];

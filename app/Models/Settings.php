@@ -14,4 +14,20 @@ class Settings extends Model
     public function setNameAttribute($value){
         $this->attributes["name"] = strtolower($value);
     }
+
+    /**
+     * Accessor for input_type (maps to type column for backward compatibility)
+     */
+    public function getInputTypeAttribute()
+    {
+        return $this->attributes['type'] ?? null;
+    }
+
+    /**
+     * Mutator for input_type (maps to type column)
+     */
+    public function setInputTypeAttribute($value)
+    {
+        $this->attributes['type'] = $value;
+    }
 }

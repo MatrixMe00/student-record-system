@@ -55,7 +55,7 @@ class NewPasswordController extends Controller
 
         // create and set up the user
         $user = User::where("email", $request->email)->first();
-        ActivityLog::$user_id = $user->id ?? 0;
+        ActivityLog::$user_id = $user->id ?? ActivityLog::SYSTEM_USER_ID; // System user if user not found
 
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can

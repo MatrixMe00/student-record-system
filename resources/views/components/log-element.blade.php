@@ -1,4 +1,4 @@
-@props(["activity", "is_admin" => false, "summary" => false, "dev" => false, "show_name" => false, "user_id" => 0])
+@props(["activity", "is_admin" => false, "summary" => false, "dev" => false, "show_name" => false, "user_id" => 1])
 
 @php
     $owner = $activity->user;

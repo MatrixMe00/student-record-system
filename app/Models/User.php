@@ -75,6 +75,27 @@ class User extends Authenticatable
         $this->attributes['password'] = Hash::make($value);
     }
 
+    /**
+     * System user ID - the first user created (developer role)
+     * This user should never be deleted as it's used for system logs
+     */
+    const SYSTEM_USER_ID = 1;
+
+    /**
+     * Prevent system user from being deleted
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($user) {
+            // Prevent system user (ID = 1) from being deleted
+            if ($user->id === self::SYSTEM_USER_ID) {
+                throw new \Exception('System user cannot be deleted');
+            }
+        });
+    }
+
     // every user has a role
     public function role(): BelongsTo{
         return $this->belongsTo(Role::class);
