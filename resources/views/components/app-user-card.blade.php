@@ -16,8 +16,8 @@
 @endphp
 
 <div class="w-full {{ ($user->is_active ?? $user->user->is_active) || $is_deleted ? 'bg-white' : 'bg-red-100' }} shadow rounded border border-transparent hover:border-blue-500 cursor-pointer">
-    <div class="h-32 w-full checker-bg flex items-center justify-center p-4 text-blue-500">
-      <x-application-logo />
+    <div class="h-32 w-full checker-bg flex items-center justify-center p-4">
+      <x-application-logo variant="icon-only" />
     </div>
 
     <div class="p-4 border-t border-gray-200" x-data="{showMore:false}" x-cloak="">

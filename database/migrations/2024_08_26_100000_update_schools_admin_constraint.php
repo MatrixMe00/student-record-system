@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('school_settings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId("school_id")->constrained()->cascadeOnDelete();
-            $table->string("settings_name");
-            $table->string("value");
-            $table->timestamps();
+        Schema::table('schools', function (Blueprint $table) {
+            $table->foreign('admin_id')
+                  ->references('user_id')
+                  ->on('admins')
+                  ->nullOnDelete();
         });
     }
 
@@ -25,6 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('school_settings');
+        Schema::table('schools', function (Blueprint $table) {
+            $table->dropForeign(['admin_id']);
+        });
     }
 };

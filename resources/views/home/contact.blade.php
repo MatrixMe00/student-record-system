@@ -1,77 +1,374 @@
 <x-main-layout>
- <div class="px-6 py-24 sm:py-32 lg:px-8">
-    <div class="mx-auto max-w-2xl text-center">
-      <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Get in touch Us</h2>
-      <p class="mt-2 text-lg leading-8 text-gray-600">Send us a mail and have your answers given you in a short time</p>
-    </div>
-    <form action="#" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
-      <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-        <div>
-          <label for="first-name" class="block text-sm font-semibold leading-6 text-gray-900">First name</label>
-          <div class="mt-2.5">
-            <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-          </div>
-        </div>
-        <div>
-          <label for="last-name" class="block text-sm font-semibold leading-6 text-gray-900">Last name</label>
-          <div class="mt-2.5">
-            <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-          </div>
-        </div>
-        <div class="sm:col-span-2">
-          <label for="company" class="block text-sm font-semibold leading-6 text-gray-900">Company</label>
-          <div class="mt-2.5">
-            <input type="text" name="company" id="company" autocomplete="organization" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-          </div>
-        </div>
-        <div class="sm:col-span-2">
-          <label for="email" class="block text-sm font-semibold leading-6 text-gray-900">Email</label>
-          <div class="mt-2.5">
-            <input type="email" name="email" id="email" autocomplete="email" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-          </div>
-        </div>
-        <div class="sm:col-span-2">
-          <label for="phone-number" class="block text-sm font-semibold leading-6 text-gray-900">Phone number</label>
-          <div class="relative mt-2.5">
-            <div class="absolute inset-y-0 left-0 flex items-center">
-              <label for="country" class="sr-only">Country</label>
-              <select id="country" name="country" class="h-full rounded-md border-0 bg-transparent bg-none py-0 pl-4 pr-9 text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
-                <option>US</option>
-                <option>CA</option>
-                <option>EU</option>
-              </select>
-              <svg class="pointer-events-none absolute right-3 top-0 h-full w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <input type="tel" name="phone-number" id="phone-number" autocomplete="tel" class="block w-full rounded-md border-0 px-3.5 py-2 pl-20 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-          </div>
-        </div>
-        <div class="sm:col-span-2">
-          <label for="message" class="block text-sm font-semibold leading-6 text-gray-900">Message</label>
-          <div class="mt-2.5">
-            <textarea name="message" id="message" rows="4" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
-          </div>
-        </div>
-        <div class="flex gap-x-4 sm:col-span-2">
-          <div class="flex h-6 items-center">
-            <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
-            <button type="button" class="bg-gray-200 flex w-8 flex-none cursor-pointer rounded-full p-px ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" role="switch" aria-checked="false" aria-labelledby="switch-1-label">
-              <span class="sr-only">Agree to policies</span>
-              <!-- Enabled: "translate-x-3.5", Not Enabled: "translate-x-0" -->
-              <span aria-hidden="true" class="translate-x-0 h-4 w-4 transform rounded-full bg-white shadow-sm ring-1 ring-gray-900/5 transition duration-200 ease-in-out"></span>
-            </button>
-          </div>
-          <label class="text-sm leading-6 text-gray-600" id="switch-1-label">
-            By selecting this, you agree to our
-            <a href="#" class="font-semibold text-indigo-600">privacy&nbsp;policy</a>.
-          </label>
-        </div>
-      </div>
-      <div class="mt-10">
-        <button type="submit" class="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Let's talk</button>
-      </div>
-    </form>
-  </div>
+    {{-- Hero Section --}}
+    <x-hero-section 
+        title="Contact Us"
+        subtitle="Get in touch with the EduRecordsGH team. We're here to help Basic and Secondary Schools with their record management needs."
+    />
 
+    {{-- Contact Section --}}
+    <section class="py-20 px-4 bg-white md:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {{-- Contact Information --}}
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Get in Touch</h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Have questions about EduRecordsGH? Want to learn more about how we can help your school? We'd love to hear from you.
+                    </p>
+
+                    {{-- Contact Details --}}
+                    <div class="space-y-4 sm:space-y-6 mb-8">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-envelope text-indigo-600 text-lg sm:text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="ml-3 sm:ml-4">
+                                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1">Email Us</h3>
+                                <p class="text-gray-600 text-xs sm:text-sm mb-2">Send us an email and we'll respond within 24 hours</p>
+                                <a href="mailto:info@edurecordsgh.com" class="text-indigo-600 hover:text-indigo-700 font-medium text-sm sm:text-base break-all">
+                                    info@edurecordsgh.com
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-phone text-purple-600 text-lg sm:text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="ml-3 sm:ml-4">
+                                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1">Call Us</h3>
+                                <p class="text-gray-600 text-xs sm:text-sm mb-2">Monday - Friday, 8:00 AM - 5:00 PM GMT</p>
+                                <a href="tel:+233XXXXXXXXX" class="text-indigo-600 hover:text-indigo-700 font-medium text-sm sm:text-base">
+                                    +233 XX XXX XXXX
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <i class="fab fa-whatsapp text-green-600 text-lg sm:text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="ml-3 sm:ml-4">
+                                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1">WhatsApp</h3>
+                                <p class="text-gray-600 text-xs sm:text-sm mb-2">Quick support via WhatsApp</p>
+                                <a href="https://wa.me/233XXXXXXXXX" target="_blank" class="text-indigo-600 hover:text-indigo-700 font-medium text-sm sm:text-base">
+                                    Chat with us on WhatsApp
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt text-yellow-600 text-lg sm:text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="ml-3 sm:ml-4">
+                                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1">Location</h3>
+                                <p class="text-gray-600 text-xs sm:text-sm mb-2">Based in Ghana, serving schools nationwide</p>
+                                <p class="text-gray-900 font-medium text-sm sm:text-base">Ghana</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Response Time Info --}}
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+                        <div class="flex items-start">
+                            <i class="fas fa-clock text-blue-600 mr-3 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-1">Response Time</h4>
+                                <p class="text-sm text-gray-700">
+                                    We typically respond to inquiries within <strong>24 hours</strong> during business days. For urgent matters, please call us directly.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Quick Links --}}
+                    <div class="bg-indigo-50 rounded-xl p-6 border border-indigo-100">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Quick Actions</h3>
+                        <div class="space-y-2">
+                            <a href="{{ route('register') }}" class="block text-indigo-600 hover:text-indigo-700 font-medium">
+                                <i class="fas fa-school mr-2"></i> Register Your School
+                            </a>
+                            <a href="{{ route('school.index') }}" class="block text-indigo-600 hover:text-indigo-700 font-medium">
+                                <i class="fas fa-list mr-2"></i> View Our Schools
+                            </a>
+                            <a href="{{ route('about') }}" class="block text-indigo-600 hover:text-indigo-700 font-medium">
+                                <i class="fas fa-info-circle mr-2"></i> Learn More About Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Contact Form --}}
+                <div>
+                    <div class="bg-gray-50 rounded-xl p-4 sm:p-6 lg:p-8 border border-gray-200">
+                        <div class="mb-6">
+                            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Send us a Message</h2>
+                            <div class="flex items-center text-xs sm:text-sm text-gray-500">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                <span>All fields marked * are required</span>
+                            </div>
+                        </div>
+                        <form action="#" method="POST" class="space-y-6" x-data="{ submitting: false }" @submit="submitting = true">
+                            @csrf
+                            
+                            {{-- Name Fields --}}
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="first_name" class="block text-sm font-semibold text-gray-900 mb-2">
+                                        First Name <span class="text-red-500">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        name="first_name" 
+                                        id="first_name" 
+                                        required
+                                        class="block w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        placeholder="John"
+                                    >
+                                </div>
+                                <div>
+                                    <label for="last_name" class="block text-sm font-semibold text-gray-900 mb-2">
+                                        Last Name <span class="text-red-500">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        name="last_name" 
+                                        id="last_name" 
+                                        required
+                                        class="block w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        placeholder="Doe"
+                                    >
+                                </div>
+                            </div>
+
+                            {{-- School Name --}}
+                            <div>
+                                <label for="school_name" class="block text-sm font-semibold text-gray-900 mb-2">
+                                    School Name (Optional)
+                                </label>
+                                <input 
+                                    type="text" 
+                                    name="school_name" 
+                                    id="school_name"
+                                    class="block w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    placeholder="Your School Name"
+                                >
+                            </div>
+
+                            {{-- Email --}}
+                            <div>
+                                <label for="email" class="block text-sm font-semibold text-gray-900 mb-2">
+                                    Email Address <span class="text-red-500">*</span>
+                                </label>
+                                <input 
+                                    type="email" 
+                                    name="email" 
+                                    id="email" 
+                                    required
+                                    class="block w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    placeholder="your.email@example.com"
+                                >
+                            </div>
+
+                            {{-- Phone --}}
+                            <div>
+                                <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">
+                                    Phone Number <span class="text-red-500">*</span>
+                                </label>
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                                        +233
+                                    </span>
+                                    <input 
+                                        type="tel" 
+                                        name="phone" 
+                                        id="phone" 
+                                        required
+                                        class="block w-full rounded-r-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        placeholder="XX XXX XXXX"
+                                    >
+                                </div>
+                            </div>
+
+                            {{-- Subject --}}
+                            <div>
+                                <label for="subject" class="block text-sm font-semibold text-gray-900 mb-2">
+                                    Subject <span class="text-red-500">*</span>
+                                </label>
+                                <select 
+                                    name="subject" 
+                                    id="subject" 
+                                    required
+                                    class="block w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                >
+                                    <option value="">Select a subject...</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="registration">School Registration</option>
+                                    <option value="support">Technical Support</option>
+                                    <option value="pricing">Pricing Information</option>
+                                    <option value="partnership">Partnership Opportunities</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            {{-- Message --}}
+                            <div>
+                                <label for="message" class="block text-sm font-semibold text-gray-900 mb-2">
+                                    Message <span class="text-red-500">*</span>
+                                </label>
+                                <textarea 
+                                    name="message" 
+                                    id="message" 
+                                    rows="5" 
+                                    required
+                                    class="block w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    placeholder="Tell us how we can help you..."
+                                ></textarea>
+                            </div>
+
+                            {{-- Privacy Policy --}}
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input 
+                                        id="privacy_policy" 
+                                        name="privacy_policy" 
+                                        type="checkbox" 
+                                        required
+                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                    >
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="privacy_policy" class="text-gray-600">
+                                        I agree to the 
+                                        <a href="{{ route('privacy') }}" target="_blank" class="text-indigo-600 hover:text-indigo-700 font-semibold">Privacy Policy</a>
+                                        and 
+                                        <a href="{{ route('terms') }}" target="_blank" class="text-indigo-600 hover:text-indigo-700 font-semibold">Terms of Service</a>
+                                        and consent to being contacted by EduRecordsGH.
+                                    </label>
+                                </div>
+                            </div>
+
+                            {{-- Submit Button --}}
+                            <div>
+                                <button 
+                                    type="submit" 
+                                    :disabled="submitting"
+                                    class="w-full px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    <span x-show="!submitting">
+                                        Send Message <i class="fas fa-paper-plane ml-2"></i>
+                                    </span>
+                                    <span x-show="submitting" class="flex items-center justify-center">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i>
+                                        Sending...
+                                    </span>
+                                </button>
+                            </div>
+                            
+                            {{-- Help Text --}}
+                            <p class="text-xs text-gray-500 text-center">
+                                <i class="fas fa-shield-alt mr-1"></i>
+                                Your information is secure and will only be used to respond to your inquiry.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- FAQ Section --}}
+    <section class="py-16 px-4 bg-gray-50 md:px-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-600">
+                    Quick answers to common questions about EduRecordsGH
+                </p>
+            </div>
+
+            <div class="space-y-4" x-data="{ openFaq: null }">
+                @php
+                    $faqs = [
+                        [
+                            'question' => 'How do I register my school?',
+                            'answer' => 'Click on "Register Your School" in the navigation menu or visit the registration page. You\'ll need to provide your school details and create an admin account. The process is simple and takes just a few minutes.'
+                        ],
+                        [
+                            'question' => 'Is EduRecordsGH free to use?',
+                            'answer' => 'EduRecordsGH offers flexible pricing plans for Basic and Secondary Schools. Contact us to learn more about our pricing options and find a plan that works for your school.'
+                        ],
+                        [
+                            'question' => 'What types of schools can use EduRecordsGH?',
+                            'answer' => 'EduRecordsGH is designed specifically for Basic Schools (Primary) and Secondary Schools (JHS and SHS) in Ghana. Both public and private schools are welcome to use our platform.'
+                        ],
+                        [
+                            'question' => 'How secure is my school\'s data?',
+                            'answer' => 'We take data security seriously. Each school\'s data is completely isolated and secure. We use industry-standard encryption and security practices to protect your information.'
+                        ],
+                        [
+                            'question' => 'Can I try EduRecordsGH before committing?',
+                            'answer' => 'Yes! Contact us to schedule a demo or trial period. We\'d be happy to show you how EduRecordsGH can benefit your school.'
+                        ],
+                        [
+                            'question' => 'What kind of support do you provide?',
+                            'answer' => 'We provide comprehensive support including email support, phone support during business hours, WhatsApp support, and detailed documentation. Our team is here to help you succeed.'
+                        ]
+                    ];
+                @endphp
+
+                @foreach($faqs as $index => $faq)
+                    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                        <button 
+                            @click="openFaq = openFaq === {{ $index }} ? null : {{ $index }}"
+                            class="w-full px-4 sm:px-6 py-3 sm:py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+                        >
+                            <span class="font-semibold text-gray-900 text-sm sm:text-base pr-2">{{ $faq['question'] }}</span>
+                            <i 
+                                class="fas fa-chevron-down text-indigo-600 transition-transform duration-200 flex-shrink-0"
+                                :class="{ 'rotate-180': openFaq === {{ $index }} }"
+                            ></i>
+                        </button>
+                        <div 
+                            x-show="openFaq === {{ $index }}"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 max-h-0"
+                            x-transition:enter-end="opacity-100 max-h-96"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 max-h-96"
+                            x-transition:leave-end="opacity-0 max-h-0"
+                            class="overflow-hidden"
+                        >
+                            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+                                <p class="text-gray-700 leading-relaxed">{{ $faq['answer'] }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="text-center mt-8 sm:mt-12">
+                <p class="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">
+                    Still have questions? We're here to help!
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+                    <a href="{{ route('about') }}" class="px-5 sm:px-6 py-2.5 sm:py-3 bg-white text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors font-semibold text-sm sm:text-base">
+                        Learn More About Us
+                    </a>
+                    <a href="{{ route('register') }}" class="px-5 sm:px-6 py-2.5 sm:py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold text-sm sm:text-base">
+                        Register Your School
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 </x-main-layout>

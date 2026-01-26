@@ -5,8 +5,8 @@
         onclick="location.href='{{ $item_url }}'"
     @endif
 >
-    <div class="h-32 w-full checker-bg flex items-center justify-center p-4 text-blue-500">
-      <x-application-logo :icon="$icon" />
+    <div class="h-32 w-full checker-bg flex items-center justify-center p-4">
+      <x-application-logo variant="icon-only" :icon="$icon" />
     </div>
 
     <div class="p-4 border-t border-gray-200" x-data="{showMore:false}" x-cloak="">

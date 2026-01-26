@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->string("slug")->nullable();
             $table->foreignId("school_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("class_teacher")->nullable()->constrained("teachers", "user_id")->nullOnDelete();
+            $table->bigInteger("class_teacher")->nullable();
             $table->timestamps();
         });
     }

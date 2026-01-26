@@ -17,11 +17,11 @@ return new class extends Migration
             $table->foreignId("school_id")->constrained()->cascadeOnDelete();
             $table->foreignId("program_id")->constrained()->cascadeOnDelete();
             $table->foreignId("subject_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("teacher_id")->constrained("teachers", "user_id");
+            $table->foreignId("teacher_id")->constrained("teachers", "user_id")->cascadeOnDelete();
             $table->integer("semester");
             $table->enum("status", ["pending","rejected", "accepted", "submitted"])->default("pending");
             $table->enum("remark_status", ["pending","accepted","rejected"])->default("pending");
-            $table->foreignId("admin_id")->nullable();
+            $table->foreignId("admin_id")->nullable()->constrained("admins", "user_id")->nullOnDelete();
             $table->string("academic_year", 16);
             $table->timestamps();
         });

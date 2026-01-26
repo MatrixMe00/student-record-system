@@ -6,8 +6,8 @@
 @endphp
 
 <a href="{{ route('school.candidate.show', ['beceCandidate' => $candidate->id]) }}" class="w-full bg-white shadow rounded border border-transparent hover:border-blue-500 cursor-pointer">
-    <div class="h-32 w-full checker-bg flex items-center justify-center p-4 text-blue-500">
-      <x-application-logo />
+    <div class="h-32 w-full checker-bg flex items-center justify-center p-4">
+      <x-application-logo variant="icon-only" />
     </div>
 
     <div class="p-4 border-t border-gray-200">
