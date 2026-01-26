@@ -91,13 +91,22 @@ class RegisteredUserController extends Controller
 
     /**
      * Used only once per system bootup
-     * @param string $user_admin_secret The secret key provided
+     * @param string $user_admin_secret The secret key provided by the user
      */
     private function verify_startup(string $user_admin_secret){
-        $admin_secret = password_hash(env('SYSTEM_SECRET'), PASSWORD_BCRYPT);
-        if(password_verify($admin_secret, $user_admin_secret)){
+        $system_secret = env('SYSTEM_SECRET');
+        
+        // Check if SYSTEM_SECRET is set
+        if (empty($system_secret)) {
             throw ValidationException::withMessages([
-                "admin_secret" => "Invalid System Password provided"
+                "admin_secret" => "System password is not configured. Please contact your system administrator."
+            ]);
+        }
+        
+        // Compare the user-provided secret with the system secret
+        if ($user_admin_secret !== $system_secret) {
+            throw ValidationException::withMessages([
+                "admin_secret" => "Invalid System Password provided. Please check and try again."
             ]);
         }
     }
