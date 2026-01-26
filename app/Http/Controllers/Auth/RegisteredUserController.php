@@ -8,6 +8,8 @@ use App\Traits\UserModelTrait;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
@@ -73,6 +75,9 @@ class RegisteredUserController extends Controller
         // based on user role determine which user data should be stored
         $this->store_user($request, $user);
 
+        // Reload user to get the actual saved user with ID and relationships
+        $user = $user->fresh();
+
         event(new Registered($user));
 
         $new_school = isset($request->new_school) ? true : false;
@@ -81,7 +86,19 @@ class RegisteredUserController extends Controller
         if($non_submit){
             return redirect()->route('users.all');
         }elseif(intval($user->role_id) == 2 && $new_system){
-            return redirect('/');
+            // Update super.txt file to mark system as ready
+            try {
+                $disk = Storage::disk(env("FILESYSTEM_DISK", "public"));
+                $disk->put('super.txt', 'system-ready:true');
+            } catch (\Exception $e) {
+                // Log error but don't fail the setup
+                \Log::error('Failed to update super.txt after setup: ' . $e->getMessage());
+            }
+
+            // Auto-login the newly created super admin
+            Auth::login($user);
+
+            return redirect('/')->with('success', 'System has been successfully activated! Welcome to EduRecordsGH.');
         }elseif(intval($user->role_id) == 3 && $new_school){
             return redirect()->route("school.create")->with(["admin_id" => $user->id, "ignore_school_check" => true]);
         }else{
@@ -91,13 +108,22 @@ class RegisteredUserController extends Controller
 
     /**
      * Used only once per system bootup
-     * @param string $user_admin_secret The secret key provided
+     * @param string $user_admin_secret The secret key provided by the user
      */
     private function verify_startup(string $user_admin_secret){
-        $admin_secret = password_hash(env('SYSTEM_SECRET'), PASSWORD_BCRYPT);
-        if(password_verify($admin_secret, $user_admin_secret)){
+        $system_secret = env('SYSTEM_SECRET');
+        
+        // Check if SYSTEM_SECRET is set
+        if (empty($system_secret)) {
             throw ValidationException::withMessages([
-                "admin_secret" => "Invalid System Password provided"
+                "admin_secret" => "System password is not configured. Please contact your system administrator."
+            ]);
+        }
+        
+        // Compare the user-provided secret with the system secret
+        if ($user_admin_secret !== $system_secret) {
+            throw ValidationException::withMessages([
+                "admin_secret" => "Invalid System Password provided. Please check and try again."
             ]);
         }
     }
