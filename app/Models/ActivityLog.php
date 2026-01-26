@@ -17,6 +17,12 @@ class ActivityLog extends Model
     const UPDATED_AT = null;
 
     /**
+     * System user ID - the first user created (developer role)
+     * Used for system logs when no user is authenticated
+     */
+    const SYSTEM_USER_ID = 1;
+
+    /**
      * @var ?int $user_id A selected user id other than the authenticated user id
      */
     public static ?int $user_id = null;
@@ -80,7 +86,8 @@ class ActivityLog extends Model
         // Initialize the query
         $query = ActivityLog::query();
 
-        // Add user ID condition if it's specified [empty means system call]
+        // Add user ID condition if it's specified
+        // Note: user_id = 1 is the system user for system logs
         if (!empty($user_id)) {
             $query->where('user_id', $user_id);
         }
@@ -130,8 +137,9 @@ class ActivityLog extends Model
         }
 
         // set as a system error if there is no user activity involved
+        // Use system user ID instead of 0 for system logs
         if(is_null(self::$user_id) && !Auth::check()){
-            self::$user_id = 0;
+            self::$user_id = self::SYSTEM_USER_ID; // System user (developer role)
         }
 
         ActivityLog::create([
