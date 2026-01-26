@@ -38,7 +38,7 @@ class CheckForSuperAdmin
                     }
                     return $next($request);
                 }else{
-                    $has_super = User::where("role_id", "<=", 2)->exists();
+                    $has_super = User::where("role_id", "<=", 2)->where("id", "!=", 1)->exists();
                     if ($has_super) {
                         // write that the system is setup
                         Storage::disk(env("FILESYSTEM_DISK"))->put('super.txt', 'system-ready:true');
