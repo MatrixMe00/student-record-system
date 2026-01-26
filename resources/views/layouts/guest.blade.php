@@ -13,17 +13,7 @@
         <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
 
         <!-- Scripts -->
-        @if (env('APP_URL') == "http://localhost")
-            @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @else
-            @php
-                $app_js = "assets/app.js?v=".time();
-                $app_css = "assets/app.css?v=".time();
-            @endphp
-            <link rel="stylesheet" href="{{ asset($app_css) }}" />
-            <script src="{{ asset($app_js) }}"></script>
-            <script src="{{ asset('assets/alpine.js') }}"></script>
-        @endif
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
         <div class="min-h-screen flex flex-col sm:justify-center items-center py-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
