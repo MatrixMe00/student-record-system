@@ -8,6 +8,8 @@ use App\Traits\UserModelTrait;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
@@ -73,6 +75,9 @@ class RegisteredUserController extends Controller
         // based on user role determine which user data should be stored
         $this->store_user($request, $user);
 
+        // Reload user to get the actual saved user with ID and relationships
+        $user = $user->fresh();
+
         event(new Registered($user));
 
         $new_school = isset($request->new_school) ? true : false;
@@ -81,7 +86,19 @@ class RegisteredUserController extends Controller
         if($non_submit){
             return redirect()->route('users.all');
         }elseif(intval($user->role_id) == 2 && $new_system){
-            return redirect('/');
+            // Update super.txt file to mark system as ready
+            try {
+                $disk = Storage::disk(env("FILESYSTEM_DISK", "public"));
+                $disk->put('super.txt', 'system-ready:true');
+            } catch (\Exception $e) {
+                // Log error but don't fail the setup
+                \Log::error('Failed to update super.txt after setup: ' . $e->getMessage());
+            }
+
+            // Auto-login the newly created super admin
+            Auth::login($user);
+
+            return redirect('/')->with('success', 'System has been successfully activated! Welcome to EduRecordsGH.');
         }elseif(intval($user->role_id) == 3 && $new_school){
             return redirect()->route("school.create")->with(["admin_id" => $user->id, "ignore_school_check" => true]);
         }else{
