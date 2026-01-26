@@ -1,341 +1,37 @@
-# Software Setup Guide
+# System Setup Guide
 
-Complete guide for installing and setting up EduRecordsGH Student Record Management System.
+Complete guide for superadmins to set up and configure EduRecordsGH Student Record Management System.
 
 ## 📋 Table of Contents
 
-1. [System Requirements](#system-requirements)
-2. [Installation Steps](#installation-steps)
-3. [Environment Configuration](#environment-configuration)
-4. [Database Setup](#database-setup)
-5. [Initial System Setup](#initial-system-setup)
-6. [Post-Setup Configuration](#post-setup-configuration)
+1. [Overview](#overview)
+2. [Initial System Setup](#initial-system-setup)
+3. [Post-Setup Configuration](#post-setup-configuration)
+5. [Payment Gateway Configuration](#payment-gateway-configuration)
+6. [System Settings](#system-settings)
 7. [Troubleshooting](#troubleshooting)
 
 ---
 
-## System Requirements
+## Overview
 
-### Minimum Requirements
+This guide is for **Superadmins** setting up the EduRecordsGH system for the first time. The system must be installed and configured by your technical team before you can begin this setup process.
 
-- **PHP**: 8.2 or higher
-- **Composer**: 2.x or higher
-- **Node.js**: 18.x or higher
-- **npm**: 9.x or higher
-- **Database**: SQLite (default), MySQL 5.7+, or PostgreSQL 10+
-- **Web Server**: Apache 2.4+, Nginx, or PHP built-in server
-- **Memory**: 512MB RAM minimum (1GB recommended)
-- **Storage**: 100MB free space minimum
+### Prerequisites
 
-### Recommended Requirements
+Before you begin, ensure:
+- ✅ The system has been installed by your technical team
+- ✅ The system is accessible via web browser
+- ✅ You have the **System Password** (provided by your technical team)
+- ✅ You have all necessary school information ready
 
-- **PHP**: 8.3 or higher
-- **Memory**: 2GB RAM or higher
-- **Storage**: 500MB+ for production use
-- **Database**: MySQL 8.0+ or PostgreSQL 13+ for production
+### What You'll Set Up
 
-### PHP Extensions Required
-
-- BCMath
-- Ctype
-- cURL
-- DOM
-- Fileinfo
-- JSON
-- Mbstring
-- OpenSSL
-- PCRE
-- PDO
-- Tokenizer
-- XML
-
----
-
-## Installation Steps
-
-### Step 1: Download/Clone the Project
-
-If you have the project files:
-
-```bash
-cd student-record-system
-```
-
-If cloning from a repository:
-
-```bash
-git clone <repository-url>
-cd student-record-system
-```
-
-### Step 2: Install PHP Dependencies
-
-Install all required PHP packages using Composer:
-
-```bash
-composer install
-```
-
-> **Note:** If you don't have Composer installed, download it from [getcomposer.org](https://getcomposer.org/)
-
-### Step 3: Install Node.js Dependencies
-
-Install all required frontend packages:
-
-```bash
-npm install
-```
-
-> **Note:** If you don't have Node.js installed, download it from [nodejs.org](https://nodejs.org/)
-
-### Step 4: Environment Configuration
-
-1. **Copy the environment file:**
-
-```bash
-cp .env.example .env
-```
-
-2. **Generate application key:**
-
-```bash
-php artisan key:generate
-```
-
-This will automatically generate and set the `APP_KEY` in your `.env` file.
-
-### Step 5: Configure Database
-
-Edit the `.env` file and configure your database connection.
-
-#### Option A: SQLite (Easiest for Development)
-
-```env
-DB_CONNECTION=sqlite
-DB_DATABASE=/absolute/path/to/database.sqlite
-```
-
-Or for a relative path:
-
-```env
-DB_CONNECTION=sqlite
-DB_DATABASE=database/database.sqlite
-```
-
-Create the database file:
-
-```bash
-touch database/database.sqlite
-```
-
-#### Option B: MySQL
-
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=student_records
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-```
-
-Create the database:
-
-```sql
-CREATE DATABASE student_records CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-#### Option C: PostgreSQL
-
-```env
-DB_CONNECTION=pgsql
-DB_HOST=127.0.0.1
-DB_PORT=5432
-DB_DATABASE=student_records
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-```
-
-### Step 6: Run Database Migrations
-
-Create all necessary database tables:
-
-```bash
-php artisan migrate
-```
-
-This will create all required tables for the system.
-
-### Step 7: Seed Initial Data (Optional)
-
-Seed the database with initial roles and settings:
-
-```bash
-php artisan db:seed
-```
-
-> **Note:** This creates default roles and system settings. You can skip this if you prefer to set up everything manually.
-
-### Step 8: Create Storage Link
-
-Create a symbolic link for public storage:
-
-```bash
-php artisan storage:link
-```
-
-This allows public access to uploaded files (logos, documents, etc.).
-
-### Step 9: Build Frontend Assets
-
-#### For Production:
-
-```bash
-npm run build
-```
-
-#### For Development:
-
-```bash
-npm run dev
-```
-
-> **Note:** For development, keep `npm run dev` running in a separate terminal to watch for changes.
-
-### Step 10: Set File Permissions
-
-Ensure proper permissions for storage and cache directories:
-
-**On Linux/macOS:**
-
-```bash
-chmod -R 775 storage bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache
-```
-
-**On Windows:**
-
-Permissions are usually handled automatically, but ensure the web server has write access to:
-- `storage/` directory
-- `bootstrap/cache/` directory
-
-### Step 11: Start the Application
-
-#### Development Server:
-
-```bash
-php artisan serve
-```
-
-The application will be available at `http://localhost:8000`
-
-#### Production Server:
-
-Configure your web server (Apache/Nginx) to point to the `public/` directory as the document root.
-
----
-
-## Environment Configuration
-
-### Essential Environment Variables
-
-Edit the `.env` file with your configuration:
-
-```env
-# Application
-APP_NAME="EduRecordsGH"
-APP_ENV=local
-APP_KEY=base64:... (generated automatically)
-APP_DEBUG=true
-APP_URL=http://localhost:8000
-
-# Database (configure based on your choice above)
-DB_CONNECTION=sqlite
-DB_DATABASE=database/database.sqlite
-
-# Mail Configuration (for email notifications)
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-MAIL_FROM_ADDRESS="noreply@edurecordsgh.com"
-MAIL_FROM_NAME="${APP_NAME}"
-
-# System Security
-SYSTEM_SECRET="I@M$up3r@dM!n"
-FILESYSTEM_DISK=public
-
-# Payment Gateway (Paystack - Optional)
-PAYSTACK_PUBLIC_KEY=your_public_key
-PAYSTACK_SECRET_KEY=your_secret_key
-PAYSTACK_MERCHANT_EMAIL=your_email@example.com
-```
-
-### Mail Configuration
-
-For email notifications to work, configure your mail settings:
-
-#### Using SMTP (Gmail example):
-
-```env
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=your_email@gmail.com
-MAIL_PASSWORD=your_app_password
-MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS="noreply@edurecordsgh.com"
-MAIL_FROM_NAME="EduRecordsGH"
-```
-
-#### Using Mailtrap (for testing):
-
-```env
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=your_mailtrap_username
-MAIL_PASSWORD=your_mailtrap_password
-MAIL_ENCRYPTION=tls
-```
-
----
-
-## Database Setup
-
-### Running Migrations
-
-After configuring your database connection, run migrations:
-
-```bash
-php artisan migrate
-```
-
-### Resetting Database (Development Only)
-
-If you need to start fresh:
-
-```bash
-php artisan migrate:fresh
-```
-
-This will drop all tables and recreate them.
-
-### Seeding Database
-
-Seed initial data (roles, settings):
-
-```bash
-php artisan db:seed
-```
-
-Or run migrations and seed together:
-
-```bash
-php artisan migrate --seed
-```
+1. **Create Super Admin Account** - Your main administrator account
+2. **Activate the System** - Enable the system for use
+3. **Register Schools** - Add schools to the platform
+4. **Configure Payments** - Set up payment gateway (if needed)
+5. **System Settings** - Configure global system preferences
 
 ---
 
@@ -344,106 +40,172 @@ php artisan migrate --seed
 ### Step 1: Access Setup Page
 
 1. Open your web browser
-2. Navigate to: `http://your-domain/setup`
-   - For local development: `http://localhost:8000/setup`
+2. Navigate to your system URL followed by `/setup`
+   - Example: `https://your-domain.com/setup`
+   - Or: `http://localhost:8000/setup` (for local installations)
 
-> **Important:** If the system is not set up, all routes will automatically redirect to `/setup`
+> **Important:** If the system is not yet set up, all routes will automatically redirect to `/setup`. You cannot access other parts of the system until setup is complete.
 
 ### Step 2: Create Super Admin Account
 
-On the setup page, you'll need to:
+On the setup page, you'll need to complete the following sections:
 
-1. **Enter Personal Information:**
-   - Last Name
-   - Other Name(s)
+#### Personal Information
+- **Last Name** - Your last name
+- **Other Name(s)** - Your first and middle names
 
-2. **Enter Account Information:**
-   - Email Address (optional but recommended)
-   - Username (this will be your login username)
-   - Password (choose a strong password)
-   - Confirm Password
+#### Account Information
+- **Email Address** - Your email (optional but highly recommended)
+  - Used for system notifications and password recovery
+- **Username** - This will be your login username
+  - Choose a username you'll remember
+  - Cannot be changed after creation
+- **Password** - Choose a strong password
+  - Minimum 8 characters recommended
+  - Use a combination of letters, numbers, and symbols
+- **Confirm Password** - Re-enter your password to confirm
 
-3. **Enter Contact Information:**
-   - Primary Phone Number (include country code, e.g., +233)
-   - Secondary Phone Number (optional)
+#### Contact Information
+- **Primary Phone Number** - Your main contact number
+  - Include country code (e.g., +233 for Ghana)
+  - Format: +233XXXXXXXXX
+- **Secondary Phone Number** - Optional additional contact number
 
-4. **Enter System Password:**
-   - This is the `SYSTEM_SECRET` value from your `.env` file
-   - Default: `I@M$up3r@dM!n`
-   - **Important:** Change this in production!
+#### System Security
+- **System Password** - Enter the system password
+  - This is the `SYSTEM_SECRET` provided by your technical team
+  - **Important:** Contact your technical team if you don't have this password
 
-5. **Click "Activate System"**
+### Step 3: Activate System
 
-### Step 3: System Activation
+1. Review all information you've entered
+2. Ensure all required fields are completed
+3. Click **"Activate System"** button
+
+### Step 4: System Activation Confirmation
 
 After successful setup:
 
 - ✅ System will be automatically activated
 - ✅ You'll be logged in automatically
-- ✅ You'll be redirected to the homepage
+- ✅ You'll be redirected to the homepage/dashboard
 - ✅ A success message will be displayed
 
-> **Note:** The setup can only be performed once. Keep your super admin credentials safe!
+> **Note:** The setup can only be performed once. Keep your super admin credentials safe and secure!
 
-### Step 4: Verify Setup
+### Step 5: Verify Setup
 
-1. Check that you're logged in
-2. Verify you can access the dashboard
-3. Confirm the system is ready for use
+1. **Check Login Status** - Verify you're logged in (your username should be visible)
+2. **Access Dashboard** - Navigate to the dashboard to confirm access
+3. **Test Navigation** - Try accessing different sections of the system
+4. **Confirm System Ready** - System should now be ready for school registration
 
 ---
 
 ## Post-Setup Configuration
 
-### 1. Register Your First School
+After activating the system, you should complete these configuration steps:
 
-1. Navigate to **Register School** or use the registration link
-2. Enter school information:
-   - School Name
-   - School Type (Public/Private)
-   - District
-   - Circuit (if applicable)
-   - Contact Information
-   - GPS Address (optional)
-   - Postal Address
-3. Submit the registration
+### 1. Review Your Profile
 
-### 2. Configure School Details
+1. Navigate to your **Profile** or **Account Settings**
+2. Verify all your information is correct
+3. Update any missing information
+4. Add a profile picture if desired
+5. Save changes
 
-1. Log in as the super admin
-2. Navigate to your school's settings
-3. Complete all school information:
-   - Full school name
-   - Physical address
-   - Contact details
-   - School logo (if desired)
+### 2. Familiarize Yourself with the Dashboard
 
-### 3. Set Up Payment Gateway (Optional)
+Take time to explore:
+- **System Statistics** - Overview of schools, users, and students
+- **Navigation Menu** - Available sections and features
+- **Quick Actions** - Common administrative tasks
+- **Recent Activities** - System activity log
 
-If you plan to use payment features:
+---
 
-1. Get Paystack API keys from [paystack.com](https://paystack.com)
-2. Add keys to `.env`:
-   ```env
-   PAYSTACK_PUBLIC_KEY=pk_test_...
-   PAYSTACK_SECRET_KEY=sk_test_...
-   PAYSTACK_MERCHANT_EMAIL=your_email@example.com
-   ```
-3. Configure payment accounts in the system
+## Payment Gateway Configuration
 
-### 4. Configure Mail Settings
+The system uses payment features via a Paystack integration, configure the payment gateway:
 
-For email notifications to work:
+### Step 1: Get Payment Gateway Credentials
 
-1. Update mail configuration in `.env`
-2. Test email sending (if needed)
-3. Verify super admin email addresses are correct
+1. **Sign up for Paystack** (if not already done)
+   - Visit [paystack.com](https://paystack.com)
+   - Create an account or log in
+   - Navigate to Settings → API Keys & Webhooks
 
-### 5. Create Additional Users
+2. **Obtain API Keys**
+   - **Public Key** - Starts with `pk_`
+   - **Secret Key** - Starts with `sk_`
+   - **Merchant Email** - Your Paystack account email
 
-1. Add school administrators
-2. Add teachers
-3. Add students (can be done in bulk via Excel import)
+> **Note:** These payment gateway keys are already available in the system configuration. You only need to check with your technical team to confirm that they're present and correctly set. In some cases, you may also be able to verify or edit them through the system interface if that feature is available.
+
+### Step 2: Configure Payment Accounts
+
+1. Navigate to **Payment Accounts** in the system
+2. Click **"Add Payment Account"** or **"Configure Payment"**
+3. Enter payment details:
+   - **Paystack Public Key**
+   - **Paystack Secret Key**
+   - **Merchant Email**
+4. **Test Payment Processing** (if test mode available)
+5. **Save Configuration**
+
+### Step 3: Initialize Banks (Paystack)
+
+1. Go to **Payment Accounts** → **Paystack Banks**
+2. Click **"Initialize Banks"**
+3. System will fetch and store bank information from Paystack
+4. Banks are now available for payment configuration
+
+### Step 4: Configure Payment Settings
+
+Set up payment-related settings:
+- **Payment Prices** - Configure result viewing fees
+- **Payment Methods** - Enable/disable payment methods
+- **Payment Notifications** - Configure email notifications for payments
+
+---
+
+## System Settings
+
+### Accessing System Settings
+
+1. Navigate to **System Settings** in the navigation menu
+2. View all configurable system options
+
+### Configurable Settings
+
+You can configure:
+
+- **System Name** - Application name displayed to users
+- **Default Settings** - Default values for new schools
+- **Feature Access** - Which features are available to schools
+- **Role Permissions** - System-wide role configurations
+- **Email Settings** - Email notification preferences
+- **Payment Settings** - Global payment configuration
+
+### Creating System Settings
+
+1. Go to **System Settings**
+2. Click **"Create Setting"** or **"Add Setting"**
+3. Enter:
+   - **Setting Key** - Unique identifier (e.g., `max_schools`)
+   - **Setting Value** - Configuration value
+   - **Description** - What this setting controls
+4. Click **"Save"**
+
+### Updating System Settings
+
+1. Navigate to **System Settings**
+2. Find the setting to update
+3. Click **"Edit"**
+4. Update the value
+5. Click **"Save"**
+
+> **Note:** Some settings may require system restart or cache clearing to take effect. Consult your technical team if unsure.
 
 ---
 
@@ -451,72 +213,90 @@ For email notifications to work:
 
 ### Common Issues
 
-#### Issue: "500 Internal Server Error"
+#### Issue: Cannot Access Setup Page
+
+**Symptoms:**
+- Redirected to login page
+- Getting 404 error
+- Page not loading
 
 **Solutions:**
-- Check file permissions: `chmod -R 775 storage bootstrap/cache`
-- Clear cache: `php artisan cache:clear`
-- Check `.env` file exists and is configured correctly
-- Verify `APP_KEY` is set: `php artisan key:generate`
+- Verify the URL is correct: `your-domain.com/setup`
+- Check if system has already been set up (try logging in)
+- Contact your technical team to verify system installation
+- Clear browser cache and cookies
+- Try a different browser
 
-#### Issue: "Database connection error"
+#### Issue: "Invalid System Password" Error
 
-**Solutions:**
-- Verify database credentials in `.env`
-- Ensure database exists (for MySQL/PostgreSQL)
-- Check database file exists (for SQLite): `touch database/database.sqlite`
-- Verify database user has proper permissions
-
-#### Issue: "Class not found" or "Autoload error"
+**Symptoms:**
+- Error message when entering system password
+- Cannot proceed with setup
 
 **Solutions:**
-- Run: `composer dump-autoload`
-- Clear cache: `php artisan optimize:clear`
-- Reinstall dependencies: `composer install`
+- Verify you're using the correct system password
+- Check for typos or extra spaces
+- Contact your technical team to confirm the `SYSTEM_SECRET` value
+- Ensure you're using the password from the system configuration file
 
-#### Issue: "Assets not loading (CSS/JS)"
+#### Issue: Setup Form Errors
 
-**Solutions:**
-- Build assets: `npm run build` (production) or `npm run dev` (development)
-- Clear cache: `php artisan cache:clear`
-- Verify `public/build` directory exists
-- Check Vite configuration
-
-#### Issue: "Setup page not accessible"
+**Symptoms:**
+- Validation errors on form fields
+- Cannot submit the form
 
 **Solutions:**
-- Check if `super.txt` file exists in storage
-- Delete `storage/app/public/super.txt` to reset (if needed)
-- Verify middleware is working correctly
-- Check application logs: `storage/logs/laravel.log`
+- Check all required fields are filled
+- Verify email format is correct (if provided)
+- Ensure password meets requirements (minimum length, etc.)
+- Check phone number format includes country code
+- Ensure password and confirm password match
 
-#### Issue: "Email not sending"
+#### Issue: System Not Activating
 
-**Solutions:**
-- Verify mail configuration in `.env`
-- Test with Mailtrap or similar service first
-- Check mail logs: `storage/logs/laravel.log`
-- Verify `MAIL_FROM_ADDRESS` is set correctly
-
-#### Issue: "Permission denied" errors
+**Symptoms:**
+- Setup completes but system doesn't activate
+- Still redirected to setup page
+- Cannot access dashboard
 
 **Solutions:**
-- Set proper permissions:
-  ```bash
-  chmod -R 775 storage bootstrap/cache
-  chown -R www-data:www-data storage bootstrap/cache
-  ```
-- Ensure web server user has write access
+- Refresh the page
+- Clear browser cache
+- Try logging in with your credentials
+- Check browser console for errors
+- Contact your technical team to check system logs
+
+#### Issue: Payment Gateway Not Working
+
+**Symptoms:**
+- Payment configuration errors
+- Payments not processing
+- API key errors
+
+**Solutions:**
+- Verify API keys are correct (no extra spaces)
+- Check if using test keys in production (or vice versa)
+- Ensure merchant email matches Paystack account
+- Test payment gateway connection
+- Contact Paystack support if issues persist
+
+#### Issue: User Role is Invalid
+
+**Symptoms:**
+- Error message: "Invalid user role" or similar during setup or login
+- Unable to proceed past account creation or access dashboard
+
+**Solution:**
+- Report this issue to your technical team. They will update the system configuration to ensure the necessary user roles are available and enabled for setup and use.
 
 ### Getting Help
 
 If you encounter issues not covered here:
 
-1. Check application logs: `storage/logs/laravel.log`
-2. Enable debug mode in `.env`: `APP_DEBUG=true`
-3. Review error messages carefully
-4. Check Laravel documentation: [laravel.com/docs](https://laravel.com/docs)
-5. Contact system administrator or support
+1. **Check System Logs** - Ask your technical team to review system logs
+2. **Contact Technical Support** - Reach out to your technical team
+3. **Review Documentation** - Check other user guides for related information
+4. **System Status** - Verify system is running and accessible
 
 ---
 
@@ -524,36 +304,31 @@ If you encounter issues not covered here:
 
 Use this checklist to ensure you've completed all setup steps:
 
-### Pre-Installation
-- [ ] PHP 8.2+ installed and verified
-- [ ] Composer installed and verified
-- [ ] Node.js 18+ and npm installed and verified
-- [ ] Database server ready (SQLite/MySQL/PostgreSQL)
-- [ ] Web server configured (or using PHP built-in server)
-
-### Installation
-- [ ] Project files extracted/cloned
-- [ ] `composer install` completed successfully
-- [ ] `npm install` completed successfully
-- [ ] `.env` file created and configured
-- [ ] `APP_KEY` generated
-- [ ] Database connection configured
-- [ ] Migrations run successfully
-- [ ] Storage link created
-- [ ] Frontend assets built
-
 ### Initial Setup
-- [ ] Accessed `/setup` page
-- [ ] Created super admin account
+- [ ] Accessed `/setup` page successfully
+- [ ] Created super admin account with all required information
+- [ ] Entered correct system password
 - [ ] System activated successfully
 - [ ] Logged in and verified access
+- [ ] Can access dashboard
 
-### Post-Setup
-- [ ] Registered first school
-- [ ] Configured school details
-- [ ] Mail settings configured (if needed)
-- [ ] Payment gateway configured (if needed)
-- [ ] Tested system functionality
+### Post-Setup Configuration
+- [ ] Reviewed and updated profile information
+- [ ] Familiarized with dashboard and navigation
+- [ ] Understood system features and capabilities
+
+### Payment Configuration (If Applicable)
+- [ ] Obtained Paystack API keys
+- [ ] Configured payment gateway in system
+- [ ] Initialized banks list
+- [ ] Tested payment processing (if test mode available)
+- [ ] Configured payment prices and settings
+
+### System Settings
+- [ ] Reviewed system settings
+- [ ] Configured system name and branding
+- [ ] Set default values for new schools
+- [ ] Configured email settings (if applicable)
 
 ---
 
@@ -561,13 +336,39 @@ Use this checklist to ensure you've completed all setup steps:
 
 After completing the setup:
 
-1. 📖 Read the [Getting Started Guide](getting-started.md)
-2. 📚 Review [User Guides](user-guides/) for your role
-3. 🎯 Start adding users, classes, and students
-4. ⚙️ Configure school settings and preferences
-5. 💰 Set up payment accounts (if needed)
+1. 📖 Read the [Superadmin Guide](user-guides/superadmin-guide.md) for detailed system management
+2. 🏫 Start registering and managing schools
+3. 👥 Create school administrators for each school
+4. ⚙️ Configure system-wide settings and preferences
+5. 💰 Set up payment accounts if using payment features
+6. 📊 Monitor system activity and school usage
+
+---
+
+## Important Notes
+
+### Security
+
+- **Keep Credentials Safe** - Never share your superadmin credentials
+- **Strong Passwords** - Use strong, unique passwords
+- **System Password** - Keep the system password secure and change it periodically
+- **Regular Updates** - Ensure system is kept updated by your technical team
+
+### System Access
+
+- **Single Setup** - System setup can only be done once
+- **Superadmin Role** - You have full system access
+- **School Management** - You can manage all schools in the system
+- **System Settings** - You can configure global system settings
+
+### Support
+
+- **Technical Issues** - Contact your technical team for installation/technical problems
+- **System Usage** - Refer to user guides for how to use system features
+- **Documentation** - Check other documentation files for detailed guides
 
 ---
 
 **Last Updated:** 2026-01-25  
-**System Version:** 1.0.0
+**System Version:** 1.0.0  
+**For:** Superadmins
