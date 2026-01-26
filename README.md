@@ -173,8 +173,9 @@ The system supports five user roles:
 
 ## 📖 Documentation
 
+- [Setup Guide](docs/setup-guide.md) - Complete software installation and setup instructions
 - [User Documentation](docs/README.md) - Complete user guides and documentation
-- [Getting Started Guide](docs/getting-started.md) - Initial setup and first steps
+- [Getting Started Guide](docs/getting-started.md) - Initial setup and first steps after installation
 - [Features List](FEATURES.md) - Complete feature documentation
 - [Project Context](.ai/PROJECT_CONTEXT.md) - Technical architecture details
 

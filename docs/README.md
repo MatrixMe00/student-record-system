@@ -11,8 +11,9 @@ Welcome to the Student Record System documentation. This guide will help you und
 - [Superadmin Guide](user-guides/superadmin-guide.md) - For system administrators
 - [Developer Guide](user-guides/developer-guide.md) - For developers
 
-### Quick Start
-- [Getting Started](getting-started.md) - Initial setup and first steps
+### Setup & Installation
+- [Setup Guide](setup-guide.md) - Complete software installation and setup instructions
+- [Getting Started](getting-started.md) - Initial setup and first steps after installation
 
 ---
 
