@@ -124,11 +124,7 @@
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">System Security</h3>
                             <div>
                                 <x-input-label for="admin_secret" :value="__('System Password')" />
-                                <x-text-input id="admin_secret" type="password" name="admin_secret" :value="old('admin_secret')" placeholder="Enter the system activation password" required />
-                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                    <i class="fas fa-info-circle mr-1"></i>
-                                    This is the system activation password provided by your administrator
-                                </p>
+                                <x-text-input id="admin_secret" type="password" name="admin_secret" :value="old('admin_secret')" placeholder="Enter the system activation password" required subtext="This is the system activation password provided by your administrator" />
                                 <x-input-error :messages="$errors->get('admin_secret')" class="mt-2" />
                             </div>
                         </div>

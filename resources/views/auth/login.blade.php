@@ -8,6 +8,14 @@
         </a>
     @endsection
 
+    <!-- Navigation -->
+    <div class="absolute top-4 right-4 sm:top-6 sm:right-6">
+        <a href="{{ route('index') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+            <i class="fas fa-home mr-2"></i>
+            Home
+        </a>
+    </div>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -17,10 +25,6 @@
             Welcome back
         </h1>
     </div>
-
-    <p class="fixed top-2 right-2 sm:right-6 border border-transparent hover:border-b-slate-500">
-        <a href="/">Home</a>
-    </p>
 
     <form method="POST" action="{{ route('login') }}" class="w-full md:min-w-96 m-auto">
         @csrf

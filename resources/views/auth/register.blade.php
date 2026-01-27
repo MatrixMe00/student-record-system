@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-guest-layout :showLogo="false">
     @section('title', $page_title)
     <!-- component -->
     @if (isset($role_id))

@@ -31,6 +31,7 @@ class StoreSchoolRequest extends FormRequest
             "gps_address" => ["required", "string", "max:15", Rule::unique("schools", "gps_address")],
             "box_number" => ["required", "string", Rule::unique("schools", "box_number")],
             "school_type" => ["required", "string", Rule::in(["public", "private"])],
+            "education_level" => ["required", "string", Rule::in(["basic", "secondary"])],
             "school_head" => ["required", "string"],
             "description" => ["required", "string"],
             "school_email" => ["required", "string", "email", Rule::unique("schools", "school_email")],

@@ -1,8 +1,9 @@
 @props([
     "options", "value" => "", "default" => "Select An Option", "value_key" => "id", "text_key" => "name",
-    "keyword" => "", "min" => 0, "max" => 0, "abled" => true, "method" => false
+    "keyword" => "", "min" => 0, "max" => 0, "abled" => true, "method" => false, "subtext" => null, "subtextIcon" => "fas fa-info-circle"
 ])
 
+<div>
 <select
 @if (!$abled)
     disabled
@@ -77,3 +78,10 @@
 {{ $slot }}
 
 </select>
+@if($subtext)
+    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+        <i class="{{ $subtextIcon }} mr-1"></i>
+        {{ $subtext }}
+    </p>
+@endif
+</div>
