@@ -32,7 +32,7 @@
                     <x-content-card
                         class="shadow hover:shadow-lg bg-slate-50 hover:bg-white"
                         title="{{ __($school->school_name) }}"
-                        sub_title="{{ __($school->school_slug ?? 'No Slogan') }}"
+                        sub_title="{{ __($school->school_abbr ?? 'No Abbreviation') }}"
                         item_id="{{ $school->id }}"
                         avatar_url="{{ asset('storage/'.$school->logo_path) }}"
                         removable="0"

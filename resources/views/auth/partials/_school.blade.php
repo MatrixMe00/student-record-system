@@ -64,9 +64,9 @@
                                 </div>
 
                                 <div>
-                                    <x-input-label for="school_slug" :value="__('School Abbreviation')" />
-                                    <x-text-input id="school_slug" type="text" name="school_slug" :value="old('school_slug')" placeholder="Slug name for school" required />
-                                    <x-input-error :messages="$errors->get('school_slug')" class="mt-2" />
+                                    <x-input-label for="school_abbr" :value="__('School Abbreviation')" subtext="Optional: A short abbreviation or alias for your school" />
+                                    <x-text-input id="school_abbr" type="text" name="school_abbr" :value="old('school_abbr')" placeholder="e.g., MSD, ABC School" maxlength="50" />
+                                    <x-input-error :messages="$errors->get('school_abbr')" class="mt-2" />
                                 </div>
 
                                 <div>

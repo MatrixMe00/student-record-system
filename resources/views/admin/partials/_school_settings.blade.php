@@ -12,11 +12,21 @@
             <x-input-error :messages="dual_error('settings','school_name',$errors)" class="mt-2" />
         </div>
 
-        <!-- School Slug -->
+        <!-- School Abbreviation -->
         <div>
-            <x-input-label for="school_slug" :value="__('School Abbreviation')" />
-            <x-text-input id="school_slug" type="text" name="school_slug" :value="dual_old('settings','school_slug') ?? $school->school_slug" placeholder="Slug name for school" required />
-            <x-input-error :messages="dual_error('settings','school_slug',$errors)" class="mt-2" />
+            <x-input-label for="school_abbr" :value="__('School Abbreviation')" subtext="Optional: A short abbreviation or alias for your school" />
+            <x-text-input id="school_abbr" type="text" name="school_abbr" :value="dual_old('settings','school_abbr') ?? $school->school_abbr" placeholder="e.g., MSD, ABC School" maxlength="50" />
+            <x-input-error :messages="dual_error('settings','school_abbr',$errors)" class="mt-2" />
+        </div>
+        
+        <!-- School Slug (Read-only, system generated) -->
+        <div>
+            <x-input-label for="school_slug_display" :value="__('School Slug (System Generated)')" subtext="This is automatically generated from your school name and used for URLs" />
+            <x-text-input id="school_slug_display" type="text" :value="$school->school_slug" readonly class="bg-gray-100 dark:bg-gray-800 cursor-not-allowed" />
+            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                <i class="fas fa-info-circle mr-1"></i>
+                This value is automatically generated and cannot be changed manually
+            </p>
         </div>
 
         <!-- School Email -->

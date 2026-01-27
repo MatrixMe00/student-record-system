@@ -24,7 +24,7 @@ class UpdateSchoolRequest extends FormRequest
     {
         return [
             "school_name" => ["required", "string"],
-            "school_slug" => ["required", "string"],
+            "school_abbr" => ["nullable", "string", "max:50"],
             "circuit" => ["required", 'string'],
             "district" => ["nullable", "required", "string"],
             "gps_address" => ["required", "string", "max:15"],

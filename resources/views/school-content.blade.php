@@ -10,7 +10,7 @@
             <h2 class="uppercase border-b w-fit pb-2 mt-2">Overview</h2>
             <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 <x-dl-data title="School Name" content="{{ $school->school_name }}" />
-                <x-dl-data title="School Alias" content="{{ $school->school_slug ?? 'N/A' }}" />
+                <x-dl-data title="School Abbreviation" content="{{ $school->school_abbr ?? 'N/A' }}" />
                 <x-dl-data title="Circuit" content="{{ $school->circuit }}" />
                 <x-dl-data title="District" content="{{ $school->district ?? 'N/A' }}" />
                 <x-dl-data title="School Type" content="{{ ucfirst($school->school_type) }}" />

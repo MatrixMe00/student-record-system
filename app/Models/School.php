@@ -7,12 +7,64 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
 
 class School extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Auto-generate school_slug from school_name before creating
+        static::creating(function ($school) {
+            if (empty($school->school_slug) && !empty($school->school_name)) {
+                $school->school_slug = static::generateSlug($school->school_name);
+            }
+        });
+
+        // Auto-generate school_slug from school_name before updating if name changed
+        static::updating(function ($school) {
+            if ($school->isDirty('school_name')) {
+                $school->school_slug = static::generateSlug($school->school_name, $school->id);
+            }
+        });
+
+        static::deleting(function($school){
+            $students = $school->students()->pluck("user_id");
+            $teachers = $school->teachers()->pluck("user_id");
+            $admins = $school->school_admins()->pluck("user_id");
+
+            $ids = array_merge($students->toArray(), $teachers->toArray(), $admins->toArray());
+
+            User::whereIn("id", $ids)->delete();
+        });
+    }
+
+    /**
+     * Generate a unique slug from school name
+     */
+    protected static function generateSlug(string $name, ?int $excludeId = null): string
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        while (static::where('school_slug', $slug)
+            ->when($excludeId, fn($query) => $query->where('id', '!=', $excludeId))
+            ->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+        
+        return $slug;
+    }
 
     /**
      * creates an encrypted version of the id
@@ -86,19 +138,5 @@ class School extends Model
      */
     public function payment_information() :HasMany{
         return $this->hasMany(PaymentInformation::class);
-    }
-
-    protected static function boot(){
-        parent::boot();
-
-        static::deleting(function($school){
-            $students = $school->students()->pluck("user_id");
-            $teachers = $school->teachers()->pluck("user_id");
-            $admins = $school->school_admins()->pluck("user_id");
-
-            $ids = array_merge($students->toArray(), $teachers->toArray(), $admins->toArray());
-
-            User::whereIn("id", $ids)->delete();
-        });
     }
 }

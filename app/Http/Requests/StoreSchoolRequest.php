@@ -24,7 +24,7 @@ class StoreSchoolRequest extends FormRequest
     {
         return [
             "school_name" => ["required", "string", Rule::unique("schools", "school_name")],
-            "school_slug" => ["required", "string"],
+            "school_abbr" => ["nullable", "string", "max:50"],
             "logo_path" => ["nullable", "required", "file"],
             "circuit" => ["required", 'string'],
             "district" => ["nullable", "required", "string"],
